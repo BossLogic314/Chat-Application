@@ -1,6 +1,9 @@
 import express from "express";
 import authRouter from './routes/authentication.js';
+import usersRouter from './routes/users.js';
 import connectToDb from "./db/connect.js";
+import cookieParser from "cookie-parser";
+import cors from "cors";
 
 const app = express()
 const PORT = 8080;
@@ -9,7 +12,12 @@ const PORT = 8080;
 connectToDb();
 
 app.use('/auth', authRouter);
+app.use('/users', usersRouter);
 app.use(express.json());
+app.use(cookieParser());
+app.use(cors({
+	credentials: true
+}));
 
 app.get('/', (req, res) => {
     res.send('Hi Anish!');
