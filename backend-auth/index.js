@@ -11,13 +11,13 @@ const PORT = 8080;
 // Calling the method to connect to MongoDB
 connectToDb();
 
-app.use('/auth', authRouter);
-app.use('/users', usersRouter);
-app.use(express.json());
-app.use(cookieParser());
 app.use(cors({
 	credentials: true
 }));
+app.use(express.json());
+app.use(cookieParser());
+app.use('/auth', authRouter);
+app.use('/users', usersRouter);
 
 app.get('/', (req, res) => {
     res.send('Hi Anish!');

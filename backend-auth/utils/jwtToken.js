@@ -12,11 +12,11 @@ export let generateJwtTokenAndPutInCookie = (jsonObj, res) => {
     }
 }
 
-export let verifyJwtToken = async (req, res) => {
+export let verifyJwtToken = async (req, res, next) => {
 
     try {
         //res.status(200).json({cookie: req.cookie});
-        const jwtToken = req.cookie.jwt;
+        const jwtToken = req.cookies.jwt;
         if (!jwtToken) {
             res.status(401).json({message: "JWT token is missing in the request"});
         }
