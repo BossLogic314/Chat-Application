@@ -6,6 +6,6 @@ import { verifyJwtToken } from '../utils/jwtToken.js';
 const router = express.Router();
 const jsonParser = bodyParser.json();
 
-router.get('/getUsers', jsonParser, verifyJwtToken, getUsers);
+router.get('/getUsers', jsonParser, getUsers);
 
 export default router;

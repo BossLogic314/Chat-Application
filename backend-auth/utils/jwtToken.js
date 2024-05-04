@@ -12,20 +12,12 @@ export let generateJwtTokenAndPutInCookie = (jsonObj, res) => {
     }
 }
 
-export let verifyJwtToken = async (req, res, next) => {
-
+export let verifyJwtToken = (jwtToken) => {
     try {
-        //res.status(200).json({cookie: req.cookie});
-        const jwtToken = req.cookies.jwt;
-        if (!jwtToken) {
-            res.status(401).json({message: "JWT token is missing in the request"});
-        }
-        else {
-            jwt.verify(jwtToken, ACCESS_TOKEN_SECRET);
-            next();
-        }
+        const result = jwt.verify(jwtToken, ACCESS_TOKEN_SECRET);
+        return true;
     }
     catch(err) {
-        res.status(500).json({message: "Unauthorized: Invalid token!"});
+        return false;
     }
 };

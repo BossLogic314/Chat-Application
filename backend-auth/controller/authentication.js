@@ -1,8 +1,20 @@
 import { getUser, authenticateUser } from "./users.js";
 import userModel from "../model/User.js";
-import { generateJwtTokenAndPutInCookie } from "../utils/jwtToken.js";
+import { generateJwtTokenAndPutInCookie, verifyJwtToken } from "../utils/jwtToken.js";
 
 export let loginUser = async (req, res) => {
+
+    try {
+        const jwtToken = req.cookies.jwt;
+        const status = verifyJwtToken(jwtToken);
+        if (status) {
+            res.status(200).json({message: "Authorized"});
+            return;
+        }
+    }
+    catch(error) {
+        ;
+    }
 
     try {
         const {username, password} = req.body;
