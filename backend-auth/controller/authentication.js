@@ -60,6 +60,18 @@ function checkCredentials(username, password) {
 export let signupUser = async (req, res) => {
 
     try {
+        const jwtToken = req.cookies.jwt;
+        const status = verifyJwtToken(jwtToken);
+        if (status) {
+            res.status(200).json({message: "Authorized"});
+            return;
+        }
+    }
+    catch(error) {
+        ;
+    }
+    
+    try {
         const {username, password} = req.body;
 
         const user = await getUser(username);
