@@ -21,7 +21,7 @@ export default function Page() {
       {
         withCredentials: true,
       });
-      router.replace('/login');
+      router.replace('/');
       alert(error.response.data.message);
     }
     catch(error) {
