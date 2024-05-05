@@ -1,6 +1,7 @@
 import express from "express";
 import authRouter from './routes/authentication.js';
 import usersRouter from './routes/users.js';
+import chatsRouter from './routes/chats.js'
 import connectToDb from "./db/connect.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use('/auth', authRouter);
 app.use('/users', usersRouter);
+app.use('/chats', chatsRouter);
 
 app.get('/', (req, res) => {
     res.send('Hi Anish!');

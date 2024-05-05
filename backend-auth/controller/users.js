@@ -29,7 +29,7 @@ export let getUsers = async (req, res) => {
 
     try {
         const users = await userModel.find({});
-        res.status(200).json({users: users});
+        res.status(200).json({response: users});
     }
     catch(error) {
         res.status(500).json({message: "Server error!"});
