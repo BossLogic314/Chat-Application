@@ -33,25 +33,33 @@ export let loginUser = async (req, res) => {
     }
 }
 
-const MIN_USERNAME_LENGTH = 7
-const MIN_PASSWORD_LENGTH = 7
+const MAX_USERNAME_LENGTH = 15;
+const MIN_USERNAME_LENGTH = 7;
+const MAX_PASSWORD_LENGTH = 15
+const MIN_PASSWORD_LENGTH = 7;
 
 function checkCredentials(username, password) {
 
+    // Username checks
     if (username.length == 0) {
         return [false, 'Username cannot be empty. Please choose a valid username'];
     }
-
-    if (username.length < 7) {
+    if (username.length < MIN_USERNAME_LENGTH) {
         return [false, `Username needs to be atleast ${MIN_USERNAME_LENGTH} long`];
     }
+    if (username.length > MAX_USERNAME_LENGTH) {
+        return [false, `Username needs to be atmost ${MAX_USERNAME_LENGTH} long`];
+    }
 
+    // Password checks
     if (password.length == 0) {
         return [false, 'Password cannot be empty. Please choose a valid password'];
     }
-
-    if (password.length < 7) {
+    if (password.length < MIN_PASSWORD_LENGTH) {
         return [false, `Password needs to be atleast ${MIN_PASSWORD_LENGTH} long`];
+    }
+    if (password.length > MAX_PASSWORD_LENGTH) {
+        return [false, `Password needs to be atmost ${MAX_PASSWORD_LENGTH} long`];
     }
 
     return [true, 'All good'];
