@@ -4,7 +4,7 @@ import { verifyJwtToken } from "../utils/jwtToken.js";
 
 export let getAllChats = async (req, res) => {
 
-    const startString = req.query.startString;
+    const searchString = req.query.searchString;
     try {
         const jwtToken = req.cookies.jwt;
         const status = verifyJwtToken(jwtToken);
@@ -19,8 +19,8 @@ export let getAllChats = async (req, res) => {
         return;
     }
 
-    const groupChats = await groupChatModel.find({name: {$regex: `^${startString}`}});
-    const users = await userModel.find({username: {$regex: `^${startString}`}});
+    const groupChats = await groupChatModel.find({name: {$regex: `^${searchString}`}});
+    const users = await userModel.find({username: {$regex: `^${searchString}`}});
 
     const allChats = groupChats.concat(users);
     res.status(201).json({response: allChats});
