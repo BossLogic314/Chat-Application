@@ -10,15 +10,17 @@ export let getAllChats = async (req, res) => {
 
         if (!status) {
             res.status(401).json({message: "User unauthorized!"});
+            return;
         }
     }
     catch(error) {
         res.status(401).json({message: "User unauthorized!"});
+        return;
     }
 
     const groupChats = await groupChatModel.find();
     const users = await userModel.find();
 
-    const allChats = (await groupChats).concat(users);
+    const allChats = groupChats.concat(users);
     res.status(201).json({response: allChats});
 }
