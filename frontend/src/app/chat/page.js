@@ -22,6 +22,7 @@ export default function Page() {
     }
     catch(error) {
       // Jwt token expired, the user needs to login again
+      alert(error.response.data.message);
       router.replace('/');
     }
   });
