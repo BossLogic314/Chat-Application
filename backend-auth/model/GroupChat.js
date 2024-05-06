@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 
 let groupChatSchema = {
-    chatName: {
+    name: {
         type: String,
         unique: true,
         required: true
     },
-    users: {
+    participants: {
         type: Array,
         required: true
     }
