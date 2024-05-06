@@ -3,19 +3,6 @@ import userModel from "../model/User.js";
 import { generateJwtTokenAndPutInCookie, verifyJwtToken } from "../utils/jwtToken.js";
 
 export let loginUser = async (req, res) => {
-
-    try {
-        const jwtToken = req.cookies.jwt;
-        const status = verifyJwtToken(jwtToken);
-        if (status) {
-            res.status(200).json({message: "Authorized"});
-            return;
-        }
-    }
-    catch(error) {
-        ;
-    }
-
     try {
         const {username, password} = req.body;
         const user = await authenticateUser(username, password);
@@ -66,19 +53,6 @@ function checkCredentials(username, password) {
 }
 
 export let signupUser = async (req, res) => {
-
-    try {
-        const jwtToken = req.cookies.jwt;
-        const status = verifyJwtToken(jwtToken);
-        if (status) {
-            res.status(200).json({message: "Authorized"});
-            return;
-        }
-    }
-    catch(error) {
-        ;
-    }
-    
     try {
         const {username, password} = req.body;
 
@@ -100,5 +74,21 @@ export let signupUser = async (req, res) => {
     }
     catch(error) {
         res.status(500).json({message: "Signup failed!"});
+    }
+}
+
+export let checkJwtToken = async (req, res) => {
+    try {
+        const jwtToken = req.cookies.jwt;
+        const status = verifyJwtToken(jwtToken);
+        if (status) {
+            res.status(200).json({message: "Authorized"});
+        }
+        else {
+            res.status(401).json({message: "User unauthorized"});
+        }
+    }
+    catch(error) {
+        res.status(401).json({message: "User unauthorized"});
     }
 }
