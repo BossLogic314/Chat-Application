@@ -32,11 +32,7 @@ export default function Page() {
   useEffect(() => {
     async function checkJwtToken() {
       try {
-        const response = await axios.post('http://localhost:8080/auth/login',
-        {
-          username: '',
-          password: '',
-        },
+        const response = await axios.get('http://localhost:8080/auth/checkJwtToken',
         {
           withCredentials: true,
         });

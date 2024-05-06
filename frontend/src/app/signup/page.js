@@ -22,7 +22,7 @@ export default function Page() {
         withCredentials: true,
       });
       router.replace('/');
-      alert(error.response.data.message);
+      alert(response.data.message);
     }
     catch(error) {
       alert(error.response.data.message);
@@ -32,11 +32,7 @@ export default function Page() {
   useEffect(() => {
     async function checkJwtToken() {
       try {
-        const response = await axios.post('http://localhost:8080/auth/signup',
-        {
-          username: '',
-          password: '',
-        },
+        const response = await axios.get('http://localhost:8080/auth/checkJwtToken',
         {
           withCredentials: true,
         });
