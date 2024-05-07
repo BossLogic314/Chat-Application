@@ -1,15 +1,19 @@
 "use client";
 import React, { useEffect } from "react";
+import io from "socket.io-client";
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import CreateGroupChatPopUp from "../components/CreateGroupChatPopUp";
 import { useCreateGroupChatStore } from "../../../zustand/useCreateGroupChatStore";
+import { useUsernameStore } from "../../../zustand/useUsernameStore";
 
 export default function Page() {
 
   const [chats, setChats] = useState([]);
   const {createGroupChat, setCreateGroupChat} = useCreateGroupChatStore();
+  const [socket, setSocket] = useState(null);
+  const {username, setUsername} = useUsernameStore();
   const router = useRouter();
 
   let getChats = (async () => {
@@ -35,7 +39,19 @@ export default function Page() {
   });
 
   useEffect(() => {
+
+    const newSocket = io('http://localhost:8081', {
+      username: 'anish'
+    });
+    setSocket(newSocket);
+
+    newSocket.on('chat', (message) => {
+      console.log(`Got message ${message}`);
+    });
+
     getChats();
+
+    return () => newSocket.close();
   }, []);
 
   return (
