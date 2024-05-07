@@ -3,10 +3,13 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import CreateGroupChatPopUp from "../components/CreateGroupChatPopUp";
+import { useCreateGroupChatStore } from "../../../zustand/useCreateGroupChatStore";
 
 export default function Page() {
 
   const [chats, setChats] = useState([]);
+  const {createGroupChat, setCreateGroupChat} = useCreateGroupChatStore();
   const router = useRouter();
 
   let getChats = (async () => {
@@ -27,6 +30,10 @@ export default function Page() {
     }
   });
 
+  let createGroupChatButtonClicked = (async () => {
+    setCreateGroupChat(true);
+  });
+
   useEffect(() => {
     getChats();
   }, []);
@@ -40,7 +47,7 @@ export default function Page() {
       </div>
 
       <div className="flex flex-row flex-1 h-full w-screen border-black border">
-        <div className="chats w-1/3 h-full border-red-400 border-2">
+        <div className="chats-window w-1/3 h-full border-red-400 border-2">
           <input
             className="searchTab w-full h-10 text-lg border-black border px-2 py-2"
             placeholder="Search for chats"
@@ -63,10 +70,29 @@ export default function Page() {
 
         </div>
 
-        <div className="messages flex-1 w-full h-full border-green-400 border-2">
+        <div className="messages-window flex flex-col flex-1 w-full h-full border-green-400 border-2">
+
+          <div className="messages flex-1 w-full border-black border-2"></div>
+
+          <div className="typingSection flex flex-row h-20 border-red-600 border-2 justify-center items-center justify-center">
+            <div
+              className="createGroupChatButton flex justify-center items-center h-10 w-20 border-blue-400 border-2 ml-8 mr-4 text-3xl"
+              onClick={createGroupChatButtonClicked}>
+                +
+            </div>
+
+            <div className="typeAndSendSection w-4/5 flex flex-row">
+              <input className="typingBox h-10 w-5/6 border-black border-2" placeholder="Type your message here..." ></input>
+              <div className="sendButton h-10 w-20 border-blue-400 border-2 mr-8"></div>
+            </div>
+          </div>
 
         </div>
       </div>
+
+      {
+        createGroupChat ? <CreateGroupChatPopUp /> : <></>
+      }
     </div>
   );
 }
