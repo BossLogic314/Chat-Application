@@ -13,7 +13,7 @@ export default function CreateGroupChatPopUp() {
 
     let closeGroupChatPopUp = ((event) => {
 
-        if (event.target.className != 'create-group-chat-pop-up-overlay') {
+        if (event.target.id != 'create-group-chat-pop-up-overlay') {
             return;
         }
         setCreateGroupChat(false);
@@ -72,6 +72,7 @@ export default function CreateGroupChatPopUp() {
             });
 
             alert('Group chat successfully created!');
+            setCreateGroupChat(false);
         }
         catch(error) {
             // Jwt token expired, the user needs to login again
@@ -127,11 +128,14 @@ export default function CreateGroupChatPopUp() {
     });
 
     return (
-        <div className='create-group-chat-pop-up-overlay' onClick={closeGroupChatPopUp}>
-            <div className='create-group-chat-pop-up'>
+        <div className='create-group-chat-pop-up-overlay h-screen w-screen flex justify-center items-center'
+            id="create-group-chat-pop-up-overlay"
+            onClick={closeGroupChatPopUp}>
+                
+            <div className='create-group-chat-pop-up h-[300px] w-[600px] flex flex-col items-center border-black border-2'>
 
-                <div className='create-group-chat-pop-up-header'>
-                    <div className='create-group-chat-pop-up-title'>Create new group chat</div>
+                <div className='create-group-chat-pop-up-header flex flex-row h-[15%]'>
+                    <div className='create-group-chat-pop-up-title text-3xl text-center w-[90%]'>Create new group chat</div>
                 </div>
 
                 <input className='group-chat-name' placeholder='Group name'></input>
