@@ -13,7 +13,9 @@ export default function Page() {
   const [chats, setChats] = useState([]);
   const {createGroupChat, setCreateGroupChat} = useCreateGroupChatStore();
   const [socket, setSocket] = useState(null);
-  const {username, setUsername} = useUsernameStore();
+  const {username} = useUsernameStore();
+  const [currentChat, setCurrentChat] = useState(null);
+  const [messages, setMessages] = useState([]);
   const router = useRouter();
 
   let getChats = (async () => {
@@ -38,10 +40,62 @@ export default function Page() {
     setCreateGroupChat(true);
   });
 
+  let displayMessages = (async (chatName, isGroupChat) => {
+
+    let conversationName = '';
+    if (isGroupChat) {
+      conversationName = chatName;
+    }
+    else {
+      let list = [username, chatName];
+      list.sort();
+      conversationName = list[0] + '-' + list[1];
+    }
+
+    try {
+      const response = await axios.get(`http://localhost:8080/conversation/getConversation?conversationName=${conversationName}`,
+      {
+        withCredentials: true,
+      });
+      let newMessages = []
+      if (response.data.response != null) {
+        newMessages = response.data.response.messages;
+      }
+      setMessages(newMessages);
+    }
+    catch(error) {
+      // Jwt token expired, the user needs to login again
+      alert(error.response.data.message);
+      router.replace('/');
+    }
+  });
+
+  let chatClicked = ((event) => {
+    
+    const chat = event.target.textContent;
+
+    for (let i = 0; i < chats.length; ++i) {
+
+      // User
+      if (chats[i].username != undefined && chats[i].username == chat) {
+        setCurrentChat(chats[i].username);
+        displayMessages(chats[i].username, false);
+        break;
+      }
+
+      // Group chat
+      if (chats[i].name != undefined && chats[i].name == chat) {
+        setCurrentChat(chats[i].name);
+        displayMessages(chats[i].name, true);
+        break;
+      }
+    }
+  })
+
   useEffect(() => {
 
     const newSocket = io('http://localhost:8081', {
-      username: 'anish'
+      username: username
     });
     setSocket(newSocket);
 
@@ -63,7 +117,7 @@ export default function Page() {
       </div>
 
       <div className="flex flex-row flex-1 h-full w-screen border-black border">
-        <div className="chats-window w-1/3 h-full border-red-400 border-2">
+        <div className="chats-window w-1/3 h-full flex flex-col items-center border-red-400 border-2">
           <input
             className="searchTab w-full h-10 text-lg border-black border px-2 py-2"
             placeholder="Search for chats"
@@ -73,13 +127,18 @@ export default function Page() {
           {
             chats.map((chat, index) =>
             (
-              <div className="chat flex flex-row h-14 w-full border-black border mt-0.5 rounded" key={`chat-${index}`}>
+              <div className="chat flex flex-row h-14 w-[97%] border-black border mt-[2px] rounded hover:scale-[1.03] hover:cursor-pointer"
+                id={chat.name == currentChat ? `currentChat` : (chat.username == currentChat ? `currentChat` : `chat`)}
+                key={`chat-${index}`}
+                onClick={chatClicked}>
+
                 <img className="chatDisplayPicture h-full w-20 border-red-400 border-2" key={`chatDisplayPicture-${index}`}></img>
                 <div className="chatNameDiv flex flex-col h-full w-full border-yellow-400 border-2 ml-2 justify-center" key={`chatNameDiv-${index}`}>
                   <div className="chatName text-xl border-black border-2" key={`chatName-${index}`}>
                     {chat.name === undefined ? chat.username : chat.name}
                   </div>
                 </div>
+
               </div>
             ))
           }
