@@ -58,11 +58,13 @@ export default function Page() {
       {
         withCredentials: true,
       });
-      let newMessages = []
+      let newMessages = [];
       if (response.data.response != null) {
         newMessages = response.data.response.messages;
       }
       setMessages(newMessages);
+      console.log(newMessages);
+      console.log(new Date());
     }
     catch(error) {
       // Jwt token expired, the user needs to login again
@@ -148,7 +150,30 @@ export default function Page() {
 
         <div className="messages-window flex flex-col flex-1 w-full h-full border-green-400 border-2">
 
-          <div className="messages flex-1 w-full border-black border-2"></div>
+          <div className="messages flex-1 w-full border-black border-2">
+            {
+              messages.map((message, index) => (
+                <div className={ username == message.from ? 'message-sent' : 'message-received' }>
+
+                  <div className='from'>
+                      { message.from }
+                  </div>
+
+                  <div className={ username == message.from ? 'message-sent-text' : 'message-received-text' }>
+                      { message.message }
+                  </div>
+
+                  <div className='message-date-time'>
+                  {
+                      `${ message.hours }:${ message.minutes }:${ message.seconds }, ` +
+                      `${ message.date }-${ message.month }-${ message.year }`
+                  }
+                  </div>
+
+                </div>
+              ))
+            }
+          </div>
 
           <div className="typingSection flex flex-row h-20 border-red-600 border-2 justify-center items-center justify-center">
             <div
