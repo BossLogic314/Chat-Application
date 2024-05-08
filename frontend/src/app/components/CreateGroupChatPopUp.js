@@ -13,14 +13,14 @@ export default function CreateGroupChatPopUp() {
 
     let closeGroupChatPopUp = ((event) => {
 
-        if (event.target.id != 'create-group-chat-pop-up-overlay') {
+        if (event.target.id != 'createGroupChatPopUpOverlay') {
             return;
         }
         setCreateGroupChat(false);
     });
 
     let searchForUsers = (async () => {
-        const searchString = document.getElementsByClassName('group-chat-participants')[0].value;
+        const searchString = document.getElementsByClassName('groupChatParticipants')[0].value;
         if (searchString !== '') {
             try {
                 const response = await axios.get(`http://localhost:8080/users/getUsers?searchString=${searchString}`,
@@ -43,7 +43,7 @@ export default function CreateGroupChatPopUp() {
 
     let createButtonClicked = (async () => {
 
-        const groupChatName = document.getElementsByClassName('group-chat-name')[0].value;
+        const groupChatName = document.getElementsByClassName('groupChatName')[0].value;
 
         if (groupChatName == '') {
             alert("Group chat's name cannot be empty");
@@ -128,28 +128,28 @@ export default function CreateGroupChatPopUp() {
     });
 
     return (
-        <div className='create-group-chat-pop-up-overlay h-screen w-screen flex justify-center items-center'
-            id="create-group-chat-pop-up-overlay"
+        <div className='h-screen w-screen flex justify-center items-center'
+            id="createGroupChatPopUpOverlay"
             onClick={closeGroupChatPopUp}>
                 
-            <div className='create-group-chat-pop-up h-[300px] w-[600px] flex flex-col items-center border-black border-2'>
+            <div className='createGroupChatPopUp h-[300px] w-[600px] flex flex-col items-center border-black border-2'>
 
-                <div className='create-group-chat-pop-up-header flex flex-row h-[15%]'>
-                    <div className='create-group-chat-pop-up-title text-3xl text-center w-[90%]'>Create new group chat</div>
+                <div className='createGroupChatPopUpHeader flex flex-row h-[15%]'>
+                    <div className='createGroupChatPopUpTitle text-3xl text-center w-[90%]'>Create new group chat</div>
                 </div>
 
-                <input className='group-chat-name' placeholder='Group name'></input>
+                <input className='groupChatName' placeholder='Group name'></input>
                 <input
-                    className='group-chat-participants'
+                    className='groupChatParticipants'
                     placeholder='Add participants here'
                     onChange={searchForUsers}>
                 </input>
 
-                <div className='suggested-participants-box'>
-                    <div className='suggested-participants'>
+                <div className='suggestedParticipantsBox'>
+                    <div className='suggestedParticipants'>
                         {
                             suggestedParticipants.map( (participant) =>
-                                <div className='suggested-participant' key={participant.username}
+                                <div className='suggestedParticipant' key={participant.username}
                                     value={participant.username}
                                     onClick={suggestedParticipantClicked}>
                                         {participant.username}
@@ -159,11 +159,11 @@ export default function CreateGroupChatPopUp() {
                     </div>
                 </div>
 
-                <div className='added-participants'>
+                <div className='addedParticipants'>
                     {
                         addedParticipants.map( (participant) =>
-                            <div className='added-participant' key={participant} onClick={removeAddedParticipant}>
-                                <div className='added-participant-name' value={participant}>
+                            <div className='addedParticipant' key={participant} onClick={removeAddedParticipant}>
+                                <div className='addedParticipantName' value={participant}>
                                     {participant}
                                 </div>
                             </div>
@@ -171,10 +171,10 @@ export default function CreateGroupChatPopUp() {
                     }
                 </div>
 
-                <button className='create-group-chat-submit-button' onClick={createButtonClicked}>
+                <button className='createGroupChatSubmitButton' onClick={createButtonClicked}>
                     Create
                 </button>
-                <div className='participants-number-message'>
+                <div className='participantsNumberMessage text-[18px] mt-[5px]'>
                     Atmost 5 people can be a part of a group chat
                 </div>
 

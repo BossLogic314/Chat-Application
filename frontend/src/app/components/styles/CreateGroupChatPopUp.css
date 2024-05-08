@@ -1,14 +1,13 @@
-.create-group-chat-pop-up-overlay {
+#createGroupChatPopUpOverlay {
     position: fixed;
     background-color: rgb(0, 0, 0, 0.5);
 }
 
-.create-group-chat-pop-up {
-
+.createGroupChatPopUp {
     background-color: rgb(239, 231, 231);
 }
 
-.group-chat-name, .group-chat-participants {
+.groupChatName, .groupChatParticipants {
     width: 80%;
 
     margin-top: 10px;
@@ -16,17 +15,17 @@
     font-size: 20px;
 }
 
-.suggested-participants-box {
+.suggestedParticipantsBox {
     width: 80%;
 }
 
-.suggested-participants {
+.suggestedParticipants {
     position: absolute;
     width: 31%;
     opacity: 1;
 }
 
-.suggested-participant {
+.suggestedParticipant {
     width: 100%;
     background-color: white;
 
@@ -37,18 +36,18 @@
     border: 1px solid black;
 }
 
-.suggested-participant:hover {
+.suggestedParticipant:hover {
     cursor: pointer;
     background-color: rgb(237, 231, 231);
 }
 
-.added-participants {
+.addedParticipants {
     width: 80%;
 
     text-align: center;
 }
 
-.added-participant {
+.addedParticipant {
     display: inline-flex;
 
     background-color: rgb(124, 196, 237);
@@ -62,19 +61,19 @@
     border: 1px solid black;
 }
 
-.added-participant:hover {
+.addedParticipant:hover {
     cursor: pointer;
     transform: scale(1);
 }
 
-.added-participant-name {
+.addedParticipantName {
     font-size: 20px;
 
     padding-left: 2px;
     padding-right: 2px;
 }
 
-.create-group-chat-submit-button {
+.createGroupChatSubmitButton {
     width: 20%;
 
     font-size: 18px;
@@ -82,13 +81,7 @@
     margin-top: 10px;
 }
 
-.create-group-chat-submit-button:hover {
+.createGroupChatSubmitButton:hover {
     cursor: pointer;
     transform: scale(1.25);
-}
-
-.participants-number-message {
-    font-size: 18px;
-
-    margin-top: 5px;
 }
