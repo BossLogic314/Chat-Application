@@ -198,7 +198,12 @@ export default function Page() {
                 placeholder="Type your message here..." type="text" value={typedMessage}
                 onChange={messageTyped}>
               </input>
-              <button className="sendButton h-10 w-20 border-blue-400 border-2 mr-8" onClick={sendButtonClicked}></button>
+              {
+                typedMessage == '' || currentChat == '' ?
+                  <button className="sendButton h-10 w-20 border-blue-400 border-2 mr-8" disabled onClick={sendButtonClicked}> </button>
+                  :
+                  <button className="sendButton h-10 w-20 border-blue-400 border-2 mr-8" onClick={sendButtonClicked}> </button>
+              }
             </div>
           </div>
 
