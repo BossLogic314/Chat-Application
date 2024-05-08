@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import CreateGroupChatPopUp from "../components/CreateGroupChatPopUp";
 import { useCreateGroupChatStore } from "../../../zustand/useCreateGroupChatStore";
 import { useUsernameStore } from "../../../zustand/useUsernameStore";
+import './styles/page.css'
 
 export default function Page() {
 
@@ -14,7 +15,7 @@ export default function Page() {
   const {createGroupChat, setCreateGroupChat} = useCreateGroupChatStore();
   const [socket, setSocket] = useState(null);
   const {username} = useUsernameStore();
-  const [currentChat, setCurrentChat] = useState(null);
+  const [currentChat, setCurrentChat] = useState('');
   const [messages, setMessages] = useState([]);
   const router = useRouter();
 
