@@ -130,7 +130,7 @@ export default function Page() {
       </div>
 
       <div className="flex flex-row flex-1 h-full w-screen border-black border">
-        <div className="chats-window w-1/3 h-full flex flex-col items-center border-red-400 border-2">
+        <div className="chatsWindow w-1/3 h-full flex flex-col items-center border-red-400 border-2">
           <input
             className="searchTab w-full h-10 text-lg border-black border px-2 py-2"
             placeholder="Search for chats"
@@ -158,22 +158,25 @@ export default function Page() {
 
         </div>
 
-        <div className="messages-window flex flex-col flex-1 w-full h-full border-green-400 border-2">
+        <div className="messagesWindow flex flex-col flex-1 w-full h-full border-green-400 border-2">
 
           <div className="messages flex-1 w-full border-black border-2">
             {
               messages.map((message, index) => (
-                <div className={username == message.from ? 'message-sent' : 'message-received'} key={index}>
+                <div className={username == message.from ? 'messageSent' : 'messageReceived'} key={index}>
 
-                  <div className='from' key={`from-${index}`}>
+                  <div className='from text-[18px] italic pt-[3px] pb-[2px]' key={`from-${index}`}>
                       {message.from}
                   </div>
 
-                  <div className={username == message.from ? 'message-sent-text' : 'message-received-text'} key={`messageSentText-${index}`}>
+                  <div
+                    className="text-[25px] pt-[3px] pb-[5px]"
+                    id={username == message.from ? 'messageSentText' : 'messageReceivedText'}
+                    key={`messageSentText-${index}`}>
                       {message.message}
                   </div>
 
-                  <div className='message-date-time' key={`messageDateTime-${index}`}>
+                  <div className='messageDateTime text-[17px] pt-[2px] pb-[3px] text-right' key={`messageDateTime-${index}`}>
                   {
                       `${ message.hours }:${ message.minutes }:${ message.seconds }, ` +
                       `${ message.date }-${ message.month }-${ message.year }`
