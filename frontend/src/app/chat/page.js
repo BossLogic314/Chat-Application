@@ -17,6 +17,7 @@ export default function Page() {
   const {username} = useUsernameStore();
   const [currentChat, setCurrentChat] = useState('');
   const [messages, setMessages] = useState([]);
+  const [typedMessage, setTypedMessage] = useState('');
   const router = useRouter();
 
   let getChats = (async () => {
@@ -93,7 +94,16 @@ export default function Page() {
         break;
       }
     }
-  })
+  });
+
+  let messageTyped = ((event) => {
+    const newTypedMessage = document.getElementById('typingBox').value;
+    setTypedMessage(newTypedMessage);
+  });
+
+  let sendButtonClicked = ((event) => {
+    console.log(typedMessage);
+  });
 
   useEffect(() => {
 
@@ -153,17 +163,17 @@ export default function Page() {
           <div className="messages flex-1 w-full border-black border-2">
             {
               messages.map((message, index) => (
-                <div className={ username == message.from ? 'message-sent' : 'message-received' }>
+                <div className={username == message.from ? 'message-sent' : 'message-received'} key={index}>
 
-                  <div className='from'>
-                      { message.from }
+                  <div className='from' key={`from-${index}`}>
+                      {message.from}
                   </div>
 
-                  <div className={ username == message.from ? 'message-sent-text' : 'message-received-text' }>
-                      { message.message }
+                  <div className={username == message.from ? 'message-sent-text' : 'message-received-text'} key={`messageSentText-${index}`}>
+                      {message.message}
                   </div>
 
-                  <div className='message-date-time'>
+                  <div className='message-date-time' key={`messageDateTime-${index}`}>
                   {
                       `${ message.hours }:${ message.minutes }:${ message.seconds }, ` +
                       `${ message.date }-${ message.month }-${ message.year }`
@@ -183,8 +193,12 @@ export default function Page() {
             </div>
 
             <div className="typeAndSendSection w-4/5 flex flex-row">
-              <input className="typingBox h-10 w-5/6 border-black border-2" placeholder="Type your message here..." ></input>
-              <div className="sendButton h-10 w-20 border-blue-400 border-2 mr-8"></div>
+              <input
+                className="typingBox h-10 w-5/6 border-black border-2" id="typingBox"
+                placeholder="Type your message here..." type="text" value={typedMessage}
+                onChange={messageTyped}>
+              </input>
+              <button className="sendButton h-10 w-20 border-blue-400 border-2 mr-8" onClick={sendButtonClicked}></button>
             </div>
           </div>
 
