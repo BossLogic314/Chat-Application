@@ -1,3 +1,60 @@
 #currentChat {
     background-color: rgb(189, 187, 187);
 }
+
+.message-sent, .message-received {
+    max-width: 60%;
+    width: fit-content;
+    margin-top: 10px;
+
+    text-align: left;
+
+    padding-left: 5px;
+    padding-right: 5px;
+
+    border-radius: 10px;
+    border: 2px solid yellow;
+}
+
+.message-sent {
+    margin-left: auto;
+    margin-right: 10px;
+
+    background-color: rgb(132, 233, 110);
+}
+
+.message-received {
+    margin-left: 10px;
+    background-color: rgb(117, 213, 242);
+}
+
+.from {
+    font-size: 18px;
+    font-style: italic;
+
+    padding-top: 3px;
+    padding-bottom: 2px;
+
+    border-bottom: 2px solid white;
+}
+
+.message-sent-text, .message-received-text {
+    font-size: 25px;
+
+    padding-top: 3px;
+    padding-bottom: 5px;
+
+    border-bottom: 2px solid white;
+}
+
+.message-date-time {
+    font-size: 17px;
+    font-style: oblique;
+
+    padding-top: 2px;
+    padding-bottom: 3px;
+
+    text-align: right;
+
+    color: rgb(83, 79, 79);
+}
