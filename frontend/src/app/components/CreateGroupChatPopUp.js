@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import '../styles/CreateGroupChatPopUp.css';
+import './styles/CreateGroupChatPopUp.css';
 import { useCreateGroupChatStore } from "../../../zustand/useCreateGroupChatStore";
 
 export default function CreateGroupChatPopUp() {
