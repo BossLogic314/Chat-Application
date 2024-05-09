@@ -42,7 +42,7 @@ io.on('connection', (socket) => {
             if (userSocketMap[participant] == undefined) {
                 continue;
             }
-            userSocketMap[participant].emit('chat', message);
+            userSocketMap[participant].emit('chat', messageObj);
         }
     });
 });
