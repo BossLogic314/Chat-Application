@@ -24,8 +24,8 @@ export default function Page() {
         withCredentials: true,
       });
       // Setting the username state
-      setUsername(enteredUsername);
-      router.replace('/chat');
+      const status = await setUsername(enteredUsername);
+      router.replace('/chat')
     }
     catch(error) {
       console.log(error);
