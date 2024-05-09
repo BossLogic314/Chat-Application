@@ -9,6 +9,10 @@ let conversationSchema = {
     participants: {
         type: Array,
         required: true
+    },
+    messages: {
+        type: Array,
+        required: true
     }
 }
 
