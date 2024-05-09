@@ -3,7 +3,6 @@ import { verifyJwtToken } from '../utils/jwtToken.js';
 
 export let getConversation = (async (req, res) => {
 
-    const conversationName = req.query.conversationName;
     try {
         const jwtToken = req.cookies.jwt;
         const status = verifyJwtToken(jwtToken);
@@ -19,6 +18,7 @@ export let getConversation = (async (req, res) => {
     }
 
     try {
+        const conversationName = req.query.conversationName;
         const conversation = await conversationModel.findOne({name: conversationName});
         res.status(200).json({response: conversation});
     }
@@ -29,7 +29,6 @@ export let getConversation = (async (req, res) => {
 
 export let addMessageToConversation = (async (req, res) => {
 
-    const {conversationName, participants, from, to, message, hours, minutes, seconds, date, month, year} = req.body;
     try {
         const jwtToken = req.cookies.jwt;
         const status = verifyJwtToken(jwtToken);
@@ -45,6 +44,7 @@ export let addMessageToConversation = (async (req, res) => {
     }
 
     try {
+        const {conversationName, participants, from, to, message, hours, minutes, seconds, date, month, year} = req.body;
         const conversation = await conversationModel.findOne({name: conversationName});
         conversation.messages.push(
             {

@@ -13,7 +13,6 @@ export let getUser = async (username) => {
 
 export let getUsers = async (req, res) => {
 
-    const searchString = req.query.searchString;
     try {
         const jwtToken = req.cookies.jwt;
         const status = verifyJwtToken(jwtToken);
@@ -29,6 +28,7 @@ export let getUsers = async (req, res) => {
     }
 
     try {
+        const searchString = req.query.searchString;
         const users = await userModel.find({username: {$regex: `^${searchString}`}});
         res.status(200).json({response: users});
     }
