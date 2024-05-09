@@ -16,6 +16,7 @@ export default function Page() {
   const [socket, setSocket] = useState(null);
   const {username} = useUsernameStore();
   const [currentChat, setCurrentChat] = useState('');
+  const [currentConversation, setCurrentConversation] = useState('');
   const [messages, setMessages] = useState([]);
   const [typedMessage, setTypedMessage] = useState('');
   const router = useRouter();
@@ -39,7 +40,7 @@ export default function Page() {
 
           const name = newChats[i].name == undefined ? newChats[i].username : newChats[i].name;
           const participants = newChats[i].participants == undefined ? [username, newChats[i].username] : newChats[i].participants;
-          
+
           // Participants are always sorted in alphabetical order
           participants.sort();
 
@@ -84,7 +85,6 @@ export default function Page() {
         newMessages = response.data.response.messages;
       }
       setMessages(newMessages);
-      console.log(chatNameToParticipantsMap);
     }
     catch(error) {
       // Jwt token expired, the user needs to login again
@@ -101,6 +101,10 @@ export default function Page() {
 
       // User
       if (chats[i].username != undefined && chats[i].username == chat) {
+        // Conversation name in case of two users is 'user1-user2'
+        const users = [username, chats[i].username];
+        users.sort();
+        setCurrentConversation(users[0] + '-' + users[1]);
         setCurrentChat(chats[i].username);
         displayMessages(chats[i].username, false);
         break;
@@ -108,6 +112,7 @@ export default function Page() {
 
       // Group chat
       if (chats[i].name != undefined && chats[i].name == chat) {
+        setCurrentConversation(chats[i].name);
         setCurrentChat(chats[i].name);
         displayMessages(chats[i].name, true);
         break;
@@ -120,26 +125,97 @@ export default function Page() {
     setTypedMessage(newTypedMessage);
   });
 
-  let sendButtonClicked = ((event) => {
-    
+  let sendButtonClicked = (async () => {
+
+    const currentDate = new Date();
+    const hours = ("0" + currentDate.getHours().toString()).slice(-2);
+    const minutes = ("0" + currentDate.getMinutes().toString()).slice(-2);
+    const seconds = ("0" + currentDate.getSeconds().toString()).slice(-2);
+    const date = ("0" + currentDate.getDate().toString()).slice(-2);
+    const month = ("0" + (currentDate.getMonth() + 1).toString()).slice(-2);
+    const year= ("0" + currentDate.getFullYear().toString()).slice(-2);
+
+    const newMessage = {
+      from: username,
+      to: currentChat,
+      participants: chatNameToParticipantsMap[currentChat],
+      message: typedMessage,
+      hours: hours,
+      minutes: minutes,
+      seconds: seconds,
+      date: date,
+      month: month,
+      year: year
+    }
+
+    socket.emit('chat', newMessage);
+
+    try {
+      // Saving the message in the database
+      const response = await axios.post('http://localhost:8080/conversation/addMessageToConversation',
+      {
+        conversationName: currentConversation,
+        from: username,
+        to: currentChat,
+        participants: chatNameToParticipantsMap[currentChat],
+        message: typedMessage,
+        hours: hours,
+        minutes: minutes,
+        seconds: seconds,
+        date: date,
+        month: month,
+        year: year
+      },
+      {
+        withCredentials: true
+      });
+    }
+    catch(error) {
+      // Jwt token expired, the user needs to login again
+      alert(error.response.data.message);
+      router.replace('/');
+    }
+
+    const newMessages = [...messages, newMessage];
+    setMessages(newMessages);
+
     setTypedMessage('');
   });
 
   useEffect(() => {
 
     const newSocket = io('http://localhost:8081', {
-      username: username
+      query: {
+        username: username
+      }
     });
     setSocket(newSocket);
 
     newSocket.on('chat', (message) => {
-      console.log(`Got message ${message}`);
+
+      const receivedMessage = {
+        from: message.from,
+        to: message.to,
+        message: message.message,
+        hours: message.hours,
+        minutes: message.minutes,
+        seconds: message.seconds,
+        date: message.date,
+        month: message.month,
+        year: message.year
+      }
+      setMessages([...messages, receivedMessage]);
+
+      // Message did not come another user
+      if (message.from == username) {
+        return;
+      }
     });
 
     getChats();
 
     return () => newSocket.close();
-  }, []);
+  }, [username]);
 
   return (
     <div className="flex flex-col box bg-white-200 h-screen w-screen">
