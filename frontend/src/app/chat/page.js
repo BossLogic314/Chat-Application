@@ -19,6 +19,7 @@ export default function Page() {
   const [messages, setMessages] = useState([]);
   const [typedMessage, setTypedMessage] = useState('');
   const router = useRouter();
+  const [chatNameToParticipantsMap, setChatNameToParticipantsMap] = useState({});
 
   let getChats = (async () => {
     const searchString = document.getElementsByClassName('searchTab')[0].value;
@@ -29,6 +30,25 @@ export default function Page() {
         withCredentials: true,
       });
       const newChats = response.data.response;
+
+      // If the search string is empty, storing a map of all chat names to participants
+      let newChatNameToParticipantsMap = {};
+
+      if (searchString == '') {
+        for (let i = 0; i < newChats.length; ++i) {
+
+          const name = newChats[i].name == undefined ? newChats[i].username : newChats[i].name;
+          const participants = newChats[i].participants == undefined ? [username, newChats[i].username] : newChats[i].participants;
+          
+          // Participants are always sorted in alphabetical order
+          participants.sort();
+
+          newChatNameToParticipantsMap[name] = participants;
+        }
+
+        setChatNameToParticipantsMap(newChatNameToParticipantsMap);
+      }
+
       setChats(newChats);
     }
     catch(error) {
@@ -64,8 +84,7 @@ export default function Page() {
         newMessages = response.data.response.messages;
       }
       setMessages(newMessages);
-      console.log(newMessages);
-      console.log(new Date());
+      console.log(chatNameToParticipantsMap);
     }
     catch(error) {
       // Jwt token expired, the user needs to login again
@@ -75,7 +94,7 @@ export default function Page() {
   });
 
   let chatClicked = ((event) => {
-    
+
     const chat = event.target.textContent;
 
     for (let i = 0; i < chats.length; ++i) {
@@ -102,7 +121,8 @@ export default function Page() {
   });
 
   let sendButtonClicked = ((event) => {
-    console.log(typedMessage);
+    
+    setTypedMessage('');
   });
 
   useEffect(() => {
@@ -140,12 +160,12 @@ export default function Page() {
           {
             chats.map((chat, index) =>
             (
-              <div className="chat flex flex-row h-14 w-[97%] border-black border mt-[2px] rounded hover:scale-[1.03] hover:cursor-pointer"
+              <div className="chat flex flex-row h-[60px] w-[97%] border-black border mt-[2px] rounded hover:scale-[1.03] hover:cursor-pointer"
                 id={chat.name == currentChat ? `currentChat` : (chat.username == currentChat ? `currentChat` : `chat`)}
                 key={`chat-${index}`}
                 onClick={chatClicked}>
 
-                <img className="chatDisplayPicture h-full w-20 border-red-400 border-2" key={`chatDisplayPicture-${index}`}></img>
+                <img className="chatDisplayPicture h-[58px] w-20 border-red-400 border-2 rounded-full" key={`chatDisplayPicture-${index}`}></img>
                 <div className="chatNameDiv flex flex-col h-full w-full border-yellow-400 border-2 ml-2 justify-center" key={`chatNameDiv-${index}`}>
                   <div className="chatName text-xl border-black border-2" key={`chatName-${index}`}>
                     {chat.name === undefined ? chat.username : chat.name}
@@ -170,9 +190,9 @@ export default function Page() {
                   </div>
 
                   <div
-                    className="text-[25px] pt-[3px] pb-[5px]"
+                    className="text-[23px] pt-[3px] pb-[5px]"
                     id={username == message.from ? 'messageSentText' : 'messageReceivedText'}
-                    key={`messageSentText-${index}`}>
+                    key={`messageText-${index}`}>
                       {message.message}
                   </div>
 
@@ -189,11 +209,11 @@ export default function Page() {
           </div>
 
           <div className="typingSection flex flex-row h-20 border-red-600 border-2 justify-center items-center justify-center">
-            <div
-              className="createGroupChatButton flex justify-center items-center h-10 w-20 border-blue-400 border-2 ml-8 mr-4 text-3xl"
+            <button
+              className="createGroupChatButton flex justify-center items-center h-10 w-20 border-blue-400 border-2 ml-8 mr-4 text-3xl hover:scale-[1.05] hover:cursor-pointer"
               onClick={createGroupChatButtonClicked}>
                 +
-            </div>
+            </button>
 
             <div className="typeAndSendSection w-4/5 flex flex-row">
               <input
@@ -205,7 +225,9 @@ export default function Page() {
                 typedMessage == '' || currentChat == '' ?
                   <button className="sendButton h-10 w-20 border-blue-400 border-2 mr-8" disabled onClick={sendButtonClicked}> </button>
                   :
-                  <button className="sendButton h-10 w-20 border-blue-400 border-2 mr-8" onClick={sendButtonClicked}> </button>
+                  <button className="sendButton h-10 w-20 border-blue-400 border-2 mr-8 hover:scale-[1.05] hover:cursor-pointer"
+                    onClick={sendButtonClicked}>
+                  </button>
               }
             </div>
           </div>
