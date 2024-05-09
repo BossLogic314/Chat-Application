@@ -21,7 +21,7 @@ io.on('connection', (socket) => {
 
     console.log('Client connected');
 
-    const username = socket.handshake.username;
+    const username = socket.handshake.query.username;
     userSocketMap[username] = socket;
 
     socket.on('chat', (messageObj) => {
@@ -35,7 +35,13 @@ io.on('connection', (socket) => {
 
         // Sending the message to all participants of the chat
         for (let i = 0; i < participants.length; ++i) {
+
             const participant = participants[i];
+
+            // The participant is not logged in
+            if (userSocketMap[participant] == undefined) {
+                continue;
+            }
             userSocketMap[participant].emit('chat', message);
         }
     });
