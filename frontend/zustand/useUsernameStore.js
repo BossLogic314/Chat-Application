@@ -3,7 +3,7 @@ import {devtools, persist} from "zustand/middleware";
 
 const usernameStore = (set) => ({
     username: '',
-    setUsername: (newUsername) => set({username: newUsername})
+    setUsername: async (newUsername) => set({username: newUsername})
 });
 
 export const useUsernameStore = create(
