@@ -23,11 +23,16 @@ export default function Page() {
   const router = useRouter();
   const [chatNameToParticipantsMap, setChatNameToParticipantsMap] = useState({});
 
-  let getChats = (async () => {
+  let getChats = (async (usernameValue=null) => {
+    
     const searchString = document.getElementsByClassName('searchTab')[0].value;
 
+    if (!usernameValue) {
+      usernameValue = username;
+    }
+
     try {
-      const response = await axios.get(`http://localhost:8080/chats/getAllChats?searchString=${searchString}&username=${username}`,
+      const response = await axios.get(`http://localhost:8080/chats/getAllChats?searchString=${searchString}&username=${usernameValue}`,
       {
         withCredentials: true,
       });
@@ -40,7 +45,7 @@ export default function Page() {
         for (let i = 0; i < newChats.length; ++i) {
 
           const name = newChats[i].name == undefined ? newChats[i].username : newChats[i].name;
-          const participants = newChats[i].participants == undefined ? [username, newChats[i].username] : newChats[i].participants;
+          const participants = newChats[i].participants == undefined ? [usernameValue, newChats[i].username] : newChats[i].participants;
 
           // Participants are always sorted in alphabetical order
           participants.sort();
@@ -190,7 +195,7 @@ export default function Page() {
         withCredentials: true,
       });
       setUsername(response.data.username);
-      getChats();
+      getChats(response.data.username);
     }
     catch(error) {
       // Jwt token expired, the user needs to login again
@@ -230,10 +235,10 @@ export default function Page() {
       addToMessages(receivedMessage);
     });
 
-    //verifyJwtTokenAndGetChats();
+    verifyJwtTokenAndGetChats();
 
     return () => newSocket.close();
-  });
+  }, []);
 
   return (
     <div className="flex flex-col box bg-white-200 h-screen w-screen">

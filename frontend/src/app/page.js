@@ -3,13 +3,11 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useUsernameStore } from "../../zustand/useUsernameStore";
 
 export default function Page() {
 
   const [enteredUsername, setEnteredUsername] = useState('');
   const [enteredPassword, setEnteredPassword] = useState('');
-  const {setUsername} = useUsernameStore();
   const router = useRouter();
 
   const loginEntered = async (e) => {
@@ -23,8 +21,7 @@ export default function Page() {
       {
         withCredentials: true,
       });
-      // Setting the username state
-      const status = await setUsername(enteredUsername);
+
       router.replace('/chat')
     }
     catch(error) {
