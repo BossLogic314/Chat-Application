@@ -19,9 +19,15 @@ export let getAllChats = async (req, res) => {
     }
 
     try {
+        const username = req.query.username;
         const searchString = req.query.searchString;
         const groupChats = await groupChatModel.find({name: {$regex: `^${searchString}`}});
-        const users = await userModel.find({username: {$regex: `^${searchString}`}});
+        const users = await userModel.find({
+            "$and": [
+                {username: {$regex: `^${searchString}`}},
+                {username: {$ne: username}}
+            ]
+        });
     
         const allChats = groupChats.concat(users);
         res.status(201).json({response: allChats});
