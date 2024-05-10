@@ -187,7 +187,7 @@ export default function Page() {
     setTypedMessage('');
   });
 
-  const verifyJwtTokenAndGetChats = async() => {
+  const verifyJwtTokenAndGetUsername = async() => {
 
     try {
       const response = await axios.get('http://localhost:8080/auth/checkJwtToken',
@@ -195,7 +195,7 @@ export default function Page() {
         withCredentials: true,
       });
       setUsername(response.data.username);
-      getChats(response.data.username);
+      return response.data.username;
     }
     catch(error) {
       // Jwt token expired, the user needs to login again
@@ -204,11 +204,13 @@ export default function Page() {
     }
   };
 
-  useEffect(() => {
+  const initialize = async() => {
+
+    const usernameValue = await verifyJwtTokenAndGetUsername();
 
     const newSocket = io('http://localhost:8081', {
       query: {
-        username: username
+        username: usernameValue
       }
     });
     setSocket(newSocket);
@@ -235,9 +237,19 @@ export default function Page() {
       addToMessages(receivedMessage);
     });
 
-    verifyJwtTokenAndGetChats();
+    getChats(usernameValue);
+  };
 
-    return () => newSocket.close();
+  useEffect(() => {
+
+    initialize();
+
+    return () => {
+      if (socket) {
+        socket.close();
+      }
+    };
+
   }, []);
 
   return (
