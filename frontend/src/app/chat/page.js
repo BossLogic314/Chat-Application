@@ -15,7 +15,7 @@ export default function Page() {
   const [chats, setChats] = useState([]);
   const {createGroupChat, setCreateGroupChat} = useCreateGroupChatStore();
   const [socket, setSocket] = useState(null);
-  const {username} = useUsernameStore();
+  const [username, setUsername] = useState('');
   const [currentChat, setCurrentChat] = useState('');
   const [currentConversation, setCurrentConversation] = useState('');
   const {messages, addToMessages, setMessages} = useMessagesStore();
@@ -182,12 +182,25 @@ export default function Page() {
     setTypedMessage('');
   });
 
+  const verifyJwtTokenAndGetChats = async() => {
+
+    try {
+      const response = await axios.get('http://localhost:8080/auth/checkJwtToken',
+      {
+        withCredentials: true,
+      });
+      setUsername(response.data.username);
+      getChats();
+    }
+    catch(error) {
+      // Jwt token expired, the user needs to login again
+      alert(error.response.data.message);
+      router.replace('/');
+    }
+  };
+
   useEffect(() => {
 
-    if (username == '') {
-      return;
-    }
-    
     const newSocket = io('http://localhost:8081', {
       query: {
         username: username
@@ -217,10 +230,10 @@ export default function Page() {
       addToMessages(receivedMessage);
     });
 
-    getChats();
+    //verifyJwtTokenAndGetChats();
 
     return () => newSocket.close();
-  }, [username]);
+  });
 
   return (
     <div className="flex flex-col box bg-white-200 h-screen w-screen">
