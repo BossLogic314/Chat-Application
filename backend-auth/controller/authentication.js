@@ -11,7 +11,7 @@ export let loginUser = async (req, res) => {
             res.status(401).json({message: "Invalid credentials"});
         }
         else {
-            generateJwtTokenAndPutInCookie(user._id.toJSON(), res);
+            generateJwtTokenAndPutInCookie({username: username}, res);
             res.status(200).json({message: "Authorized"});
         }
     }
@@ -80,9 +80,9 @@ export let signupUser = async (req, res) => {
 export let checkJwtToken = async (req, res) => {
     try {
         const jwtToken = req.cookies.jwt;
-        const status = verifyJwtToken(jwtToken);
-        if (status) {
-            res.status(200).json({message: "Authorized"});
+        const username = verifyJwtToken(jwtToken);
+        if (username) {
+            res.status(200).json({username: username});
         }
         else {
             res.status(401).json({message: "User unauthorized"});
