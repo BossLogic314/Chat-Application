@@ -15,7 +15,7 @@ export default function Page() {
   const [chats, setChats] = useState([]);
   const {createGroupChat, setCreateGroupChat} = useCreateGroupChatStore();
   const [socket, setSocket] = useState(null);
-  const [username, setUsername] = useState('');
+  const {username, setUsername} = useUsernameStore();
   const [currentChat, setCurrentChat] = useState('');
   const [currentConversation, setCurrentConversation] = useState('');
   const {messages, addToMessages, setMessages} = useMessagesStore();
@@ -24,7 +24,7 @@ export default function Page() {
   const [chatNameToParticipantsMap, setChatNameToParticipantsMap] = useState({});
 
   let getChats = (async (usernameValue=null) => {
-    
+
     const searchString = document.getElementsByClassName('searchTab')[0].value;
 
     if (!usernameValue) {
