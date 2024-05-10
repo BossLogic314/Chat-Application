@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import CreateGroupChatPopUp from "../components/CreateGroupChatPopUp";
 import { useCreateGroupChatStore } from "../../../zustand/useCreateGroupChatStore";
 import { useUsernameStore } from "../../../zustand/useUsernameStore";
-import { useMessageStore } from "../../../zustand/useMessagesStore";
 import './styles/page.css'
 
 export default function Page() {
@@ -18,7 +17,7 @@ export default function Page() {
   const {username} = useUsernameStore();
   const [currentChat, setCurrentChat] = useState('');
   const [currentConversation, setCurrentConversation] = useState('');
-  const {messages, setMessages} = useMessageStore();
+  const [messages, setMessages] = useState([]);
   const [typedMessage, setTypedMessage] = useState('');
   const router = useRouter();
   const [chatNameToParticipantsMap, setChatNameToParticipantsMap] = useState({});
@@ -151,7 +150,7 @@ export default function Page() {
 
     socket.emit('chat', newMessage);
 
-    try {
+    /*try {
       // Saving the message in the database
       const response = await axios.post('http://localhost:8080/conversation/addMessageToConversation',
       {
@@ -175,10 +174,9 @@ export default function Page() {
       // Jwt token expired, the user needs to login again
       alert(error.response.data.message);
       router.replace('/');
-    }
+    }*/
 
-    const newMessages = [...messages, newMessage];
-    setMessages(newMessages);
+    setMessages([...messages, newMessage]);
 
     setTypedMessage('');
   });
@@ -211,6 +209,7 @@ export default function Page() {
         year: message.year
       }
 
+      console.log(messages);
       setMessages([...messages, receivedMessage]);
     });
 
