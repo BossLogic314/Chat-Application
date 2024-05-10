@@ -28,8 +28,14 @@ export let getUsers = async (req, res) => {
     }
 
     try {
+        const username = req.query.username;
         const searchString = req.query.searchString;
-        const users = await userModel.find({username: {$regex: `^${searchString}`}});
+        const users = await userModel.find({
+            "$and": [
+                {username: {$regex: `^${searchString}`}},
+                {username: {$ne: username}}
+            ]
+        });
         res.status(200).json({response: users});
     }
     catch(error) {
