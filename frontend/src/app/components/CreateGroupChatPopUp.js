@@ -3,12 +3,14 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import './styles/CreateGroupChatPopUp.css';
 import { useCreateGroupChatStore } from "../../../zustand/useCreateGroupChatStore";
+import { useUsernameStore } from "../../../zustand/useUsernameStore";
 
 export default function CreateGroupChatPopUp() {
 
     const [suggestedParticipants, setSuggestedParticipants] = useState([]);
     const [addedParticipants, setAddedParticipants] = useState([]);
     const {createGroupChat, setCreateGroupChat} = useCreateGroupChatStore();
+    const {username} = useUsernameStore();
     const router = useRouter();
 
     let closeGroupChatPopUp = ((event) => {
@@ -23,7 +25,7 @@ export default function CreateGroupChatPopUp() {
         const searchString = document.getElementsByClassName('groupChatParticipants')[0].value;
         if (searchString !== '') {
             try {
-                const response = await axios.get(`http://localhost:8080/users/getUsers?searchString=${searchString}`,
+                const response = await axios.get(`http://localhost:8080/users/getUsers?searchString=${searchString}&username=${username}`,
                 {
                     withCredentials: true
                 });

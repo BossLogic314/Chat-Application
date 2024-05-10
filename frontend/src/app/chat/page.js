@@ -27,7 +27,7 @@ export default function Page() {
     const searchString = document.getElementsByClassName('searchTab')[0].value;
 
     try {
-      const response = await axios.get(`http://localhost:8080/chats/getAllChats?searchString=${searchString}`,
+      const response = await axios.get(`http://localhost:8080/chats/getAllChats?searchString=${searchString}&username=${username}`,
       {
         withCredentials: true,
       });
@@ -184,6 +184,10 @@ export default function Page() {
 
   useEffect(() => {
 
+    if (username == '') {
+      return;
+    }
+    
     const newSocket = io('http://localhost:8081', {
       query: {
         username: username
