@@ -156,7 +156,7 @@ export default function Page() {
 
     socket.emit('chat', newMessage);
 
-    try {
+    /*try {
       // Saving the message in the database
       const response = await axios.post('http://localhost:8080/conversation/addMessageToConversation',
       {
@@ -180,9 +180,7 @@ export default function Page() {
       // Jwt token expired, the user needs to login again
       alert(error.response.data.message);
       router.replace('/');
-    }
-
-    setMessages([...messages, newMessage]);
+    }*/
 
     setTypedMessage('');
   });
@@ -216,11 +214,6 @@ export default function Page() {
     setSocket(newSocket);
 
     newSocket.on('chat', (message) => {
-
-      // Message did not come from another user
-      if (message.from == username) {
-        return;
-      }
   
       const receivedMessage = {
         from: message.from,
