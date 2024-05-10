@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import CreateGroupChatPopUp from "../components/CreateGroupChatPopUp";
 import { useCreateGroupChatStore } from "../../../zustand/useCreateGroupChatStore";
 import { useUsernameStore } from "../../../zustand/useUsernameStore";
+import { useMessageStore } from "../../../zustand/useMessagesStore";
 import './styles/page.css'
 
 export default function Page() {
@@ -17,7 +18,7 @@ export default function Page() {
   const {username} = useUsernameStore();
   const [currentChat, setCurrentChat] = useState('');
   const [currentConversation, setCurrentConversation] = useState('');
-  const [messages, setMessages] = useState([]);
+  const {messages, setMessages} = useMessageStore();
   const [typedMessage, setTypedMessage] = useState('');
   const router = useRouter();
   const [chatNameToParticipantsMap, setChatNameToParticipantsMap] = useState({});
@@ -193,6 +194,11 @@ export default function Page() {
 
     newSocket.on('chat', (message) => {
 
+      // Message did not come from another user
+      if (message.from == username) {
+        return;
+      }
+  
       const receivedMessage = {
         from: message.from,
         to: message.to,
@@ -204,12 +210,8 @@ export default function Page() {
         month: message.month,
         year: message.year
       }
-      setMessages([...messages, receivedMessage]);
 
-      // Message did not come another user
-      if (message.from == username) {
-        return;
-      }
+      setMessages([...messages, receivedMessage]);
     });
 
     getChats();
