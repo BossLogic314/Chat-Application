@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import CreateGroupChatPopUp from "../components/CreateGroupChatPopUp";
 import { useCreateGroupChatStore } from "../../../zustand/useCreateGroupChatStore";
 import { useUsernameStore } from "../../../zustand/useUsernameStore";
+import { useCurrentChatNameStore } from "../../../zustand/useCurrentChatNameStore";
 import { useMessagesStore } from "../../../zustand/useMessagesStore";
 import { useChatsStore } from "../../../zustand/useChatStore";
 import './styles/page.css'
@@ -17,7 +18,7 @@ export default function Page() {
   const {createGroupChat, setCreateGroupChat} = useCreateGroupChatStore();
   const [socket, setSocket] = useState(null);
   const {username, setUsername} = useUsernameStore();
-  const [currentChatName, setCurrentChatName] = useState('');
+  const {currentChatName, setCurrentChatName} = useCurrentChatNameStore();
   const [currentConversation, setCurrentConversation] = useState('');
   const {messages, addToMessages, setMessages} = useMessagesStore();
   const [typedMessage, setTypedMessage] = useState('');
@@ -255,6 +256,7 @@ export default function Page() {
       const chatName = message.from == usernameValue ? message.to : message.from;
       pushChatToTop(chatName);
 
+      // Adding the received message to the displaying list
       addToMessages(receivedMessage);
     });
 
