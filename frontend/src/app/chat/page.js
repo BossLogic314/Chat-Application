@@ -76,9 +76,7 @@ export default function Page() {
       conversationName = chatName;
     }
     else {
-      let list = [username, chatName];
-      list.sort();
-      conversationName = list[0] + '-' + list[1];
+      conversationName = [username, chatName].sort().join('-');
     }
 
     try {
@@ -156,7 +154,7 @@ export default function Page() {
 
     socket.emit('chat', newMessage);
 
-    try {
+    /*try {
       // Saving the message in the database
       const response = await axios.post('http://localhost:8080/conversation/addMessageToConversation',
       {
@@ -180,7 +178,7 @@ export default function Page() {
       // Jwt token expired, the user needs to login again
       alert(error.response.data.message);
       router.replace('/');
-    }
+    }*/
 
     setTypedMessage('');
   });
