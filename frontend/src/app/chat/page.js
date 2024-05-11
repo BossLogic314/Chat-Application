@@ -16,7 +16,7 @@ export default function Page() {
   const {createGroupChat, setCreateGroupChat} = useCreateGroupChatStore();
   const [socket, setSocket] = useState(null);
   const {username, setUsername} = useUsernameStore();
-  const [currentChat, setCurrentChat] = useState('');
+  const [currentChatName, setCurrentChatName] = useState('');
   const [currentConversation, setCurrentConversation] = useState('');
   const {messages, addToMessages, setMessages} = useMessagesStore();
   const [typedMessage, setTypedMessage] = useState('');
@@ -143,7 +143,7 @@ export default function Page() {
       }
 
       setCurrentConversation(conversationName);
-      setCurrentChat(chats[i].name);
+      setCurrentChatName(chats[i].name);
       displayMessages(chats[i].name, chats[i].isGroupChat);
       break;
     }
@@ -166,8 +166,8 @@ export default function Page() {
 
     const newMessage = {
       from: username,
-      to: currentChat,
-      participants: chatNameToParticipantsMap[currentChat],
+      to: currentChatName,
+      participants: chatNameToParticipantsMap[currentChatName],
       message: typedMessage,
       hours: hours,
       minutes: minutes,
@@ -185,8 +185,8 @@ export default function Page() {
       {
         conversationName: currentConversation,
         from: username,
-        to: currentChat,
-        participants: chatNameToParticipantsMap[currentChat],
+        to: currentChatName,
+        participants: chatNameToParticipantsMap[currentChatName],
         message: typedMessage,
         hours: hours,
         minutes: minutes,
@@ -224,6 +224,28 @@ export default function Page() {
       router.replace('/');
     }
   };
+
+  const pushChatToTop = (chatName) => {
+
+    let chatToPush = null;
+    let newChats = [];
+    for (let i = 0; i < chats.length; ++i) {
+
+      // Found the chat to push to the top
+      if (chats[i].name == chatName) {
+        chatToPush = chats[i];
+        continue;
+      }
+
+      newChats.push(chats[i]);
+    }
+
+    // The chat may not be present in the list if the user has filtered the chats
+    if (chatToPush) {
+      newChats.push(chatToPush);
+      setChats(newChats);
+    }
+  }
 
   const initialize = async() => {
 
@@ -288,7 +310,7 @@ export default function Page() {
             chats.map((chat, index) =>
             (
               <div className="chat flex flex-row h-[60px] w-[97%] border-black border mt-[2px] rounded hover:scale-[1.03] hover:cursor-pointer"
-                id={chat.name == currentChat ? `currentChat` : (chat.username == currentChat ? `currentChat` : `chat`)}
+                id={chat.name == currentChatName ? `currentChat` : `chat`}
                 key={`chat-${index}`}
                 onClick={chatClicked}>
 
@@ -349,7 +371,7 @@ export default function Page() {
                 onChange={messageTyped}>
               </input>
               {
-                typedMessage == '' || currentChat == '' ?
+                typedMessage == '' || currentChatName == '' ?
                   <button className="sendButton h-10 w-20 border-blue-400 border-2 mr-8" disabled onClick={sendButtonClicked}> </button>
                   :
                   <button className="sendButton h-10 w-20 border-blue-400 border-2 mr-8 hover:scale-[1.05] hover:cursor-pointer"
