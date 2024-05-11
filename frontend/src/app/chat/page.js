@@ -8,11 +8,12 @@ import CreateGroupChatPopUp from "../components/CreateGroupChatPopUp";
 import { useCreateGroupChatStore } from "../../../zustand/useCreateGroupChatStore";
 import { useUsernameStore } from "../../../zustand/useUsernameStore";
 import { useMessagesStore } from "../../../zustand/useMessagesStore";
+import { useChatsStore } from "../../../zustand/useChatStore";
 import './styles/page.css'
 
 export default function Page() {
 
-  const [chats, setChats] = useState([]);
+  const {chats, setChats, pushChatToTop} = useChatsStore();
   const {createGroupChat, setCreateGroupChat} = useCreateGroupChatStore();
   const [socket, setSocket] = useState(null);
   const {username, setUsername} = useUsernameStore();
@@ -179,7 +180,7 @@ export default function Page() {
 
     socket.emit('chat', newMessage);
 
-    try {
+    /*try {
       // Saving the message in the database
       const response = await axios.post('http://localhost:8080/conversation/addMessageToConversation',
       {
@@ -203,7 +204,7 @@ export default function Page() {
       // Jwt token expired, the user needs to login again
       alert(error.response.data.message);
       router.replace('/');
-    }
+    }*/
 
     setTypedMessage('');
   });
@@ -224,28 +225,6 @@ export default function Page() {
       router.replace('/');
     }
   };
-
-  const pushChatToTop = (chatName) => {
-
-    let chatToPush = null;
-    let newChats = [];
-    for (let i = 0; i < chats.length; ++i) {
-
-      // Found the chat to push to the top
-      if (chats[i].name == chatName) {
-        chatToPush = chats[i];
-        continue;
-      }
-
-      newChats.push(chats[i]);
-    }
-
-    // The chat may not be present in the list if the user has filtered the chats
-    if (chatToPush) {
-      newChats.push(chatToPush);
-      setChats(newChats);
-    }
-  }
 
   const initialize = async() => {
 
@@ -271,6 +250,10 @@ export default function Page() {
         month: message.month,
         year: message.year
       }
+
+      // The chatname to push to the top
+      const chatName = message.from == usernameValue ? message.to : message.from;
+      pushChatToTop(chatName);
 
       addToMessages(receivedMessage);
     });
