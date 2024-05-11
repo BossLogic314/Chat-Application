@@ -1,9 +1,15 @@
 import { create } from "zustand";
+import { useUsernameStore } from "./useUsernameStore";
 
 const chatsStore = (set, get) => ({
     chats: [],
     setChats: (newChats) => set({chats: newChats}),
-    pushChatToTop: (chatName) => {
+    pushChatToTop: (receivedMessage) => {
+
+        const username = useUsernameStore.getState().username;
+        const chatName = receivedMessage.from == username ? receivedMessage.to : (
+            receivedMessage.to == username ? receivedMessage.from : receivedMessage.to
+        );
 
         const currentChats = get().chats;
         let newChats = [];

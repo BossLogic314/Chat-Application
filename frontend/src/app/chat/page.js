@@ -252,9 +252,8 @@ export default function Page() {
         year: message.year
       }
 
-      // The chatname to push to the top
-      const chatName = message.from == usernameValue ? message.to : message.from;
-      pushChatToTop(chatName);
+      // To push the chat to the top
+      pushChatToTop(receivedMessage);
 
       // Adding the received message to the displaying list
       addToMessages(receivedMessage);
