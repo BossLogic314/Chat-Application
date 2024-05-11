@@ -25,7 +25,7 @@ export default function Page() {
   const router = useRouter();
   const [chatNameToParticipantsMap, setChatNameToParticipantsMap] = useState({});
 
-  let getChats = (async (usernameValue=null) => {
+  let getChats = (async (event, usernameValue=null) => {
 
     const searchString = document.getElementsByClassName('searchTab')[0].value;
 
@@ -259,7 +259,7 @@ export default function Page() {
       addToMessages(receivedMessage);
     });
 
-    getChats(usernameValue);
+    getChats(null, usernameValue);
   };
 
   useEffect(() => {
