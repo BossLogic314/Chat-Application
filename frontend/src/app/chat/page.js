@@ -8,6 +8,7 @@ import CreateGroupChatPopUp from "../components/CreateGroupChatPopUp";
 import { useCreateGroupChatStore } from "../../../zustand/useCreateGroupChatStore";
 import { useUsernameStore } from "../../../zustand/useUsernameStore";
 import { useCurrentChatNameStore } from "../../../zustand/useCurrentChatNameStore";
+import { useCurrentChatStore } from "../../../zustand/useCurrentChatStore";
 import { useMessagesStore } from "../../../zustand/useMessagesStore";
 import { useChatsStore } from "../../../zustand/useChatStore";
 import './styles/page.css'
@@ -19,6 +20,7 @@ export default function Page() {
   const [socket, setSocket] = useState(null);
   const {username, setUsername} = useUsernameStore();
   const {currentChatName, setCurrentChatName} = useCurrentChatNameStore();
+  const {currentChat, setCurrentChat} = useCurrentChatStore();
   const [currentConversation, setCurrentConversation] = useState('');
   const {messages, addToMessages, setMessages} = useMessagesStore();
   const [typedMessage, setTypedMessage] = useState('');
