@@ -67,7 +67,6 @@ export let getAllChats = async (req, res) => {
                 participants: allChats[i].name != undefined ? allChats[i].participants : [username, allChats[i].username].sort()
             });
         }
-        console.log(allChatObjs);
 
         res.status(201).json({response: allChatObjs});
     }
