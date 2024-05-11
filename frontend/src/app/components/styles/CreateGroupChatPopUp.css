@@ -1,5 +1,4 @@
 #createGroupChatPopUpOverlay {
-    position: fixed;
     background-color: rgb(0, 0, 0, 0.5);
 }
 
@@ -7,81 +6,10 @@
     background-color: rgb(239, 231, 231);
 }
 
-.groupChatName, .groupChatParticipants {
-    width: 80%;
-
-    margin-top: 10px;
-
-    font-size: 20px;
-}
-
-.suggestedParticipantsBox {
-    width: 80%;
-}
-
-.suggestedParticipants {
-    position: absolute;
-    width: 31%;
-    opacity: 1;
-}
-
-.suggestedParticipant {
-    width: 100%;
-    background-color: white;
-
-    margin-top: 0.5px;
-
-    font-size: 20px;
-
-    border: 1px solid black;
-}
-
 .suggestedParticipant:hover {
-    cursor: pointer;
-    background-color: rgb(237, 231, 231);
+    background-color: rgb(209, 206, 206);
 }
 
-.addedParticipants {
-    width: 80%;
-
-    text-align: center;
-}
-
-.addedParticipant {
-    display: inline-flex;
-
+#addedParticipantName {
     background-color: rgb(124, 196, 237);
-
-    margin-top: 7px;
-    margin-left: 10px;
-
-    width: fit-content;
-
-    border-radius: 5px;
-    border: 1px solid black;
-}
-
-.addedParticipant:hover {
-    cursor: pointer;
-    transform: scale(1);
-}
-
-.addedParticipantName {
-    font-size: 20px;
-
-    padding-left: 2px;
-    padding-right: 2px;
-}
-
-.createGroupChatSubmitButton {
-    width: 20%;
-
-    font-size: 18px;
-
-    margin-top: 10px;
-}
-
-.createGroupChatSubmitButton:hover {
-    cursor: pointer;
-    transform: scale(1.25);
 }

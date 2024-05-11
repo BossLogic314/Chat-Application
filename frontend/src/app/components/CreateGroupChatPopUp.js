@@ -22,7 +22,7 @@ export default function CreateGroupChatPopUp() {
     });
 
     let searchForUsers = (async () => {
-        const searchString = document.getElementsByClassName('groupChatParticipants')[0].value;
+        const searchString = document.getElementById('groupChatParticipants').value;
         if (searchString !== '') {
             try {
                 const response = await axios.get(`http://localhost:8080/users/getUsers?searchString=${searchString}&username=${username}`,
@@ -45,7 +45,7 @@ export default function CreateGroupChatPopUp() {
 
     let createButtonClicked = (async () => {
 
-        const groupChatName = document.getElementsByClassName('groupChatName')[0].value;
+        const groupChatName = document.getElementById('groupChatName').value;
 
         if (groupChatName == '') {
             alert("Group chat's name cannot be empty");
@@ -130,54 +130,59 @@ export default function CreateGroupChatPopUp() {
     });
 
     return (
-        <div className='h-screen w-screen flex justify-center items-center'
+        <div className='h-screen w-screen flex justify-center items-center fixed'
             id="createGroupChatPopUpOverlay"
             onClick={closeGroupChatPopUp}>
                 
-            <div className='createGroupChatPopUp h-[300px] w-[600px] flex flex-col items-center border-black border-2'>
+            <div className='createGroupChatPopUp min-h-[300px] min-w-[600px] flex flex-col items-center border-black border-2'>
 
-                <div className='createGroupChatPopUpHeader flex flex-row h-[15%]'>
-                    <div className='createGroupChatPopUpTitle text-3xl text-center w-[90%]'>Create new group chat</div>
+                <div className='createGroupChatPopUpHeader flex flex-row'>
+                    <div className='createGroupChatPopUpTitle text-4xl font-medium text-center mt-[5px]'>Create new group chat</div>
                 </div>
 
-                <input className='groupChatName' placeholder='Group name'></input>
+                <input className='groupChatName w-[80%] text-[20px] px-2 mt-[10px] rounded-lg' id="groupChatName" placeholder='Group name'></input>
                 <input
-                    className='groupChatParticipants'
+                    className='groupChatParticipants w-[80%] text-[20px] font-normal mt-[10px] px-2 rounded-lg'
+                    id='groupChatParticipants'
                     placeholder='Add participants here'
                     onChange={searchForUsers}>
                 </input>
 
-                <div className='suggestedParticipantsBox'>
-                    <div className='suggestedParticipants'>
-                        {
-                            suggestedParticipants.map( (participant) =>
-                                <div className='suggestedParticipant' key={participant.username}
-                                    value={participant.username}
-                                    onClick={suggestedParticipantClicked}>
-                                        {participant.username}
-                                </div>
-                            )
-                        }
-                    </div>
-                </div>
-
-                <div className='addedParticipants'>
+                <div className='suggestedParticipants w-[80%]'>
                     {
-                        addedParticipants.map( (participant) =>
-                            <div className='addedParticipant' key={participant} onClick={removeAddedParticipant}>
-                                <div className='addedParticipantName' value={participant}>
-                                    {participant}
-                                </div>
+                        suggestedParticipants.map( (participant) =>
+                            <div className='suggestedParticipant text-[20px] width-[100%] bg-white mt-[0.5px] px-[4px] hover:cursor-pointer border-[1px] border-black border-1'
+                                key={participant.username}
+                                value={participant.username}
+                                onClick={suggestedParticipantClicked}>
+                                    {participant.username}
                             </div>
                         )
                     }
                 </div>
 
-                <button className='createGroupChatSubmitButton' onClick={createButtonClicked}>
-                    Create
+                <div className='addedParticipants w-[80%] text-center'>
+                    {
+                        addedParticipants.map( (participant) =>
+                            <button
+                                className='addedParticipantName inline-flex text-[20px] px-[4px] mt-[7px] mx-[10px] hover:scale-[1.04] active:scale-[1] rounded-[8px] border-[1px] border-black'
+                                id='addedParticipantName'
+                                onClick={removeAddedParticipant}
+                                value={participant}>
+                                    {participant}
+                            </button>
+                        )
+                    }
+                </div>
+
+                <button
+                    className='createGroupChatSubmitButton text-white bg-green-500 hover:bg-green-600 font-medium rounded-lg text-md px-5 py-2.5 mt-[8px] hover:scale-[1.04] active:scale-[1]'
+                    onClick={createButtonClicked}>
+                        Create
                 </button>
-                <div className='participantsNumberMessage text-[18px] mt-[5px]'>
-                    Atmost 5 people can be a part of a group chat
+
+                <div className='participantsNumberMessage font-medium text-[18px] mx-[3px] my-[4px] italic'>
+                    *Atmost 5 people can be a part of a group chat*
                 </div>
 
             </div>
