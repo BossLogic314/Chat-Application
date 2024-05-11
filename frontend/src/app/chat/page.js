@@ -41,20 +41,41 @@ export default function Page() {
       // If the search string is empty, storing a map of all chat names to participants
       let newChatNameToParticipantsMap = {};
 
-      if (searchString == '') {
-        for (let i = 0; i < newChats.length; ++i) {
+      for (let i = 0; i < newChats.length; ++i) {
+        newChatNameToParticipantsMap[newChats[i].name] = newChats[i].participants;
+      }
 
-          const name = newChats[i].name == undefined ? newChats[i].username : newChats[i].name;
-          const participants = newChats[i].participants == undefined ? [usernameValue, newChats[i].username] : newChats[i].participants;
+      setChatNameToParticipantsMap(newChatNameToParticipantsMap);
 
-          // Participants are always sorted in alphabetical order
-          participants.sort();
+      // Sorting chat objects based on the last message exchanged
+      newChats.sort(function(chat1, chat2) {
+        const message1 = chat1.lastMessage;
+        const message2 = chat2.lastMessage;
 
-          newChatNameToParticipantsMap[name] = participants;
+        if (message1.year != message2.year) {
+            return message2.year - message1.year;
         }
 
-        setChatNameToParticipantsMap(newChatNameToParticipantsMap);
-      }
+        if (message1.month != message2.month) {
+            return message2.month - message1.month;
+        }
+
+        if (message1.date != message2.date) {
+            return message2.date - message1.date;
+        }
+
+        if (message1.hours != message2.hours) {
+            return message2.hours - message1.hours;
+        }
+
+        if (message1.minutes != message2.minutes) {
+            return message2.minutes - message1.minutes;
+        }
+
+        if (message1.seconds != message2.seconds) {
+            return message2.seconds - message1.seconds;
+        }
+      });
 
       setChats(newChats);
     }
@@ -101,26 +122,30 @@ export default function Page() {
 
     const chat = event.target.textContent;
 
+    // Iterating over all chats and picking the chat that was clicked
     for (let i = 0; i < chats.length; ++i) {
 
-      // User
-      if (chats[i].username != undefined && chats[i].username == chat) {
-        // Conversation name in case of two users is 'user1-user2'
-        const users = [username, chats[i].username];
-        users.sort();
-        setCurrentConversation(users[0] + '-' + users[1]);
-        setCurrentChat(chats[i].username);
-        displayMessages(chats[i].username, false);
-        break;
+      // Not the chat that was clicked
+      if (chats[i].name != chat) {
+        continue;
       }
 
-      // Group chat
-      if (chats[i].name != undefined && chats[i].name == chat) {
-        setCurrentConversation(chats[i].name);
-        setCurrentChat(chats[i].name);
-        displayMessages(chats[i].name, true);
-        break;
+      let conversationName = null;
+
+      // User
+      if (!chats[i].isGroupChat) {
+        // Conversation name in case of two users is 'user1-user2'
+        conversationName = [username, chats[i].name].sort().join('-');
       }
+      // Group chat
+      else {
+        conversationName = chats[i].name;
+      }
+
+      setCurrentConversation(conversationName);
+      setCurrentChat(chats[i].name);
+      displayMessages(chats[i].name, chats[i].isGroupChat);
+      break;
     }
   });
 
@@ -154,7 +179,7 @@ export default function Page() {
 
     socket.emit('chat', newMessage);
 
-    /*try {
+    try {
       // Saving the message in the database
       const response = await axios.post('http://localhost:8080/conversation/addMessageToConversation',
       {
@@ -178,7 +203,7 @@ export default function Page() {
       // Jwt token expired, the user needs to login again
       alert(error.response.data.message);
       router.replace('/');
-    }*/
+    }
 
     setTypedMessage('');
   });
