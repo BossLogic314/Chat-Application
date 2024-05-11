@@ -63,7 +63,8 @@ export let getAllChats = async (req, res) => {
                     month: month,
                     year: year
                 },
-                isGroupChat: allChats[i].name != undefined
+                isGroupChat: allChats[i].name != undefined,
+                participants: allChats[i].name != undefined ? allChats[i].participants : [username, allChats[i].username].sort()
             });
         }
         console.log(allChatObjs);
