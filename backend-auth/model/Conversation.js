@@ -1,19 +1,9 @@
 import mongoose from "mongoose";
 
 let conversationSchema = {
-    name: {
-        type: String,
-        unique: true,
-        required: true
-    },
-    participants: {
-        type: Array,
-        required: true
-    },
-    messages: {
-        type: Array,
-        required: true
-    }
+    name: String,
+    participants: Array,
+    messages: Array
 }
 
 let conversationModel = mongoose.model('Conversations', conversationSchema, 'Conversations');
