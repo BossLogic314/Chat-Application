@@ -22,7 +22,7 @@ export default function Page() {
   const {currentChatName, setCurrentChatName} = useCurrentChatNameStore();
   const {currentChat, setCurrentChat} = useCurrentChatStore();
   const [currentConversation, setCurrentConversation] = useState('');
-  const {messages, addToMessages, setMessages} = useMessagesStore();
+  const {readMessages, setReadMessages, unreadMessages, setUnreadMessages, addToMessages} = useMessagesStore();
   const [typedMessage, setTypedMessage] = useState('');
   const router = useRouter();
   const [chatNameToParticipantsMap, setChatNameToParticipantsMap] = useState({});
@@ -94,6 +94,22 @@ export default function Page() {
     setCreateGroupChat(true);
   });
 
+  const separateReadAndUnreadMessages = (messages) => {
+
+    let readMessages = [], unreadMessages = [];
+    for (let i = 0; i < messages.length; ++i) {
+      const read = messages[i].readList[username];
+
+      if (read) {
+        readMessages.push(messages[i]);
+      }
+      else {
+        unreadMessages.push(messages[i]);
+      }
+    }
+    return [readMessages, unreadMessages];
+  }
+
   let displayMessages = (async (chatName, isGroupChat) => {
 
     let conversationName = '';
@@ -109,11 +125,15 @@ export default function Page() {
       {
         withCredentials: true,
       });
-      let newMessages = [];
+      let newMessages = [], newReadMessages = [], newUnreadMessages = [];
       if (response.data.response != null) {
         newMessages = response.data.response.messages;
+
+        // Separating into read and unread messages
+        [newReadMessages, newUnreadMessages] = separateReadAndUnreadMessages(newMessages);
       }
-      setMessages(newMessages);
+      setReadMessages(newReadMessages);
+      setUnreadMessages(newUnreadMessages);
     }
     catch(error) {
       // Jwt token expired, the user needs to login again
@@ -315,9 +335,43 @@ export default function Page() {
 
         <div className="messagesWindow flex flex-col flex-1 w-full h-full border-green-400 border-2">
 
-          <div className="messages flex-1 w-full border-black border-2">
+          <div className="readMessages flex-1 w-full border-black border-2">
             {
-              messages.map((message, index) => (
+              readMessages.map((message, index) => (
+                <div className={username == message.from ? 'messageSent' : 'messageReceived'} key={index}>
+
+                  <div className='from text-[18px] italic pt-[3px] pb-[2px]' key={`from-${index}`}>
+                      {message.from}
+                  </div>
+
+                  <div
+                    className="text-[23px] pt-[3px] pb-[5px]"
+                    id={username == message.from ? 'messageSentText' : 'messageReceivedText'}
+                    key={`messageText-${index}`}>
+                      {message.message}
+                  </div>
+
+                  <div className='messageDateTime text-[17px] pt-[2px] pb-[3px] text-right' key={`messageDateTime-${index}`}>
+                  {
+                      `${ message.hours }:${ message.minutes }:${ message.seconds }, ` +
+                      `${ message.date }-${ message.month }-${ message.year }`
+                  }
+                  </div>
+
+                </div>
+              ))
+            }
+          </div>
+
+          {
+            unreadMessages.length != 0 ?
+              <div className="unreadMessagesNotice text-10px">Unread messages</div> :
+              <div className="unreadMessagesNotice text-10px"></div>
+          }
+
+          <div className="unreadMessages flex-1 w-full border-black border-2">
+            {
+              unreadMessages.map((message, index) => (
                 <div className={username == message.from ? 'messageSent' : 'messageReceived'} key={index}>
 
                   <div className='from text-[18px] italic pt-[3px] pb-[2px]' key={`from-${index}`}>

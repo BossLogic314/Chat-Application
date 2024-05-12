@@ -3,8 +3,10 @@ import { useCurrentChatNameStore } from "./useCurrentChatNameStore";
 import { useUsernameStore } from "./useUsernameStore";
 
 const messageStore = (set) => ({
-    messages: [],
-    setMessages: (newMessages) => set({messages: newMessages}),
+    readMessages: [],
+    setReadMessages: (newReadMessages) => set({readMessages: newReadMessages}),
+    unreadMessages: [],
+    setUnreadMessages: (newUnreadMessages) => set({unreadMessages: newUnreadMessages}),
     addToMessages: (newMessage) => {
 
         const currentChatName = useCurrentChatNameStore.getState().currentChatName;
@@ -14,7 +16,16 @@ const messageStore = (set) => ({
         let toAddMessage = (newMessage.to == username && newMessage.from == currentChatName) || (currentChatName == newMessage.to);
 
         if (toAddMessage) {
-            set((state) => ({messages: [...state.messages, newMessage]}));
+
+            // If the message was sent by the current user, all 'unread' messages need to be marked as 'read'
+            if (newMessage.from == username) {
+                set((state) => ({readMessages: [...state.readMessages, ...state.unreadMessages, newMessage]}));
+                set({unreadMessages: []});
+            }
+            else {
+                // If the message was received by the current user, add the received message to the list of unread messages
+                set((state) => ({unreadMessages: [...state.unreadMessages, newMessage]}));
+            }
         }
     }
 });
