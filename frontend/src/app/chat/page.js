@@ -152,7 +152,10 @@ export default function Page() {
     }
   });
 
-  let chatClicked = ((event) => {
+  let chatClicked = (async (event) => {
+
+    // Marking all messages of the currently-opened chat as 'read' for the current user
+    await markMessagesOfConversationToRead();
 
     const chat = event.target.textContent;
 
@@ -177,6 +180,7 @@ export default function Page() {
       }
 
       setCurrentConversation(conversationName);
+      setCurrentChatName(chats[i]);
       setCurrentChatName(chats[i].name);
       displayMessages(chats[i].name, chats[i].isGroupChat);
       break;
@@ -187,6 +191,31 @@ export default function Page() {
     const newTypedMessage = document.getElementById('typingBox').value;
     setTypedMessage(newTypedMessage);
   });
+
+  // Marking messages of the current conversation as 'read' for the current user
+  let markMessagesOfConversationToRead = async () => {
+
+    // If no chat is clicked
+    if (currentConversation == '') {
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:8080/conversation/markMessageOfConversationAsRead',
+      {
+        conversationName: currentConversation,
+        username: username
+      },
+      {
+        withCredentials: true
+      });
+    }
+    catch(error) {
+      // Jwt token expired, the user needs to login again
+      alert(error.response.data.message);
+      router.replace('/');
+    }
+  };
 
   let sendButtonClicked = (async () => {
 
