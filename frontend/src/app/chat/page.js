@@ -98,7 +98,7 @@ export default function Page() {
 
     let readMessages = [], unreadMessages = [];
     for (let i = 0; i < messages.length; ++i) {
-      const read = messages[i].readList[username];
+      const read = messages[i].readMap[username];
 
       if (read) {
         readMessages.push(messages[i]);
