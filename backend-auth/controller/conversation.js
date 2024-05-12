@@ -60,3 +60,37 @@ export let addMessageToConversation = (async (req, res) => {
         res.status(500).json({message: "Server error!"});
     }
 });
+
+export let markMessagesOfConversationToRead = (async (req, res) => {
+
+    try {
+        const jwtToken = req.cookies.jwt;
+        const status = verifyJwtToken(jwtToken);
+
+        if (!status) {
+            res.status(401).json({message: "User unauthorized!"});
+            return;
+        }
+    }
+    catch(error) {
+        res.status(401).json({message: "User unauthorized!"});
+        return;
+    }
+
+    try {
+        const {conversationName, username} = req.body;
+        const conversation = await conversationModel.findOne({name: conversationName});
+
+        // Marking all messages as 'read' by the user 'username'
+        await conversationModel.updateOne(
+            {name: conversationName},
+            {$set: {"messages.$[].readList.$[e].read": true}},
+            {arrayFilters: [{"e.username": username}]}
+        );
+
+        res.status(200).json({response: "Successfully marked all unread messages as 'read'!"});
+    }
+    catch(error) {
+        res.status(500).json({message: "Server error!"});
+    }
+});
