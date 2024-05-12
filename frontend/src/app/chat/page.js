@@ -98,13 +98,23 @@ export default function Page() {
 
     let readMessages = [], unreadMessages = [];
     for (let i = 0; i < messages.length; ++i) {
-      const read = messages[i].readMap[username];
 
-      if (read) {
-        readMessages.push(messages[i]);
-      }
-      else {
-        unreadMessages.push(messages[i]);
+      const readList = messages[i].readList;
+      for (let j = 0; j < readList.length; ++j) {
+
+        if (readList[j].username == username) {
+
+          const read = readList[j].read;
+
+          if (read) {
+            readMessages.push(messages[i]);
+          }
+          else {
+            unreadMessages.push(messages[i]);
+          }
+
+          break;
+        }
       }
     }
     return [readMessages, unreadMessages];
