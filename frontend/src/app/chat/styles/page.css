@@ -1,11 +1,13 @@
 #currentChat {
-    background-color: rgb(212, 210, 210);
+    background-color: rgb(235, 229, 229);
 }
 
 .messageSent, .messageReceived {
     max-width: 60%;
     width: fit-content;
     margin-top: 10px;
+
+    word-wrap: break-word;
 
     text-align: left;
 

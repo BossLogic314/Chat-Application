@@ -45,6 +45,7 @@ export let getAllChats = async (req, res) => {
             const conversation = await conversationModel.findOne({name: allConversationNames[i]});
             const conversationLastMessage = conversation == null ? null : conversation.messages[conversation.messages.length - 1];
 
+            const message = conversationLastMessage == null ? '' : conversationLastMessage.from + ": " + conversationLastMessage.message;
             const hours = conversationLastMessage == null ? '-1' : conversationLastMessage.hours;
             const minutes = conversationLastMessage == null ? '-1' : conversationLastMessage.minutes;
             const seconds = conversationLastMessage == null ? '-1' : conversationLastMessage.seconds;
@@ -56,6 +57,7 @@ export let getAllChats = async (req, res) => {
             allChatObjs.push({
                 name: allChats[i].name == undefined ? allChats[i].username : allChats[i].name,
                 lastMessage: {
+                    message: message,
                     hours: hours,
                     minutes: minutes,
                     seconds: seconds,

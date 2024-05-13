@@ -27,6 +27,7 @@ const chatsStore = (set, get) => ({
 
         // The chat to push may not be in the list if the user has a filter in place
         if (chatToPush) {
+            chatToPush.lastMessage.message = receivedMessage.from + ":" + receivedMessage.message;
             get().setChats([chatToPush, ...newChats]);
         }
     }

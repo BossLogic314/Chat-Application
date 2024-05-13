@@ -157,7 +157,10 @@ export default function Page() {
     // Marking all messages of the currently-opened chat as 'read' for the current user
     await markMessagesOfConversationToRead();
 
-    const chat = event.target.textContent;
+    const chat = event.target.getAttribute('value');
+    if (chat == null) {
+      return;
+    }
 
     // Iterating over all chats and picking the chat that was clicked
     for (let i = 0; i < chats.length; ++i) {
@@ -340,7 +343,7 @@ export default function Page() {
 
       <div className="header flex flex-row h-[75px] min-h-[75px] justify-between">
         <div className="logo h-full w-40 border-black border"></div>
-        <div className="userDPDiv flex h-full w-40 border-black border justify-center items-center">
+        <div className="userDPDiv flex h-full w-40 justify-center items-center hover:cursor-pointer hover:scale-[1.03] active:scale-[1]">
           <img className="userDP h-[70px] w-[70px] border-red-400 border-[1px] rounded-full"></img>
         </div>
       </div>
@@ -356,18 +359,25 @@ export default function Page() {
           {
             chats.map((chat, index) =>
             (
-              <div className="chat flex flex-row h-[80px] w-[97%] border-black border-b-[1px] mt-[4px] pb-[2px] rounded hover:scale-[1.03] hover:cursor-pointer active:scale-[1] justify-center items-center"
+              <div className="chat flex flex-row h-[80px] w-[96%] border-black border-b-[1px] mt-[4px] pb-[2px] rounded hover:scale-[1.03] hover:cursor-pointer active:scale-[1] justify-center items-center"
                 id={chat.name == currentChatName ? `currentChat` : `chat`}
+                value={chat.name}
                 key={`chat-${index}`}
                 onClick={chatClicked}>
 
                 <div className="chatDisplayPictureDiv h-[70px] min-w-[70px]" key={`chatDisplayPictureDiv-${index}`}>
-                  <img className="chatDisplayPicture h-full w-full border-red-400 border-[1px] rounded-full" key={`chatDisplayPicture-${index}`}></img>
+                  <img
+                    className="chatDisplayPicture h-full w-full border-red-400 border-[1px] rounded-full"
+                    key={`chatDisplayPicture-${index}`}>
+                  </img>
                 </div>
 
-                <div className="chatNameDiv flex flex-col w-full ml-2 justify-center" key={`chatNameDiv-${index}`}>
-                  <div className="chatName text-xl" key={`chatName-${index}`}>
+                <div className="chatNameDiv flex flex-col w-full ml-2 justify-center overflow-hidden" key={`chatNameDiv-${index}`} value={chat.name}>
+                  <div className="chatName text-[23px] font-[450]" key={`chatName-${index}`} value={chat.name}>
                     {chat.name}
+                  </div>
+                  <div className="chatLastMessage text-[17px] font-[250]" key={`chatLastMessage-${index}`} value={chat.name}>
+                    {chat.lastMessage.message}
                   </div>
                 </div>
 
