@@ -5,18 +5,19 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import CreateGroupChatPopUp from "../components/CreateGroupChatPopUp";
+import DisplayPicturePopUp from "../components/DisplayPicturePopUp"
 import { useCreateGroupChatStore } from "../../../zustand/useCreateGroupChatStore";
 import { useUsernameStore } from "../../../zustand/useUsernameStore";
 import { useCurrentChatNameStore } from "../../../zustand/useCurrentChatNameStore";
 import { useCurrentChatStore } from "../../../zustand/useCurrentChatStore";
 import { useMessagesStore } from "../../../zustand/useMessagesStore";
 import { useChatsStore } from "../../../zustand/useChatStore";
+import { usePopUpDisplayPictureStore } from "../../../zustand/usePopUpDisplayPictureStore";
 import './styles/page.css'
 
 export default function Page() {
 
   const {chats, setChats, pushChatToTop} = useChatsStore();
-  const {createGroupChat, setCreateGroupChat} = useCreateGroupChatStore();
   const [socket, setSocket] = useState(null);
   const {username, setUsername} = useUsernameStore();
   const {currentChatName, setCurrentChatName} = useCurrentChatNameStore();
@@ -26,6 +27,8 @@ export default function Page() {
   const [typedMessage, setTypedMessage] = useState('');
   const router = useRouter();
   const [chatNameToParticipantsMap, setChatNameToParticipantsMap] = useState({});
+  const {createGroupChat, setCreateGroupChat} = useCreateGroupChatStore();
+  const {popUpDisplayPicture, setPopUpDisplayPicture} = usePopUpDisplayPictureStore();
 
   let getChats = (async (event, usernameValue=null) => {
 
@@ -221,6 +224,12 @@ export default function Page() {
     }
   };
 
+  let displayPictureClicked = (async (event) => {
+
+    let chatName = event.target.getAttribute('value');
+    setPopUpDisplayPicture(chatName);
+  });
+
   let sendButtonClicked = (async () => {
 
     const currentDate = new Date();
@@ -344,8 +353,14 @@ export default function Page() {
 
       <div className="header flex flex-row h-[75px] min-h-[75px] justify-between">
         <div className="logo h-full w-40 border-black border"></div>
-        <div className="userDPDiv flex h-full w-40 justify-center items-center hover:cursor-pointer hover:scale-[1.03] active:scale-[1]">
-          <img className="userDP h-[70px] w-[70px] border-red-400 border-[1px] rounded-full"></img>
+        <div
+          className="userDPDiv flex h-full w-40 justify-center items-center hover:cursor-pointer hover:scale-[1.03] active:scale-[1]"
+          value={username}
+          onClick={displayPictureClicked}>
+            <img className="userDP h-[70px] w-[70px] border-red-400 border-[1px] rounded-full"
+              src="https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/anish.png"
+              value={username}>
+            </img>
         </div>
       </div>
 
@@ -369,7 +384,8 @@ export default function Page() {
                 <div className="chatDisplayPictureDiv h-[70px] min-w-[70px]"
                   key={`chatDisplayPictureDiv-${index}`}
                   value={chat.name}
-                  id="chatDisplayPictureDiv">
+                  id="chatDisplayPictureDiv"
+                  onClick={displayPictureClicked}>
                     <img
                       className="chatDisplayPicture h-full w-full border-red-400 border-[1px] rounded-full"
                       key={`chatDisplayPicture-${index}`}
@@ -493,6 +509,12 @@ export default function Page() {
 
       {
         createGroupChat ? <CreateGroupChatPopUp /> : <></>
+      }
+
+      {
+        popUpDisplayPicture != null ?
+          <DisplayPicturePopUp canChangeProfilePicture={popUpDisplayPicture == username || popUpDisplayPicture == ''}/> :
+          <></>
       }
     </div>
   );
