@@ -336,17 +336,19 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="flex flex-col box bg-white-200 h-screen w-screen">
+    <div className="flex flex-col box bg-red h-screen w-screen min-h-[700px] min-w-[850px] mx-auto px-[10px] py-[10px]">
 
-      <div className="header flex flex-row h-16 justify-between">
+      <div className="header flex flex-row h-[75px] min-h-[75px] justify-between">
         <div className="logo h-full w-40 border-black border"></div>
-        <div className="userDP h-full w-40 border-black border"></div>
+        <div className="userDPDiv flex h-full w-40 border-black border justify-center items-center">
+          <img className="userDP h-[70px] w-[70px] border-red-400 border-[1px] rounded-full"></img>
+        </div>
       </div>
 
-      <div className="flex flex-row flex-1 h-full w-screen border-black border">
-        <div className="chatsWindow w-1/3 h-full flex flex-col items-center border-red-400 border-2">
+      <div className="flex flex-row flex-1 h-[100%] overflow-y-hidden border-black border-2">
+        <div className="chatsWindow w-[35%] max-w-[350px] h-full flex flex-col items-center overflow-y-scroll border-black border-r-[2px]">
           <input
-            className="searchTab w-full h-10 text-lg border-black border px-2 py-2"
+            className="searchTab w-[98%] h-10 text-lg border-black border-b-[1px] px-2 py-2 mx-[2px]"
             placeholder="Search for chats"
             onChange={getChats}>
           </input>
@@ -354,15 +356,18 @@ export default function Page() {
           {
             chats.map((chat, index) =>
             (
-              <div className="chat flex flex-row h-[60px] w-[97%] border-black border mt-[2px] rounded hover:scale-[1.03] hover:cursor-pointer"
+              <div className="chat flex flex-row h-[80px] w-[97%] border-black border-b-[1px] mt-[4px] pb-[2px] rounded hover:scale-[1.03] hover:cursor-pointer active:scale-[1] justify-center items-center"
                 id={chat.name == currentChatName ? `currentChat` : `chat`}
                 key={`chat-${index}`}
                 onClick={chatClicked}>
 
-                <img className="chatDisplayPicture h-[58px] w-20 border-red-400 border-2 rounded-full" key={`chatDisplayPicture-${index}`}></img>
-                <div className="chatNameDiv flex flex-col h-full w-full border-yellow-400 border-2 ml-2 justify-center" key={`chatNameDiv-${index}`}>
-                  <div className="chatName text-xl border-black border-2" key={`chatName-${index}`}>
-                    {chat.name === undefined ? chat.username : chat.name}
+                <div className="chatDisplayPictureDiv h-[70px] min-w-[70px]" key={`chatDisplayPictureDiv-${index}`}>
+                  <img className="chatDisplayPicture h-full w-full border-red-400 border-[1px] rounded-full" key={`chatDisplayPicture-${index}`}></img>
+                </div>
+
+                <div className="chatNameDiv flex flex-col w-full ml-2 justify-center" key={`chatNameDiv-${index}`}>
+                  <div className="chatName text-xl" key={`chatName-${index}`}>
+                    {chat.name}
                   </div>
                 </div>
 
@@ -372,90 +377,97 @@ export default function Page() {
 
         </div>
 
-        <div className="messagesWindow flex flex-col flex-1 w-full h-full border-green-400 border-2">
+        <div className="messagesWindow flex flex-col flex-1 w-full h-full">
 
-          <div className="readMessages flex-1 w-full border-black border-2">
+          <div className="readUnreadMessagesWindow h-full max-h-full overflow-y-scroll">
+            <div className="readMessages flex-1 w-full">
+              {
+                readMessages.map((message, index) => (
+                  <div className={username == message.from ? 'messageSent' : 'messageReceived'} key={index}>
+
+                    <div className='from text-[18px] italic pt-[3px] pb-[2px]' key={`from-${index}`}>
+                        {message.from}
+                    </div>
+
+                    <div
+                      className="text-[23px] pt-[3px] pb-[5px]"
+                      id={username == message.from ? 'messageSentText' : 'messageReceivedText'}
+                      key={`messageText-${index}`}>
+                        {message.message}
+                    </div>
+
+                    <div className='messageDateTime text-[17px] pt-[2px] pb-[3px] text-right' key={`messageDateTime-${index}`}>
+                    {
+                        `${ message.hours }:${ message.minutes }:${ message.seconds }, ` +
+                        `${ message.date }-${ message.month }-${ message.year }`
+                    }
+                    </div>
+
+                  </div>
+                ))
+              }
+            </div>
+
             {
-              readMessages.map((message, index) => (
-                <div className={username == message.from ? 'messageSent' : 'messageReceived'} key={index}>
-
-                  <div className='from text-[18px] italic pt-[3px] pb-[2px]' key={`from-${index}`}>
-                      {message.from}
-                  </div>
-
-                  <div
-                    className="text-[23px] pt-[3px] pb-[5px]"
-                    id={username == message.from ? 'messageSentText' : 'messageReceivedText'}
-                    key={`messageText-${index}`}>
-                      {message.message}
-                  </div>
-
-                  <div className='messageDateTime text-[17px] pt-[2px] pb-[3px] text-right' key={`messageDateTime-${index}`}>
-                  {
-                      `${ message.hours }:${ message.minutes }:${ message.seconds }, ` +
-                      `${ message.date }-${ message.month }-${ message.year }`
-                  }
-                  </div>
-
-                </div>
-              ))
+              unreadMessages.length != 0 ?
+                <div className="unreadMessagesNotice text-[20px]" id="unreadMessagesNotice">Unread messages</div> :
+                <div className="unreadMessagesNotice text-[20px]" id="unreadMessagesNotice"></div>
             }
+
+            <div className="unreadMessages flex-1 w-full">
+              {
+                unreadMessages.map((message, index) => (
+                  <div className={username == message.from ? 'messageSent' : 'messageReceived'} key={index}>
+
+                    <div className='from text-[18px] italic pt-[3px] pb-[2px]' key={`from-${index}`}>
+                        {message.from}
+                    </div>
+
+                    <div
+                      className="text-[23px] pt-[3px] pb-[5px]"
+                      id={username == message.from ? 'messageSentText' : 'messageReceivedText'}
+                      key={`messageText-${index}`}>
+                        {message.message}
+                    </div>
+
+                    <div className='messageDateTime text-[17px] pt-[2px] pb-[3px] text-right' key={`messageDateTime-${index}`}>
+                    {
+                        `${ message.hours }:${ message.minutes }:${ message.seconds }, ` +
+                        `${ message.date }-${ message.month }-${ message.year }`
+                    }
+                    </div>
+
+                  </div>
+                ))
+              }
+            </div>
           </div>
 
-          {
-            unreadMessages.length != 0 ?
-              <div className="unreadMessagesNotice text-10px">Unread messages</div> :
-              <div className="unreadMessagesNotice text-10px"></div>
-          }
-
-          <div className="unreadMessages flex-1 w-full border-black border-2">
-            {
-              unreadMessages.map((message, index) => (
-                <div className={username == message.from ? 'messageSent' : 'messageReceived'} key={index}>
-
-                  <div className='from text-[18px] italic pt-[3px] pb-[2px]' key={`from-${index}`}>
-                      {message.from}
-                  </div>
-
-                  <div
-                    className="text-[23px] pt-[3px] pb-[5px]"
-                    id={username == message.from ? 'messageSentText' : 'messageReceivedText'}
-                    key={`messageText-${index}`}>
-                      {message.message}
-                  </div>
-
-                  <div className='messageDateTime text-[17px] pt-[2px] pb-[3px] text-right' key={`messageDateTime-${index}`}>
-                  {
-                      `${ message.hours }:${ message.minutes }:${ message.seconds }, ` +
-                      `${ message.date }-${ message.month }-${ message.year }`
-                  }
-                  </div>
-
-                </div>
-              ))
-            }
-          </div>
-
-          <div className="typingSection flex flex-row h-20 border-red-600 border-2 justify-center items-center justify-center">
+          <div className="typingSection flex flex-row h-20 border-black border-t-[2px] justify-center items-center justify-center">
             <button
-              className="createGroupChatButton flex justify-center items-center h-10 w-20 border-blue-400 border-2 ml-8 mr-4 text-3xl hover:scale-[1.05] hover:cursor-pointer"
+              className="createGroupChatButton flex justify-center items-center h-10 w-20 border-black border-[1px] ml-8 mr-4 text-3xl hover:scale-[1.05] active:scale-[1]"
               onClick={createGroupChatButtonClicked}>
                 +
             </button>
 
             <div className="typeAndSendSection w-4/5 flex flex-row">
               <input
-                className="typingBox h-10 w-5/6 border-black border-2" id="typingBox"
+                className="typingBox h-10 w-5/6 pl-[5px] border-black border-[1px]" id="typingBox"
                 placeholder="Type your message here..." type="text" value={typedMessage}
                 onChange={messageTyped}>
               </input>
               {
                 typedMessage == '' || currentChatName == '' ?
-                  <button className="sendButton h-10 w-20 border-blue-400 border-2 mr-8" disabled onClick={sendButtonClicked}> </button>
+                  <div className="sendButton flex justify-center items-center h-[44px] w-[44px] ml-[7px]"
+                    id="sendButton">
+                      <div className="sendShape ml-[15%]" id="sendShape"></div>
+                  </div>
                   :
-                  <button className="sendButton h-10 w-20 border-blue-400 border-2 mr-8 hover:scale-[1.05] hover:cursor-pointer"
+                  <div className="sendButton flex justify-center items-center h-[44px] w-[44px] ml-[7px] hover:scale-[1.05] active:scale-[1] hover:cursor-pointer"
+                    id="sendButton"
                     onClick={sendButtonClicked}>
-                  </button>
+                      <div className="sendShape ml-[15%]" id="sendShape"></div>
+                  </div>
               }
             </div>
           </div>

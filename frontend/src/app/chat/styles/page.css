@@ -40,3 +40,27 @@
     font-style: oblique;
     color: rgb(83, 79, 79);
 }
+
+#sendButton {
+    border-radius: 50%;
+    border: 1.5px solid rgb(64, 62, 62);
+}
+
+.sendShape {
+    border-top: 14px solid transparent;
+	border-left: 28px solid rgb(68, 135, 68);
+	border-bottom: 14px solid transparent;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: #dedcdc; 
+}
+
+::-webkit-scrollbar-thumb {
+    background: #949191; 
+    height: 10px;
+}
