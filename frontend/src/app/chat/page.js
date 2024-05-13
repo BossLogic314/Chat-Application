@@ -154,13 +154,14 @@ export default function Page() {
 
   let chatClicked = (async (event) => {
 
+    if (event.target.id == 'chatDisplayPictureDiv' || event.target.id == 'chatDisplayPicture') {
+      return;
+    }
+
     // Marking all messages of the currently-opened chat as 'read' for the current user
     await markMessagesOfConversationToRead();
 
     const chat = event.target.getAttribute('value');
-    if (chat == null) {
-      return;
-    }
 
     // Iterating over all chats and picking the chat that was clicked
     for (let i = 0; i < chats.length; ++i) {
@@ -365,11 +366,16 @@ export default function Page() {
                 key={`chat-${index}`}
                 onClick={chatClicked}>
 
-                <div className="chatDisplayPictureDiv h-[70px] min-w-[70px]" key={`chatDisplayPictureDiv-${index}`}>
-                  <img
-                    className="chatDisplayPicture h-full w-full border-red-400 border-[1px] rounded-full"
-                    key={`chatDisplayPicture-${index}`}>
-                  </img>
+                <div className="chatDisplayPictureDiv h-[70px] min-w-[70px]"
+                  key={`chatDisplayPictureDiv-${index}`}
+                  value={chat.name}
+                  id="chatDisplayPictureDiv">
+                    <img
+                      className="chatDisplayPicture h-full w-full border-red-400 border-[1px] rounded-full"
+                      key={`chatDisplayPicture-${index}`}
+                      value={chat.name}
+                      id="chatDisplayPicture">
+                    </img>
                 </div>
 
                 <div className="chatNameDiv flex flex-col w-full ml-2 justify-center overflow-hidden" key={`chatNameDiv-${index}`} value={chat.name}>
