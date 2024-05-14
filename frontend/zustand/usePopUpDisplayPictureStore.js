@@ -1,8 +1,8 @@
 import { create } from "zustand";
 
 const popUpDisplayPictureStore = (set) => ({
-    popUpChatDisplayPicture: null,
-    setPopUpDisplayPicture: (newChatName) => set({popUpDisplayPicture: newChatName})
+    popUpDisplayPicture: null,
+    setPopUpDisplayPicture: (updatedValue) => set({popUpDisplayPicture: updatedValue})
 });
 
 export const usePopUpDisplayPictureStore = create(popUpDisplayPictureStore);

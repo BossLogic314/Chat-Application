@@ -226,8 +226,9 @@ export default function Page() {
 
   let displayPictureClicked = (async (event) => {
 
-    let chatName = event.target.getAttribute('value');
-    setPopUpDisplayPicture(chatName);
+    const chatName = event.target.getAttribute('value');
+    const canChangeDisplayPicture = event.target.getAttribute('can-change-display-picture');
+    setPopUpDisplayPicture({name: chatName, canChangeDisplayPicture: canChangeDisplayPicture});
   });
 
   let sendButtonClicked = (async () => {
@@ -353,14 +354,13 @@ export default function Page() {
 
       <div className="header flex flex-row h-[75px] min-h-[75px] justify-between">
         <div className="logo h-full w-40 border-black border"></div>
-        <div
-          className="userDPDiv flex h-full w-40 justify-center items-center"
-          value={username}>
-            <img className="userDP h-[70px] w-[70px] border-red-400 border-[1px] rounded-full hover:cursor-pointer hover:scale-[1.03] active:scale-[1]"
-              src="https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/anish.png"
-              value={username}
-              onClick={displayPictureClicked}>
-            </img>
+        <div className="userDPDiv flex h-full w-40 justify-center items-center">
+          <img className="userDP h-[70px] w-[70px] border-red-400 border-[1px] rounded-full hover:cursor-pointer hover:scale-[1.03] active:scale-[1]"
+            src="https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/anish.png"
+            value={username}
+            can-change-display-picture="true"
+            onClick={displayPictureClicked}>
+          </img>
         </div>
       </div>
 
@@ -384,21 +384,22 @@ export default function Page() {
                 <div className="chatDisplayPictureDiv h-[70px] min-w-[70px]"
                   key={`chatDisplayPictureDiv-${index}`}
                   value={chat.name}
-                  id="chatDisplayPictureDiv"
-                  onClick={displayPictureClicked}>
+                  id="chatDisplayPictureDiv">
                     <img
                       className="chatDisplayPicture h-full w-full border-red-400 border-[1px] rounded-full"
                       key={`chatDisplayPicture-${index}`}
                       value={chat.name}
-                      id="chatDisplayPicture">
+                      can-change-display-picture={chat.isGroupChat ? "true" : "false"}
+                      id="chatDisplayPicture"
+                      onClick={displayPictureClicked}>
                     </img>
                 </div>
 
                 <div className="chatNameDiv flex flex-col w-full ml-2 justify-center overflow-hidden" key={`chatNameDiv-${index}`} value={chat.name}>
-                  <div className="chatName text-[23px] font-[450]" key={`chatName-${index}`} value={chat.name}>
+                  <div className="chatName text-[23px] font-[470]" key={`chatName-${index}`} value={chat.name}>
                     {chat.name}
                   </div>
-                  <div className="chatLastMessage text-[17px] font-[250]" key={`chatLastMessage-${index}`} value={chat.name}>
+                  <div className="chatLastMessage text-[17px] font-[300]" key={`chatLastMessage-${index}`} value={chat.name}>
                     {chat.lastMessage.message}
                   </div>
                 </div>
@@ -513,7 +514,7 @@ export default function Page() {
 
       {
         popUpDisplayPicture != null ?
-          <DisplayPicturePopUp canChangeProfilePicture={popUpDisplayPicture == username || popUpDisplayPicture == ''}/> :
+          <DisplayPicturePopUp name={popUpDisplayPicture.name} canChangeDisplayPicture={popUpDisplayPicture.canChangeDisplayPicture} /> :
           <></>
       }
     </div>
