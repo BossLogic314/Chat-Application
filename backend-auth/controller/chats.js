@@ -117,3 +117,14 @@ export let createGroupChat = async (req, res) => {
         return;
     }
 }
+
+export let updateDisplayPictureOfChat = async (req, res) => {
+
+    try {
+        const imageName = req.body.imageName;
+        res.status(201).json({message: "Display picture successfully updated!"});
+    }
+    catch(error) {
+        res.status(500).json({message: "Server error!"});
+    }
+}

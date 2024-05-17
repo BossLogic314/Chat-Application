@@ -5,7 +5,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import CreateGroupChatPopUp from "../components/CreateGroupChatPopUp";
-import DisplayPicturePopUp from "../components/DisplayPicturePopUp"
+import DisplayPicturePopUp from "../components/DisplayPicturePopUp";
 import { useCreateGroupChatStore } from "../../../zustand/useCreateGroupChatStore";
 import { useUsernameStore } from "../../../zustand/useUsernameStore";
 import { useCurrentChatNameStore } from "../../../zustand/useCurrentChatNameStore";

@@ -1,11 +1,13 @@
 import React from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import './styles/DisplayPicturePopUp.css';
 import { usePopUpDisplayPictureStore } from "../../../zustand/usePopUpDisplayPictureStore";
 
 export default function DisplayPicturePopUp(props) {
 
     const {setPopUpDisplayPicture} = usePopUpDisplayPictureStore();
+    const router = useRouter();
 
     let closePopUpDisplayPicture = ((event) => {
 
@@ -13,6 +15,40 @@ export default function DisplayPicturePopUp(props) {
             return;
         }
         setPopUpDisplayPicture(null);
+    });
+
+    let newDisplayPictureSelected = (async(event) => {
+
+        const fileList = event.target.files;
+
+        // No file is selected
+        if (fileList.length == 0) {
+            return;
+        }
+
+        // Selecting the first image (in case a list is selected)
+        const file = fileList[0];
+        const splitArr = file.name.split('.');
+        const fileExtension = splitArr[splitArr.length - 1];
+
+        const formData = new FormData();
+        formData.append("name", props.name);
+        formData.append("imageName", props.name + `.${fileExtension}`);
+        formData.append("image", file);
+
+        try {
+            const response = await axios.post('http://localhost:8080/chats/updateDisplayPictureOfChat',
+            formData,
+            {
+              withCredentials: true
+            });
+            console.log(response);
+          }
+          catch(error) {
+            // Jwt token expired, the user needs to login again
+            alert(error.response.data.message);
+            router.replace('/');
+          }
     });
 
     return (
@@ -33,6 +69,8 @@ export default function DisplayPicturePopUp(props) {
                     </button> :
                         <></>
                 }
+
+                <input type="file" accept="image/png, image/jpeg" name="image" onChange={newDisplayPictureSelected} />
         </div>
     );
 }
