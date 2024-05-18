@@ -8,7 +8,7 @@ export let generateJwtTokenAndPutInCookie = (jsonObj, res) => {
         res.cookie("jwt", jwtToken, {maxAge: 1000 * 60 * 60 * 24, httpOnly: true});
     }
     catch(error) {
-        res.status(500).json({message: "Server error!"});
+        throw(error);
     }
 }
 
