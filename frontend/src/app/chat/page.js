@@ -357,7 +357,9 @@ export default function Page() {
     <div className="flex flex-col box bg-red h-screen w-screen min-h-[700px] min-w-[850px] mx-auto px-[10px] py-[10px]">
 
       <div className="header flex flex-row h-[75px] min-h-[75px] justify-between">
-        <div className="logo h-full w-40 border-black border"></div>
+        <div className="logo h-full w-40 border-black border">
+          <img className="h-full w-full" src="/logo.png"></img>
+        </div>
         <div className="userDisplayPictureDiv flex h-full w-40 justify-center items-center">
           <img className="userDisplayPicture h-[70px] w-[70px] border-black border-[1px] rounded-full hover:cursor-pointer hover:scale-[1.03] active:scale-[1]"
             src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${displayPicture}`}
@@ -370,7 +372,7 @@ export default function Page() {
       </div>
 
       <div className="flex flex-row flex-1 h-[100%] overflow-y-hidden border-black border-2">
-        <div className="chatsWindow w-[35%] max-w-[350px] h-full flex flex-col items-center overflow-y-scroll border-black border-r-[2px]">
+        <div className="chatsWindow w-[30%] max-w-[350px] h-full flex flex-col items-center overflow-y-scroll border-black border-r-[2px]">
           <input
             className="searchTab w-[98%] h-10 text-lg border-black border-b-[1px] px-2 py-2 mx-[2px]"
             placeholder="Search for chats"
@@ -402,11 +404,11 @@ export default function Page() {
                     </img>
                 </div>
 
-                <div className="chatNameDiv flex flex-col w-full ml-2 justify-center overflow-hidden" key={`chatNameDiv-${index}`} value={chat.name}>
+                <div className="chatNameDiv flex flex-col h-full w-full ml-2 justify-center overflow-hidden" key={`chatNameDiv-${index}`} value={chat.name}>
                   <div className="chatName text-[23px] font-[470]" key={`chatName-${index}`} value={chat.name}>
                     {chat.name}
                   </div>
-                  <div className="chatLastMessage text-[17px] font-[300]" key={`chatLastMessage-${index}`} value={chat.name}>
+                  <div className="chatLastMessage text-[17px] font-[300] w-[100%] truncate" key={`chatLastMessage-${index}`} value={chat.name}>
                     {chat.lastMessage.message}
                   </div>
                 </div>
@@ -419,40 +421,7 @@ export default function Page() {
 
         <div className="messagesWindow flex flex-col flex-1 w-full h-full">
 
-          <div className="readUnreadMessagesWindow h-full max-h-full overflow-y-scroll">
-            <div className="readMessages flex-1 w-full">
-              {
-                readMessages.map((message, index) => (
-                  <div className={username == message.from ? 'messageSent' : 'messageReceived'} key={index}>
-
-                    <div className='from text-[18px] italic pt-[3px] pb-[2px]' key={`from-${index}`}>
-                        {message.from}
-                    </div>
-
-                    <div
-                      className="text-[23px] pt-[3px] pb-[5px]"
-                      id={username == message.from ? 'messageSentText' : 'messageReceivedText'}
-                      key={`messageText-${index}`}>
-                        {message.message}
-                    </div>
-
-                    <div className='messageDateTime text-[17px] pt-[2px] pb-[3px] text-right' key={`messageDateTime-${index}`}>
-                    {
-                        `${ message.hours }:${ message.minutes }:${ message.seconds }, ` +
-                        `${ message.date }-${ message.month }-${ message.year }`
-                    }
-                    </div>
-
-                  </div>
-                ))
-              }
-            </div>
-
-            {
-              unreadMessages.length != 0 ?
-                <div className="unreadMessagesNotice text-[20px]" id="unreadMessagesNotice">Unread messages</div> :
-                <div className="unreadMessagesNotice text-[20px]" id="unreadMessagesNotice"></div>
-            }
+          <div className="readUnreadMessagesWindow flex flex-col-reverse h-full max-h-full overflow-y-scroll">
 
             <div className="unreadMessages flex-1 w-full">
               {
@@ -481,6 +450,39 @@ export default function Page() {
                 ))
               }
             </div>
+            {
+              unreadMessages.length != 0 ?
+                <div className="unreadMessagesNotice text-[20px] text-center italic font-[650]" id="unreadMessagesNoticeVisible">Unread messages</div> :
+                <div className="unreadMessagesNotice text-[20px]" id="unreadMessagesNoticeHidden"></div>
+            }
+            <div className="readMessages flex-1 w-full">
+              {
+                readMessages.map((message, index) => (
+                  <div className={username == message.from ? 'messageSent' : 'messageReceived'} key={index}>
+
+                    <div className='from text-[18px] italic pt-[3px] pb-[2px]' key={`from-${index}`}>
+                        {message.from}
+                    </div>
+
+                    <div
+                      className="text-[23px] pt-[3px] pb-[5px]"
+                      id={username == message.from ? 'messageSentText' : 'messageReceivedText'}
+                      key={`messageText-${index}`}>
+                        {message.message}
+                    </div>
+
+                    <div className='messageDateTime text-[17px] pt-[2px] pb-[3px] text-right' key={`messageDateTime-${index}`}>
+                    {
+                        `${ message.hours }:${ message.minutes }:${ message.seconds }, ` +
+                        `${ message.date }-${ message.month }-${ message.year }`
+                    }
+                    </div>
+
+                  </div>
+                ))
+              }
+            </div>
+
           </div>
 
           <div className="typingSection flex flex-row h-20 border-black border-t-[2px] justify-center items-center justify-center">
