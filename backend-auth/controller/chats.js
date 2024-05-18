@@ -2,6 +2,17 @@ import userModel from "../model/User.js";
 import groupChatModel from "../model/GroupChat.js";
 import conversationModel from "../model/Conversation.js";
 import { verifyJwtToken } from "../utils/jwtToken.js";
+import dotenv from "dotenv";
+import AWS from "aws-sdk";
+import fs from 'fs';
+
+dotenv.config();
+
+const s3 = new AWS.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: 'ap-south-1'
+});
 
 // Returning all chats in order of the last message exchanged
 export let getAllChats = async (req, res) => {
@@ -122,6 +133,18 @@ export let updateDisplayPictureOfChat = async (req, res) => {
 
     try {
         const imageName = req.body.imageName;
+        const imageContent = fs.readFileSync(`./uploads/${imageName}`);
+        s3.putObject({
+            Body: imageContent,
+            Bucket: "chat-application-display-pictures-bucket",
+            Key: `${imageName}`
+        }, (error, data) => {
+            // Deleting the temporary image file that was saved
+            fs.unlinkSync(`./uploads/${imageName}`);
+            if (error) {
+                throw error;
+            }
+        });
         res.status(201).json({message: "Display picture successfully updated!"});
     }
     catch(error) {
