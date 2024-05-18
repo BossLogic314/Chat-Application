@@ -97,6 +97,11 @@ export default function DisplayPicturePopUp(props) {
         <div className='h-screen w-screen min-h-[700px] min-w-[650px] flex flex-col justify-center items-center fixed'
             id="displayPicturePopUpOverlay"
             onClick={closePopUpDisplayPicture}>
+
+                <div className="text-[30px] mb-[10px]" id="name">
+                    {props.name}
+                </div>
+
                 <img
                     className="displayPicture h-[450px] w-[450px] min-h-[450px] min-w-[450px] rounded-full border-white border-[2px]"
                     src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${props.displayPicture}`}>
