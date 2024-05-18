@@ -137,7 +137,7 @@ export default function CreateGroupChatPopUp() {
             <div className='createGroupChatPopUp min-h-[300px] min-w-[600px] flex flex-col items-center border-black border-2'>
 
                 <div className='createGroupChatPopUpHeader flex flex-row'>
-                    <div className='createGroupChatPopUpTitle text-4xl font-medium text-center mt-[5px]'>Create new group chat</div>
+                    <div className='createGroupChatPopUpTitle text-4xl font-medium text-center mt-[5px] mb-[5px]'>Create new group chat</div>
                 </div>
 
                 <input className='groupChatName w-[80%] text-[20px] px-2 mt-[10px] rounded-lg' id="groupChatName" placeholder='Group name'></input>

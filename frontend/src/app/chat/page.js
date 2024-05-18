@@ -18,7 +18,7 @@ import { useDisplayPictureStore } from "../../../zustand/useDisplayPictureStore"
 
 export default function Page() {
 
-  const {chats, setChats, pushChatToTop} = useChatsStore();
+  const {chats, setChats, pushChatToTop, addToNumberOfUnreadMessagesOfChat, clearNumberOfUnreadMessagesOfChat} = useChatsStore();
   const [socket, setSocket] = useState(null);
   const {username, setUsername} = useUsernameStore();
   const {displayPicture, setDisplayPicture} = useDisplayPictureStore();
@@ -164,6 +164,11 @@ export default function Page() {
     // Marking all messages of the currently-opened chat as 'read' for the current user
     await markMessagesOfConversationToRead();
 
+    // Clearing the number of unread messages of the current chat
+    if (currentChatName != '') {
+      clearNumberOfUnreadMessagesOfChat(currentChatName);
+    }
+
     const chat = event.target.getAttribute('value');
 
     // Iterating over all chats and picking the chat that was clicked
@@ -245,6 +250,11 @@ export default function Page() {
     const month = ("0" + (currentDate.getMonth() + 1).toString()).slice(-2);
     const year= ("0" + currentDate.getFullYear().toString()).slice(-2);
 
+    const readList = chatNameToParticipantsMap[currentChatName].map((participant) => ({
+      "username": participant,
+      "read": participant == username ? true : false
+    }));
+
     const newMessage = {
       from: username,
       to: currentChatName,
@@ -268,6 +278,7 @@ export default function Page() {
         from: username,
         to: currentChatName,
         participants: chatNameToParticipantsMap[currentChatName],
+        readList: readList,
         message: typedMessage,
         hours: hours,
         minutes: minutes,
@@ -335,6 +346,21 @@ export default function Page() {
 
       // Adding the received message to the displaying list
       addToMessages(receivedMessage);
+
+      // Self-message
+      if (receivedMessage.from == usernameValue) {
+        clearNumberOfUnreadMessagesOfChat(receivedMessage.to);
+      }
+      else {
+        // Direct message
+        if (receivedMessage.to == usernameValue) {
+          addToNumberOfUnreadMessagesOfChat(receivedMessage.from);
+        }
+        // Group chat
+        else {
+          addToNumberOfUnreadMessagesOfChat(receivedMessage.to);
+        }
+      }
     });
 
     getChats(null, usernameValue);
@@ -358,7 +384,7 @@ export default function Page() {
 
       <div className="header flex flex-row h-[75px] min-h-[75px] justify-between">
         <div className="logo h-full w-40 border-black border">
-          <img className="h-full w-full" src="/logo.png"></img>
+          <img className="h-full w-full" ></img>
         </div>
         <div className="userDisplayPictureDiv flex h-full w-40 justify-center items-center">
           <img className="userDisplayPicture h-[70px] w-[70px] border-black border-[1px] rounded-full hover:cursor-pointer hover:scale-[1.03] active:scale-[1]"
@@ -372,7 +398,7 @@ export default function Page() {
       </div>
 
       <div className="flex flex-row flex-1 h-[100%] overflow-y-hidden border-black border-2">
-        <div className="chatsWindow w-[30%] max-w-[350px] h-full flex flex-col items-center overflow-y-scroll border-black border-r-[2px]">
+        <div className="chatsWindow w-[30%] max-w-[400px] h-full flex flex-col items-center overflow-y-scroll border-black border-r-[2px]">
           <input
             className="searchTab w-[98%] h-10 text-lg border-black border-b-[1px] px-2 py-2 mx-[2px]"
             placeholder="Search for chats"
@@ -405,13 +431,26 @@ export default function Page() {
                 </div>
 
                 <div className="chatNameDiv flex flex-col h-full w-full ml-2 justify-center overflow-hidden" key={`chatNameDiv-${index}`} value={chat.name}>
-                  <div className="chatName text-[23px] font-[470]" key={`chatName-${index}`} value={chat.name}>
+                  <div className="chatName text-[23px] font-[470] truncate" key={`chatName-${index}`} value={chat.name}>
                     {chat.name}
                   </div>
-                  <div className="chatLastMessage text-[17px] font-[300] w-[100%] truncate" key={`chatLastMessage-${index}`} value={chat.name}>
+                  <div className="chatLastMessage text-[17px] font-[400] w-[100%] truncate" key={`chatLastMessage-${index}`} value={chat.name}
+                  id="chatLastMessage">
                     {chat.lastMessage.message}
                   </div>
                 </div>
+
+                {
+                  chat.numberOfUnreadMessages != 0 ?
+                  (
+                    <div className="numberOfUnreadMessages text-[21px] h-[40px] min-h-[40px] w-[40px] min-w-[40px] flex justify-center items-center mr-[8px] rounded-full truncate"
+                    id="numberOfUnreadMessages"
+                    value={chat.name}>
+                      {chat.numberOfUnreadMessages}
+                    </div>
+                  ) :
+                  <></>
+                }
 
               </div>
             ))

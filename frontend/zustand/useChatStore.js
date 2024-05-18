@@ -27,9 +27,37 @@ const chatsStore = (set, get) => ({
 
         // The chat to push may not be in the list if the user has a filter in place
         if (chatToPush) {
-            chatToPush.lastMessage.message = receivedMessage.from + ":" + receivedMessage.message;
+            chatToPush.lastMessage.message = receivedMessage.from + ": " + receivedMessage.message;
             get().setChats([chatToPush, ...newChats]);
         }
+    },
+    addToNumberOfUnreadMessagesOfChat: (chatName) => {
+        const currentChats = get().chats;
+        let newChats = [];
+
+        for (let i = 0; i < currentChats.length; ++i) {
+
+            if (currentChats[i].name == chatName) {
+                currentChats[i].numberOfUnreadMessages = currentChats[i].numberOfUnreadMessages + 1;
+            }
+
+            newChats.push(currentChats[i]);
+        }
+        get().setChats(newChats);
+    },
+    clearNumberOfUnreadMessagesOfChat: (chatName) => {
+        const currentChats = get().chats;
+        let newChats = [];
+
+        for (let i = 0; i < currentChats.length; ++i) {
+
+            if (currentChats[i].name == chatName) {
+                currentChats[i].numberOfUnreadMessages = 0;
+            }
+
+            newChats.push(currentChats[i]);
+        }
+        get().setChats(newChats);
     }
 });
 

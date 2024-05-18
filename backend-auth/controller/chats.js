@@ -14,6 +14,42 @@ const s3 = new AWS.S3({
     region: 'ap-south-1'
 });
 
+let getNumberOfUnreadMessagesInConversation = ((username, messages) => {
+
+    let min = 0;
+    let max = messages.length - 1;
+    let index = -1;
+
+    // Binary searching on all messages to find the number of messages 'unread' by the current user
+    while (min <= max) {
+
+        const mid = Math.floor((min + max) / 2);
+
+        const midMessage = messages[mid];
+        const readList = midMessage.readList;
+
+        for (let i = 0; i < readList.length; ++i) {
+
+            // Searching for the 'read' status by the current user
+            if (readList[i].username != username) {
+                continue;
+            }
+
+            if (readList[i].read) {
+                min = mid + 1;
+                break;
+            }
+
+            // Message is 'unread'
+            index = mid;
+            max = mid - 1;
+            break;
+        }
+    }
+
+    return index == -1 ? 0 : messages.length - index;
+});
+
 // Returning all chats in order of the last message exchanged
 export let getAllChats = async (req, res) => {
 
@@ -55,6 +91,8 @@ export let getAllChats = async (req, res) => {
             // Conversation between the user and the chat
             const conversation = await conversationModel.findOne({name: allConversationNames[i]});
             const conversationLastMessage = conversation == null ? null : conversation.messages[conversation.messages.length - 1];
+            const numberOfUnreadMessagesInConversation = conversation == null ? 0 :
+                                                            getNumberOfUnreadMessagesInConversation(username, conversation.messages);
 
             const message = conversationLastMessage == null ? '' : conversationLastMessage.from + ": " + conversationLastMessage.message;
             const hours = conversationLastMessage == null ? '-1' : conversationLastMessage.hours;
@@ -78,7 +116,8 @@ export let getAllChats = async (req, res) => {
                 },
                 isGroupChat: allChats[i].name != undefined,
                 participants: allChats[i].name != undefined ? allChats[i].participants : [username, allChats[i].username].sort(),
-                displayPicture: allChats[i].displayPicture
+                displayPicture: allChats[i].displayPicture,
+                numberOfUnreadMessages: numberOfUnreadMessagesInConversation
             });
         }
 
@@ -120,7 +159,7 @@ export let createGroupChat = async (req, res) => {
             return;
         }
 
-        const newGroupChat = new groupChatModel({"name": name, "participants": participants});
+        const newGroupChat = new groupChatModel({"name": name, "displayPicture": "default.jpg", "participants": participants});
         newGroupChat.save();
         res.status(201).json({message: "Group chat successfully created!"});
     }

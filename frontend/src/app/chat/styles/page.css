@@ -2,6 +2,15 @@
     background-color: rgb(235, 229, 229);
 }
 
+#chatLastMessage {
+    color: rgb(120, 119, 119);
+}
+
+#numberOfUnreadMessages {
+    background-color: rgb(64, 186, 64);
+    color: aliceblue;
+}
+
 .messageSent, .messageReceived {
     max-width: 60%;
     width: fit-content;
