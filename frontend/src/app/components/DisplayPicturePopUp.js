@@ -3,10 +3,12 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import './styles/DisplayPicturePopUp.css';
 import { usePopUpDisplayPictureStore } from "../../../zustand/usePopUpDisplayPictureStore";
+import { useUsernameStore } from "../../../zustand/useUsernameStore";
 
 export default function DisplayPicturePopUp(props) {
 
     const {setPopUpDisplayPicture} = usePopUpDisplayPictureStore();
+    const {username} = useUsernameStore();
     const router = useRouter();
 
     let closePopUpDisplayPicture = ((event) => {
@@ -43,13 +45,52 @@ export default function DisplayPicturePopUp(props) {
             {
               withCredentials: true
             });
-            console.log(response);
-          }
-          catch(error) {
+            window.location.reload();
+        }
+        catch(error) {
             // Jwt token expired, the user needs to login again
-            alert(error.response.data.message);
             router.replace('/');
-          }
+        }
+    });
+
+    let changeDisplayPictureButtonClicked = (async(event) => {
+        const hiddenInputTag = document.getElementById('selectDisplayPictureTag');
+        // Clicking the hidden input tag to choose a new display picture
+        hiddenInputTag.click();
+    });
+
+    let removeDisplayPictureButtonClicked = (async(event) => {
+
+        try {
+            const response = await axios.post('http://localhost:8080/chats/removeDisplayPictureOfChat',
+            {
+                name: props.name
+            },
+            {
+              withCredentials: true
+            });
+            window.location.reload();
+        }
+        catch(error) {
+            // Jwt token expired, the user needs to login again
+            router.replace('/');
+        }
+    });
+
+    let logoutButtonClicked = (async(req, res) => {
+        try {
+            const response = await axios.post('http://localhost:8080/auth/logout',
+            {},
+            {
+              withCredentials: true
+            });
+            window.location.reload();
+            router.replace('/');
+        }
+        catch(error) {
+            // Jwt token expired, the user needs to login again
+            router.replace('/');
+        }
     });
 
     return (
@@ -63,15 +104,40 @@ export default function DisplayPicturePopUp(props) {
 
                 {
                     props.canChangeDisplayPicture == 'true' ?
-                    <button
-                        className="text-white bg-green-600 hover:bg-green-700 font-medium rounded-lg text-[20px] px-5 py-2.5 mt-[20px] hover:scale-[1.04] active:scale-[1]"
-                        id="changeDisplayPictureButton">
-                            Change display picture
-                    </button> :
-                        <></>
+                    <div className="buttons flex flex-row">
+                        <button
+                            className="text-white bg-green-600 hover:bg-green-700 font-medium rounded-lg text-[20px] px-5 py-2.5 mt-[20px] mr-[10px] hover:scale-[1.04] active:scale-[1]"
+                            id="changeDisplayPictureButton"
+                            onClick={changeDisplayPictureButtonClicked}>
+                                Change display picture
+                        </button>
+
+                        {
+                            props.displayPicture != 'default.jpg' ?
+                            <button
+                                className="text-white bg-green-600 hover:bg-green-700 font-medium rounded-lg text-[20px] px-5 py-2.5 mt-[20px] ml-[10px] hover:scale-[1.04] active:scale-[1]"
+                                id="removeDisplayPictureButton"
+                                onClick={removeDisplayPictureButtonClicked}>
+                                    Remove display picture
+                            </button> :
+                            <></>
+                        }
+                    </div> :
+                    <></>
                 }
 
-                <input type="file" accept="image/png, image/jpeg" name="image" onChange={newDisplayPictureSelected} />
+                {
+                    props.name == username ?
+                    <button
+                        className="text-white bg-red-600 hover:bg-red-700 font-medium rounded-lg text-[20px] px-5 py-2.5 mt-[20px] hover:scale-[1.05] active:scale-[1]"
+                        id="logoutButton"
+                        onClick={logoutButtonClicked}>
+                            Logout
+                    </button> :
+                    <></>
+                }
+
+                <input hidden id="selectDisplayPictureTag" type="file" accept="image/png, image/jpeg" onChange={newDisplayPictureSelected} />
         </div>
     );
 }

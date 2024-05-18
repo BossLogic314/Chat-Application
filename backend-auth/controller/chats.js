@@ -172,3 +172,16 @@ export let updateDisplayPictureOfChat = async (req, res) => {
         res.status(500).json({message: "Server error!"});
     }
 }
+
+export let removeDisplayPictureOfChat = async (req, res) => {
+
+    try {
+        const name = req.body.name;
+        await userModel.updateOne({username: name}, {$set: {"displayPicture": 'default.jpg'}});
+        await groupChatModel.updateOne({name: name}, {$set: {"displayPicture": 'default.jpg'}});
+        res.status(201).json({message: "Display picture successfully updated!"});
+    }
+    catch(error) {
+        res.status(500).json({message: "Server error!"});
+    }
+}

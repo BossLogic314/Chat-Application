@@ -1,12 +1,12 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { checkJwtToken, loginUser, signupUser } from '../controller/authentication.js';
-import { verifyJwtToken } from '../utils/jwtToken.js';
+import { checkJwtToken, loginUser, logoutUser, signupUser } from '../controller/authentication.js';
 
 const router = express.Router();
 const jsonParser = bodyParser.json();
 
 router.post('/login', jsonParser, loginUser);
+router.post('/logout', jsonParser, logoutUser);
 router.post('/signup', jsonParser, signupUser);
 router.get('/checkJwtToken', jsonParser, checkJwtToken);
 

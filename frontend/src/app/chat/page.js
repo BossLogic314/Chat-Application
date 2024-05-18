@@ -90,7 +90,6 @@ export default function Page() {
     }
     catch(error) {
       // Jwt token expired, the user needs to login again
-      alert(error.response.data.message);
       router.replace('/');
     }
   });
@@ -152,7 +151,6 @@ export default function Page() {
     }
     catch(error) {
       // Jwt token expired, the user needs to login again
-      alert(error.response.data.message);
       router.replace('/');
     }
   });
@@ -221,7 +219,6 @@ export default function Page() {
     }
     catch(error) {
       // Jwt token expired, the user needs to login again
-      alert(error.response.data.message);
       router.replace('/');
     }
   };
@@ -285,7 +282,6 @@ export default function Page() {
     }
     catch(error) {
       // Jwt token expired, the user needs to login again
-      alert(error.response.data.message);
       router.replace('/');
     }*/
 
@@ -305,7 +301,6 @@ export default function Page() {
     }
     catch(error) {
       // Jwt token expired, the user needs to login again
-      alert(error.response.data.message);
       router.replace('/');
     }
   };
@@ -347,6 +342,7 @@ export default function Page() {
 
   useEffect(() => {
 
+    localStorage.setItem('alerted', false);
     initialize();
 
     return () => {
@@ -363,7 +359,7 @@ export default function Page() {
       <div className="header flex flex-row h-[75px] min-h-[75px] justify-between">
         <div className="logo h-full w-40 border-black border"></div>
         <div className="userDisplayPictureDiv flex h-full w-40 justify-center items-center">
-          <img className="userDisplayPicture h-[70px] w-[70px] border-red-400 border-[1px] rounded-full hover:cursor-pointer hover:scale-[1.03] active:scale-[1]"
+          <img className="userDisplayPicture h-[70px] w-[70px] border-black border-[1px] rounded-full hover:cursor-pointer hover:scale-[1.03] active:scale-[1]"
             src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${displayPicture}`}
             value={username}
             display-picture={displayPicture}
@@ -390,12 +386,12 @@ export default function Page() {
                 key={`chat-${index}`}
                 onClick={chatClicked}>
 
-                <div className="chatDisplayPictureDiv h-[70px] min-w-[70px]"
+                <div className="chatDisplayPictureDiv h-[70px] min-w-[70px] rounded-full"
                   key={`chatDisplayPictureDiv-${index}`}
                   value={chat.name}
                   id="chatDisplayPictureDiv">
                     <img
-                      className="chatDisplayPicture h-[70px] w-[70px] border-red-400 border-[1px] rounded-full"
+                      className="chatDisplayPicture h-[70px] w-[70px] border-black border-[1px] rounded-full"
                       src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${chat.displayPicture}`}
                       key={`chatDisplayPicture-${index}`}
                       value={chat.name}

@@ -20,6 +20,16 @@ export let loginUser = async (req, res) => {
     }
 }
 
+export let logoutUser = async (req, res) => {
+    try {
+        res.clearCookie("jwt");
+        res.status(200).json({message: "Logged out!"});
+    }
+    catch(error) {
+        res.status(500).json({message: "Logout failed!"});
+    }
+}
+
 const MAX_USERNAME_LENGTH = 15;
 const MIN_USERNAME_LENGTH = 7;
 const MAX_PASSWORD_LENGTH = 15
