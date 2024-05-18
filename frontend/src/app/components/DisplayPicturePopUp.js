@@ -33,7 +33,8 @@ export default function DisplayPicturePopUp(props) {
 
         const formData = new FormData();
         formData.append("name", props.name);
-        formData.append("imageName", props.name + `.${fileExtension}`);
+        formData.append("previousDisplayPicture", props.displayPicture);
+        formData.append("newDisplayPicture", props.name + `.${fileExtension}`);
         formData.append("image", file);
 
         try {
@@ -57,7 +58,7 @@ export default function DisplayPicturePopUp(props) {
             onClick={closePopUpDisplayPicture}>
                 <img
                     className="displayPicture h-[450px] w-[450px] min-h-[450px] min-w-[450px] rounded-full border-white border-[2px]"
-                    src="https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/anish.png">
+                    src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${props.displayPicture}`}>
                 </img>
 
                 {

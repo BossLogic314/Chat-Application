@@ -12,7 +12,7 @@ export let loginUser = async (req, res) => {
         }
         else {
             generateJwtTokenAndPutInCookie({username: username}, res);
-            res.status(200).json({message: "Authorized"});
+            res.status(200).json({message: "Authorized!"});
         }
     }
     catch(error) {
@@ -82,7 +82,8 @@ export let checkJwtToken = async (req, res) => {
         const jwtToken = req.cookies.jwt;
         const username = verifyJwtToken(jwtToken);
         if (username) {
-            res.status(200).json({username: username});
+            const user = await getUser(username);
+            res.status(200).json(user);
         }
         else {
             res.status(401).json({message: "User unauthorized"});

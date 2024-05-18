@@ -14,12 +14,14 @@ import { useMessagesStore } from "../../../zustand/useMessagesStore";
 import { useChatsStore } from "../../../zustand/useChatStore";
 import { usePopUpDisplayPictureStore } from "../../../zustand/usePopUpDisplayPictureStore";
 import './styles/page.css'
+import { useDisplayPictureStore } from "../../../zustand/useDisplayPictureStore";
 
 export default function Page() {
 
   const {chats, setChats, pushChatToTop} = useChatsStore();
   const [socket, setSocket] = useState(null);
   const {username, setUsername} = useUsernameStore();
+  const {displayPicture, setDisplayPicture} = useDisplayPictureStore();
   const {currentChatName, setCurrentChatName} = useCurrentChatNameStore();
   const {currentChat, setCurrentChat} = useCurrentChatStore();
   const [currentConversation, setCurrentConversation] = useState('');
@@ -187,7 +189,7 @@ export default function Page() {
       }
 
       setCurrentConversation(conversationName);
-      setCurrentChatName(chats[i]);
+      setCurrentChat(chats[i]);
       setCurrentChatName(chats[i].name);
       displayMessages(chats[i].name, chats[i].isGroupChat);
       break;
@@ -228,7 +230,12 @@ export default function Page() {
 
     const chatName = event.target.getAttribute('value');
     const canChangeDisplayPicture = event.target.getAttribute('can-change-display-picture');
-    setPopUpDisplayPicture({name: chatName, canChangeDisplayPicture: canChangeDisplayPicture});
+    const displayPicture = event.target.getAttribute('display-picture');
+    // The information is not fully loaded let
+    if (displayPicture == '') {
+      return;
+    }
+    setPopUpDisplayPicture({name: chatName, displayPicture: displayPicture, canChangeDisplayPicture: canChangeDisplayPicture});
   });
 
   let sendButtonClicked = (async () => {
@@ -293,6 +300,7 @@ export default function Page() {
         withCredentials: true,
       });
       setUsername(response.data.username);
+      setDisplayPicture(response.data.displayPicture);
       return response.data.username;
     }
     catch(error) {
@@ -354,10 +362,11 @@ export default function Page() {
 
       <div className="header flex flex-row h-[75px] min-h-[75px] justify-between">
         <div className="logo h-full w-40 border-black border"></div>
-        <div className="userDPDiv flex h-full w-40 justify-center items-center">
-          <img className="userDP h-[70px] w-[70px] border-red-400 border-[1px] rounded-full hover:cursor-pointer hover:scale-[1.03] active:scale-[1]"
-            src="https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/anish.png"
+        <div className="userDisplayPictureDiv flex h-full w-40 justify-center items-center">
+          <img className="userDisplayPicture h-[70px] w-[70px] border-red-400 border-[1px] rounded-full hover:cursor-pointer hover:scale-[1.03] active:scale-[1]"
+            src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${displayPicture}`}
             value={username}
+            display-picture={displayPicture}
             can-change-display-picture="true"
             onClick={displayPictureClicked}>
           </img>
@@ -386,9 +395,11 @@ export default function Page() {
                   value={chat.name}
                   id="chatDisplayPictureDiv">
                     <img
-                      className="chatDisplayPicture h-full w-full border-red-400 border-[1px] rounded-full"
+                      className="chatDisplayPicture h-[70px] w-[70px] border-red-400 border-[1px] rounded-full"
+                      src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${chat.displayPicture}`}
                       key={`chatDisplayPicture-${index}`}
                       value={chat.name}
+                      display-picture={chat.displayPicture}
                       can-change-display-picture={chat.isGroupChat ? "true" : "false"}
                       id="chatDisplayPicture"
                       onClick={displayPictureClicked}>
@@ -514,7 +525,10 @@ export default function Page() {
 
       {
         popUpDisplayPicture != null ?
-          <DisplayPicturePopUp name={popUpDisplayPicture.name} canChangeDisplayPicture={popUpDisplayPicture.canChangeDisplayPicture} /> :
+          <DisplayPicturePopUp
+            name={popUpDisplayPicture.name}
+            displayPicture={popUpDisplayPicture.displayPicture}
+            canChangeDisplayPicture={popUpDisplayPicture.canChangeDisplayPicture} /> :
           <></>
       }
     </div>

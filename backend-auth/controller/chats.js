@@ -77,7 +77,8 @@ export let getAllChats = async (req, res) => {
                     year: year
                 },
                 isGroupChat: allChats[i].name != undefined,
-                participants: allChats[i].name != undefined ? allChats[i].participants : [username, allChats[i].username].sort()
+                participants: allChats[i].name != undefined ? allChats[i].participants : [username, allChats[i].username].sort(),
+                displayPicture: allChats[i].displayPicture
             });
         }
 
@@ -132,19 +133,39 @@ export let createGroupChat = async (req, res) => {
 export let updateDisplayPictureOfChat = async (req, res) => {
 
     try {
-        const imageName = req.body.imageName;
-        const imageContent = fs.readFileSync(`./uploads/${imageName}`);
+        const name = req.body.name;
+        const newDisplayPicture = req.body.newDisplayPicture;
+        const previousDisplayPicture = req.body.previousDisplayPicture;
+        const imageContent = fs.readFileSync(`./uploads/${newDisplayPicture}`);
         s3.putObject({
             Body: imageContent,
             Bucket: "chat-application-display-pictures-bucket",
-            Key: `${imageName}`
+            Key: newDisplayPicture
         }, (error, data) => {
             // Deleting the temporary image file that was saved
-            fs.unlinkSync(`./uploads/${imageName}`);
+            fs.unlinkSync(`./uploads/${newDisplayPicture}`);
             if (error) {
-                throw error;
+                res.status(500).json({message: "Server error!"});
+                return;
             }
         });
+
+        // Deleting the old display picture from s3
+        if (previousDisplayPicture != 'default.jpg' && previousDisplayPicture != newDisplayPicture) {
+            s3.deleteObject({
+                Bucket: "chat-application-display-pictures-bucket",
+                Key: previousDisplayPicture
+            }, (error, data) => {
+                if (error) {
+                    res.status(500).json({message: "Server error!"});
+                    return;
+                }
+            });
+        }
+
+        await userModel.updateOne({username: name}, {$set: {"displayPicture": newDisplayPicture}});
+        await groupChatModel.updateOne({name: name}, {$set: {"displayPicture": newDisplayPicture}});
+
         res.status(201).json({message: "Display picture successfully updated!"});
     }
     catch(error) {
