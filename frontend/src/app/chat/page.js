@@ -494,7 +494,7 @@ export default function Page() {
                 <div className="unreadMessagesNotice text-[20px] text-center italic font-[650]" id="unreadMessagesNoticeVisible">Unread messages</div> :
                 <div className="unreadMessagesNotice text-[20px]" id="unreadMessagesNoticeHidden"></div>
             }
-            <div className="readMessages flex-1 w-full">
+            <div className="readMessages w-full">
               {
                 readMessages.map((message, index) => (
                   <div className={username == message.from ? 'messageSent' : 'messageReceived'} key={index}>
