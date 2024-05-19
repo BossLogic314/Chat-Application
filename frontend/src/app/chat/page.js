@@ -234,11 +234,18 @@ export default function Page() {
     const chatName = event.target.getAttribute('value');
     const canChangeDisplayPicture = event.target.getAttribute('can-change-display-picture');
     const displayPicture = event.target.getAttribute('display-picture');
+    const participants = event.target.getAttribute('participants');
     // The information is not fully loaded let
     if (displayPicture == '') {
       return;
     }
-    setPopUpDisplayPicture({name: chatName, displayPicture: displayPicture, canChangeDisplayPicture: canChangeDisplayPicture});
+    setPopUpDisplayPicture(
+      {
+        name: chatName, displayPicture: displayPicture,
+        canChangeDisplayPicture: canChangeDisplayPicture,
+        participants: participants
+      }
+    );
   });
 
   let sendButtonClicked = (async () => {
@@ -395,6 +402,7 @@ export default function Page() {
           <img className="userDisplayPicture h-[70px] w-[70px] border-black border-[1px] rounded-full hover:cursor-pointer hover:scale-[1.03] active:scale-[1]"
             src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${displayPicture}`}
             value={username}
+            participants={[]}
             display-picture={displayPicture}
             can-change-display-picture="true"
             onClick={displayPictureClicked}>
@@ -428,6 +436,7 @@ export default function Page() {
                       src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${chat.displayPicture}`}
                       key={`chatDisplayPicture-${index}`}
                       value={chat.name}
+                      participants={chat.isGroupChat ? chat.participants : []}
                       display-picture={chat.displayPicture}
                       can-change-display-picture={chat.isGroupChat ? "true" : "false"}
                       id="chatDisplayPicture"
@@ -570,7 +579,8 @@ export default function Page() {
           <DisplayPicturePopUp
             name={popUpDisplayPicture.name}
             displayPicture={popUpDisplayPicture.displayPicture}
-            canChangeDisplayPicture={popUpDisplayPicture.canChangeDisplayPicture} /> :
+            canChangeDisplayPicture={popUpDisplayPicture.canChangeDisplayPicture}
+            participants={popUpDisplayPicture.participants} /> :
           <></>
       }
     </div>

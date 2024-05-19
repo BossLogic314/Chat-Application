@@ -98,8 +98,12 @@ export default function DisplayPicturePopUp(props) {
             id="displayPicturePopUpOverlay"
             onClick={closePopUpDisplayPicture}>
 
-                <div className="text-[30px] mb-[10px]" id="name">
+                <div className="text-[30px]" id="name">
                     {props.name}
+                </div>
+
+                <div className="text-[25px] mb-[5px]" id="name">
+                    {props.participants}
                 </div>
 
                 <img
