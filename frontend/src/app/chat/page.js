@@ -13,13 +13,14 @@ import { useCurrentChatStore } from "../../../zustand/useCurrentChatStore";
 import { useMessagesStore } from "../../../zustand/useMessagesStore";
 import { useChatsStore } from "../../../zustand/useChatStore";
 import { usePopUpDisplayPictureStore } from "../../../zustand/usePopUpDisplayPictureStore";
-import './styles/page.css'
 import { useDisplayPictureStore } from "../../../zustand/useDisplayPictureStore";
+import { useSocketStore } from "../../../zustand/useSocketStore";
+import './styles/page.css';
 
 export default function Page() {
 
   const {chats, setChats, pushChatToTop, addToNumberOfUnreadMessagesOfChat, clearNumberOfUnreadMessagesOfChat} = useChatsStore();
-  const [socket, setSocket] = useState(null);
+  const {socket, setSocket} = useSocketStore();
   const {username, setUsername} = useUsernameStore();
   const {displayPicture, setDisplayPicture} = useDisplayPictureStore();
   const {currentChatName, setCurrentChatName} = useCurrentChatNameStore();
@@ -326,6 +327,11 @@ export default function Page() {
       }
     });
     setSocket(newSocket);
+
+    // Called when a new group chat is created with the current user involved in it
+    newSocket.on('groupChatCreated', () => {
+      getChats(null, usernameValue);
+    })
 
     newSocket.on('chat', (message) => {
   

@@ -24,6 +24,26 @@ io.on('connection', (socket) => {
     const username = socket.handshake.query.username;
     userSocketMap[username] = socket;
 
+    socket.on('groupChatCreated', (obj) => {
+
+        console.log(`Group chat created with participants ${obj.participants}`);
+
+        const participants = obj.participants;
+
+        // Sending the notification to all participants of the group chat
+        for (let i = 0; i < participants.length; ++i) {
+
+            const participant = participants[i];
+
+            // The participant is not logged in
+            if (userSocketMap[participant] == undefined) {
+                continue;
+            }
+
+            userSocketMap[participant].emit('groupChatCreated', {});
+        }
+    });
+
     socket.on('chat', (messageObj) => {
 
         const from = messageObj.from;

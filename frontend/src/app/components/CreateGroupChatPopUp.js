@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import './styles/CreateGroupChatPopUp.css';
 import { useCreateGroupChatStore } from "../../../zustand/useCreateGroupChatStore";
 import { useUsernameStore } from "../../../zustand/useUsernameStore";
+import { useSocketStore } from "../../../zustand/useSocketStore";
+import './styles/CreateGroupChatPopUp.css';
 
 export default function CreateGroupChatPopUp() {
 
@@ -11,6 +12,7 @@ export default function CreateGroupChatPopUp() {
     const [addedParticipants, setAddedParticipants] = useState([]);
     const {createGroupChat, setCreateGroupChat} = useCreateGroupChatStore();
     const {username} = useUsernameStore();
+    const {socket, setSocket} = useSocketStore();
     const router = useRouter();
 
     let closeGroupChatPopUp = ((event) => {
@@ -71,6 +73,10 @@ export default function CreateGroupChatPopUp() {
             },
             {
                 withCredentials: true
+            });
+
+            socket.emit('groupChatCreated', {
+                participants: [username, ...addedParticipants]
             });
 
             alert('Group chat successfully created!');
