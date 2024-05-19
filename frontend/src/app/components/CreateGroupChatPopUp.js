@@ -67,13 +67,14 @@ export default function CreateGroupChatPopUp() {
             const response = await axios.post('http://localhost:8080/chats/createGroupChat',
             {
                 name: groupChatName,
-                participants: addedParticipants
+                participants: [username, ...addedParticipants]
             },
             {
                 withCredentials: true
             });
 
             alert('Group chat successfully created!');
+            window.location.reload();
             setCreateGroupChat(false);
         }
         catch(error) {
