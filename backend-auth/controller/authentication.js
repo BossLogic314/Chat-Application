@@ -6,7 +6,7 @@ export let loginUser = async (req, res) => {
     try {
         const {username, password} = req.body;
         const user = await authenticateUser(username, password);
-    
+
         if (!user) {
             res.status(401).json({message: "Invalid credentials"});
         }
@@ -77,7 +77,7 @@ export let signupUser = async (req, res) => {
                 return;
             }
 
-            const newUser = new userModel({"username": username, "password": password});
+            const newUser = new userModel({"username": username, "password": password, "displayPicture": "default.jpg"});
             newUser.save();
             res.status(200).json({message: "Successfully signed up!"});
         }

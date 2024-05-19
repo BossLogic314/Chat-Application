@@ -368,7 +368,6 @@ export default function Page() {
 
   useEffect(() => {
 
-    localStorage.setItem('alerted', false);
     initialize();
 
     return () => {

@@ -70,7 +70,12 @@ export let getAllChats = async (req, res) => {
     try {
         const username = req.query.username;
         const searchString = req.query.searchString;
-        const groupChats = await groupChatModel.find({name: {$regex: `^${searchString}`}});
+        const groupChats = await groupChatModel.find({
+            "$and": [
+                {name: {$regex: `^${searchString}`}},
+                {participants: username}
+            ]
+        });
         const users = await userModel.find({
             "$and": [
                 {username: {$regex: `^${searchString}`}},
