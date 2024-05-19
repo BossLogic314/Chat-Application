@@ -44,13 +44,19 @@ export let addMessageToConversation = (async (req, res) => {
     }
 
     try {
-        const {conversationName, participants, from, to, message, hours, minutes, seconds, date, month, year} = req.body;
-        const conversation = await conversationModel.findOne({name: conversationName});
+        const {conversationName, from, to, participants, readList, message, hours, minutes, seconds, date, month, year} = req.body;
+        let conversation = await conversationModel.findOne({name: conversationName});
+
+        // Conversation does not exist
+        if (!conversation) {
+            conversation = new conversationModel({"name": conversationName, "messages": []});
+        }
+
         conversation.messages.push(
             {
                 from: from, to: to, message: message,
                 hours: hours, minutes: minutes, seconds: seconds,
-                date: date, month: month, year: year
+                date: date, month: month, year: year, readList: readList
             }
         );
         conversation.save();

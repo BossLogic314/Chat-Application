@@ -248,7 +248,7 @@ export default function Page() {
     const seconds = ("0" + currentDate.getSeconds().toString()).slice(-2);
     const date = ("0" + currentDate.getDate().toString()).slice(-2);
     const month = ("0" + (currentDate.getMonth() + 1).toString()).slice(-2);
-    const year= ("0" + currentDate.getFullYear().toString()).slice(-2);
+    const year= ("0" + currentDate.getFullYear().toString()).slice(-4);
 
     const readList = chatNameToParticipantsMap[currentChatName].map((participant) => ({
       "username": participant,
@@ -270,7 +270,7 @@ export default function Page() {
 
     socket.emit('chat', newMessage);
 
-    /*try {
+    try {
       // Saving the message in the database
       const response = await axios.post('http://localhost:8080/conversation/addMessageToConversation',
       {
@@ -294,7 +294,7 @@ export default function Page() {
     catch(error) {
       // Jwt token expired, the user needs to login again
       router.replace('/');
-    }*/
+    }
 
     setTypedMessage('');
   });
