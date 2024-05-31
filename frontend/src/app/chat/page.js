@@ -415,7 +415,7 @@ export default function Page() {
         <div className="chatsWindow w-[30%] max-w-[400px] h-full flex flex-col items-center overflow-y-scroll border-black border-r-[1px]"
         id="chatsWindow">
           <input
-            className="searchTab w-[98%] h-10 text-lg border-black border-b-[1px] px-2 py-2 mx-[2px]"
+            className="searchTab w-[98%] h-10 text-lg font-[400] border-black border-b-[1px] px-2 py-2 mx-[2px]"
             placeholder="Search for chats"
             onChange={getChats}>
           </input>
