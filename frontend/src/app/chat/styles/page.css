@@ -1,3 +1,7 @@
+#messagesWindow {
+    background-image: url("../../images/background.png");
+}
+
 #currentChat {
     background-color: rgb(235, 229, 229);
 }
@@ -30,13 +34,13 @@
     margin-left: auto;
     margin-right: 10px;
     border-radius: 15px 0px 15px 15px;
-    background-color: rgb(95, 191, 73);
+    background-color: rgb(71, 187, 71);
 }
 
 .messageReceived {
     margin-left: 10px;
     border-radius: 0px 15px 15px 15px;
-    background-color: rgb(85, 156, 232);
+    background-color: rgb(56, 142, 255);
 }
 
 .from {
@@ -58,7 +62,8 @@
     border-bottom: 1px solid rgb(65, 59, 59);
 }
 
-#sendButton {
+#createGroupChatButton, #sendButton {
+    background-color: white;
     border-radius: 50%;
     border: 1.5px solid rgb(64, 62, 62);
 }

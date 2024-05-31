@@ -411,8 +411,9 @@ export default function Page() {
         </div>
       </div>
 
-      <div className="flex flex-row flex-1 h-[100%] overflow-y-hidden border-black border-2">
-        <div className="chatsWindow w-[30%] max-w-[400px] h-full flex flex-col items-center overflow-y-scroll border-black border-r-[2px]">
+      <div className="flex flex-row flex-1 h-[100%] overflow-y-hidden border-black border-[1px]">
+        <div className="chatsWindow w-[30%] max-w-[400px] h-full flex flex-col items-center overflow-y-scroll border-black border-r-[1px]"
+        id="chatsWindow">
           <input
             className="searchTab w-[98%] h-10 text-lg border-black border-b-[1px] px-2 py-2 mx-[2px]"
             placeholder="Search for chats"
@@ -473,7 +474,7 @@ export default function Page() {
 
         </div>
 
-        <div className="messagesWindow flex flex-col flex-1 w-full h-full">
+        <div className="messagesWindow flex flex-col flex-1 w-full h-full" id="messagesWindow">
 
           <div className="readUnreadMessagesWindow flex flex-col-reverse h-full max-h-full overflow-y-scroll">
 
@@ -539,14 +540,16 @@ export default function Page() {
 
           </div>
 
-          <div className="typingSection flex flex-row h-20 border-black border-t-[2px] justify-center items-center justify-center">
-            <button
-              className="createGroupChatButton flex justify-center items-center h-10 w-20 border-black border-[1px] ml-8 mr-4 text-3xl hover:scale-[1.05] active:scale-[1]"
-              onClick={createGroupChatButtonClicked}>
-                +
-            </button>
+          <div className="typingSection flex flex-row h-20 border-black border-t-[1px] justify-center items-center justify-center"
+          id="typingSection">
+            <div className="typingSectionElements flex flex-row w-[80%]">
+              <button
+                className="createGroupChatButton flex justify-center items-center h-[44px] w-[48px] mr-[10px] border-black border-[1px] text-[30px] hover:scale-[1.05] active:scale-[1]"
+                id="createGroupChatButton"
+                onClick={createGroupChatButtonClicked}>
+                  +
+              </button>
 
-            <div className="typeAndSendSection w-4/5 flex flex-row">
               <input
                 className="typingBox h-10 w-5/6 pl-[5px] border-black border-[1px]" id="typingBox"
                 placeholder="Type your message here..." type="text" value={typedMessage}
