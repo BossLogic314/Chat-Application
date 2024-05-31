@@ -15,6 +15,7 @@ import { useChatsStore } from "../../../zustand/useChatStore";
 import { usePopUpDisplayPictureStore } from "../../../zustand/usePopUpDisplayPictureStore";
 import { useDisplayPictureStore } from "../../../zustand/useDisplayPictureStore";
 import { useSocketStore } from "../../../zustand/useSocketStore";
+import logo from '../images/logo.png';
 import './styles/page.css';
 
 export default function Page() {
@@ -395,8 +396,8 @@ export default function Page() {
     <div className="flex flex-col box bg-red h-screen w-screen min-h-[700px] min-w-[850px] mx-auto px-[10px] py-[10px]">
 
       <div className="header flex flex-row h-[75px] min-h-[75px] justify-between">
-        <div className="logo h-full w-40 border-black border">
-          <img className="h-full w-full" ></img>
+        <div className="logo h-full w-[130px] ml-[8px]">
+          <img className="h-full w-full" src={logo.src}></img>
         </div>
         <div className="userDisplayPictureDiv flex h-full w-40 justify-center items-center">
           <img className="userDisplayPicture h-[70px] w-[70px] border-black border-[1px] rounded-full hover:cursor-pointer hover:scale-[1.03] active:scale-[1]"
