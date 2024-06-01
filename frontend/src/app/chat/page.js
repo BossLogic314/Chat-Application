@@ -152,6 +152,11 @@ export default function Page() {
         // Separating into read and unread messages
         [newReadMessages, newUnreadMessages] = separateReadAndUnreadMessages(newMessages);
       }
+
+      // Marking all messages of chat as 'read' for the current user
+      await markMessagesOfConversationToRead(conversationName);
+      clearNumberOfUnreadMessagesOfChat(chatName);
+
       setReadMessages(newReadMessages);
       setUnreadMessages(newUnreadMessages);
     }
@@ -211,17 +216,21 @@ export default function Page() {
   });
 
   // Marking messages of the current conversation as 'read' for the current user
-  let markMessagesOfConversationToRead = async () => {
+  let markMessagesOfConversationToRead = async (conversationName=null) => {
+
+    if (conversationName == null) {
+      conversationName = currentConversation;
+    }
 
     // If no chat is clicked
-    if (currentConversation == '') {
+    if (conversationName == '') {
       return;
     }
 
     try {
       const response = await axios.post('http://localhost:8080/conversation/markMessageOfConversationAsRead',
       {
-        conversationName: currentConversation,
+        conversationName: conversationName,
         username: username
       },
       {
