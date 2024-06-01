@@ -97,6 +97,10 @@ export default function Page() {
   });
 
   let createGroupChatButtonClicked = (async () => {
+    // Information is not fully loaded yet
+    if (username == '') {
+      return;
+    }
     setCreateGroupChat(true);
   });
 
