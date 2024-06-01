@@ -43,11 +43,7 @@
     background-color: rgb(92, 151, 227);
 }
 
-.from {
-    border-bottom: 2px solid rgb(20, 20, 20);
-}
-
-#messageSentText, #messageReceivedText {
+#messageSentText, #messageReceivedText, .from {
     border-bottom: 2px solid rgb(20, 20, 20);
 }
 
