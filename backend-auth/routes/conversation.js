@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { getConversation, addMessageToConversation, markMessagesOfConversationToRead } from '../controller/conversation.js';
+import { getConversation, addMessageToConversation, markMessagesOfConversationToRead } from '../controllers/conversation.js';
 
 const router = express.Router();
 const jsonParser = bodyParser.json();

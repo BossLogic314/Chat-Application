@@ -1,4 +1,4 @@
-import conversationModel from '../model/Conversation.js';
+import conversationModel from '../models/Conversation.js';
 import { verifyJwtToken } from '../utils/jwtToken.js';
 
 export let getConversation = (async (req, res) => {

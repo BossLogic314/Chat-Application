@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { checkJwtToken, loginUser, logoutUser, signupUser } from '../controller/authentication.js';
+import { checkJwtToken, loginUser, logoutUser, signupUser } from '../controllers/authentication.js';
 
 const router = express.Router();
 const jsonParser = bodyParser.json();

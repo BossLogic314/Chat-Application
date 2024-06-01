@@ -1,5 +1,5 @@
 import { getUser, authenticateUser } from "./users.js";
-import userModel from "../model/User.js";
+import userModel from "../models/User.js";
 import { generateJwtTokenAndPutInCookie, verifyJwtToken } from "../utils/jwtToken.js";
 
 export let loginUser = async (req, res) => {

@@ -1,4 +1,4 @@
-import userModel from '../model/User.js';
+import userModel from '../models/User.js';
 import { verifyJwtToken } from '../utils/jwtToken.js';
 
 export let authenticateUser = async (username, password) => {

@@ -1,6 +1,6 @@
-import userModel from "../model/User.js";
-import groupChatModel from "../model/GroupChat.js";
-import conversationModel from "../model/Conversation.js";
+import userModel from "../models/User.js";
+import groupChatModel from "../models/GroupChat.js";
+import conversationModel from "../models/Conversation.js";
 import { verifyJwtToken } from "../utils/jwtToken.js";
 import dotenv from "dotenv";
 import AWS from "aws-sdk";
