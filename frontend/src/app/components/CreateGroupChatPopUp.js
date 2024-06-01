@@ -155,17 +155,19 @@ export default function CreateGroupChatPopUp() {
                     onChange={searchForUsers}>
                 </input>
 
-                <div className='suggestedParticipants w-[80%]'>
-                    {
-                        suggestedParticipants.map( (participant) =>
-                            <div className='suggestedParticipant text-[20px] width-[100%] bg-white mt-[0.5px] px-[4px] hover:cursor-pointer border-[1px] border-black border-1'
-                                key={participant.username}
-                                value={participant.username}
-                                onClick={suggestedParticipantClicked}>
-                                    {participant.username}
-                            </div>
-                        )
-                    }
+                <div className='suggestedParticipants h-[0px] w-[80%]'>
+                    <div className='suggestedParticipants max-h-[100px] relative w-[100%] z-[10] overflow-y-scroll'>
+                        {
+                            suggestedParticipants.map( (participant) =>
+                                <div className='suggestedParticipant text-[20px] width-[100%] bg-white mt-[0.5px] px-[4px] hover:cursor-pointer border-[1px] border-black border-1'
+                                    key={participant.username}
+                                    value={participant.username}
+                                    onClick={suggestedParticipantClicked}>
+                                        {participant.username}
+                                </div>
+                            )
+                        }
+                    </div>
                 </div>
 
                 <div className='addedParticipants w-[80%] text-center'>
