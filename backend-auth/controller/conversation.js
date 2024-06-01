@@ -49,7 +49,7 @@ export let addMessageToConversation = (async (req, res) => {
 
         // Conversation does not exist
         if (!conversation) {
-            conversation = new conversationModel({"name": conversationName, "messages": []});
+            conversation = new conversationModel({"name": conversationName, "messages": [], "participants": participants});
         }
 
         conversation.messages.push(
