@@ -544,7 +544,9 @@ export default function Page() {
 
           </div>
 
-          <div className="typingSection flex flex-row h-20 border-black border-t-[1px] justify-center items-center justify-center"
+          <div className="emptyDiv w-[90%] border-black border-t-[1.5px] ml-[5%]" id="emptyDiv"></div>
+
+          <div className="typingSection flex flex-row h-20 border-black justify-center items-center justify-center"
           id="typingSection">
             <div className="typingSectionElements flex flex-row w-[80%]">
               <button
