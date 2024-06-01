@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import io from "socket.io-client";
 import { useState } from "react";
 import axios from "axios";
