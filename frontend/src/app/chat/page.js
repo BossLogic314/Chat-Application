@@ -416,7 +416,7 @@ export default function Page() {
       </div>
 
       <div className="flex flex-row flex-1 h-[100%] overflow-y-hidden border-black border-[1px]">
-        <div className="chatsWindow w-[30%] max-w-[400px] h-full flex flex-col items-center overflow-y-scroll border-black border-r-[1px]"
+        <div className="chatsWindow w-[30%] max-w-[400px] h-full flex flex-col items-center border-black border-r-[1px]"
         id="chatsWindow">
           <input
             className="searchTab w-[98%] h-10 text-lg font-[400] border-black border-b-[1px] px-2 py-2 mx-[2px]"
@@ -424,57 +424,59 @@ export default function Page() {
             onChange={getChats}>
           </input>
           
-          {
-            chats.map((chat, index) =>
-            (
-              <div className="chat flex flex-row h-[80px] w-[96%] border-black border-b-[1px] mt-[4px] pb-[2px] rounded hover:scale-[1.03] hover:cursor-pointer active:scale-[1] justify-center items-center"
-                id={chat.name == currentChatName ? `currentChat` : `chat`}
-                value={chat.name}
-                key={`chat-${index}`}
-                onClick={chatClicked}>
-
-                <div className="chatDisplayPictureDiv h-[70px] min-w-[70px] rounded-full"
-                  key={`chatDisplayPictureDiv-${index}`}
+          <div className="chats h-full w-full flex flex-col items-center overflow-y-scroll">
+            {
+              chats.map((chat, index) =>
+              (
+                <div className="chat flex flex-row h-[80px] w-[96%] border-black border-b-[1px] mt-[4px] pb-[2px] rounded hover:scale-[1.03] hover:cursor-pointer active:scale-[1] justify-center items-center"
+                  id={chat.name == currentChatName ? `currentChat` : `chat`}
                   value={chat.name}
-                  id="chatDisplayPictureDiv">
-                    <img
-                      className="chatDisplayPicture h-[70px] w-[70px] border-black border-[1px] rounded-full"
-                      src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${chat.displayPicture}`}
-                      key={`chatDisplayPicture-${index}`}
-                      value={chat.name}
-                      participants={chat.isGroupChat ? chat.participants : []}
-                      display-picture={chat.displayPicture}
-                      can-change-display-picture={chat.isGroupChat ? "true" : "false"}
-                      id="chatDisplayPicture"
-                      onClick={displayPictureClicked}>
-                    </img>
-                </div>
+                  key={`chat-${index}`}
+                  onClick={chatClicked}>
 
-                <div className="chatNameDiv flex flex-col h-full w-full ml-2 justify-center overflow-hidden" key={`chatNameDiv-${index}`} value={chat.name}>
-                  <div className="chatName text-[23px] font-[470] truncate" key={`chatName-${index}`} value={chat.name}>
-                    {chat.name}
+                  <div className="chatDisplayPictureDiv h-[70px] min-w-[70px] rounded-full"
+                    key={`chatDisplayPictureDiv-${index}`}
+                    value={chat.name}
+                    id="chatDisplayPictureDiv">
+                      <img
+                        className="chatDisplayPicture h-[70px] w-[70px] border-black border-[1px] rounded-full"
+                        src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${chat.displayPicture}`}
+                        key={`chatDisplayPicture-${index}`}
+                        value={chat.name}
+                        participants={chat.isGroupChat ? chat.participants : []}
+                        display-picture={chat.displayPicture}
+                        can-change-display-picture={chat.isGroupChat ? "true" : "false"}
+                        id="chatDisplayPicture"
+                        onClick={displayPictureClicked}>
+                      </img>
                   </div>
-                  <div className="chatLastMessage text-[17px] font-[400] w-[100%] truncate" key={`chatLastMessage-${index}`} value={chat.name}
-                  id="chatLastMessage">
-                    {chat.lastMessage.message}
-                  </div>
-                </div>
 
-                {
-                  chat.numberOfUnreadMessages != 0 ?
-                  (
-                    <div className="numberOfUnreadMessages text-[21px] h-[40px] min-h-[40px] w-[40px] min-w-[40px] flex justify-center items-center mr-[8px] rounded-full truncate"
-                    id="numberOfUnreadMessages"
-                    value={chat.name}>
-                      {chat.numberOfUnreadMessages}
+                  <div className="chatNameDiv flex flex-col h-full w-full ml-2 justify-center overflow-hidden" key={`chatNameDiv-${index}`} value={chat.name}>
+                    <div className="chatName text-[23px] font-[470] truncate" key={`chatName-${index}`} value={chat.name}>
+                      {chat.name}
                     </div>
-                  ) :
-                  <></>
-                }
+                    <div className="chatLastMessage text-[17px] font-[400] w-[100%] truncate" key={`chatLastMessage-${index}`} value={chat.name}
+                    id="chatLastMessage">
+                      {chat.lastMessage.message}
+                    </div>
+                  </div>
 
-              </div>
-            ))
-          }
+                  {
+                    chat.numberOfUnreadMessages != 0 ?
+                    (
+                      <div className="numberOfUnreadMessages text-[21px] h-[40px] min-h-[40px] w-[40px] min-w-[40px] flex justify-center items-center mr-[8px] rounded-full truncate"
+                      id="numberOfUnreadMessages"
+                      value={chat.name}>
+                        {chat.numberOfUnreadMessages}
+                      </div>
+                    ) :
+                    <></>
+                  }
+
+                </div>
+              ))
+            }
+          </div>
 
         </div>
 
