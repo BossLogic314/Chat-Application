@@ -6,7 +6,7 @@ import { useUsernameStore } from "../../../zustand/useUsernameStore";
 import { useSocketStore } from "../../../zustand/useSocketStore";
 import './styles/CreateGroupChatPopUp.css';
 
-export default function CreateGroupChatPopUp() {
+export default function CreateGroupChatPopUp({chatNameToDisplayPictureMap}) {
 
     const [suggestedParticipants, setSuggestedParticipants] = useState([]);
     const [addedParticipants, setAddedParticipants] = useState([]);
@@ -90,9 +90,7 @@ export default function CreateGroupChatPopUp() {
         }
     });
 
-    let removeAddedParticipant = ((event) => {
-        
-        const participant = event.target.getAttribute('value');
+    let removeAddedParticipant = ((participant) => {
         
         let newAddedParticipants = [];
         for (let i = 0; i < addedParticipants.length; ++i) {
@@ -106,14 +104,25 @@ export default function CreateGroupChatPopUp() {
         setAddedParticipants(newAddedParticipants);
     });
 
-    let suggestedParticipantClicked = ((event) => {
+    const checkboxClicked = ((event) => {
+        const participantName = event.target.getAttribute('participant-name');
+
+        const checked = event.target.checked;
+
+        if (checked) {
+            suggestedParticipantClicked(participantName);
+        }
+        else {
+            removeAddedParticipant(participantName);
+        }
+    });
+
+    let suggestedParticipantClicked = ((newParticipant) => {
 
         // Maximum number of participants have already been added
         if (addedParticipants.length >= 5) {
             return;
         }
-
-        const newParticipant = event.target.getAttribute('value');
 
         let newParticipantAlreadyExists = false;
 
@@ -132,8 +141,6 @@ export default function CreateGroupChatPopUp() {
             const newAddedParticipants = [...addedParticipants, newParticipant];
             setAddedParticipants(newAddedParticipants);
         }
-
-        setSuggestedParticipants([]);
     });
 
     return (
@@ -141,56 +148,65 @@ export default function CreateGroupChatPopUp() {
             id="createGroupChatPopUpOverlay"
             onClick={closeGroupChatPopUp}>
                 
-            <div className='createGroupChatPopUp min-h-[600px] min-w-[600px] flex flex-col items-center border-black border-[2px] rounded-[5px]'>
+            <div className='createGroupChatPopUp h-[80%] max-h-[600px] min-w-[600px] max-w-[600px] flex flex-col items-center border-black border-[2px] rounded-[5px]'>
 
                 <div className='createGroupChatPopUpHeader flex flex-row'>
-                    <div className='createGroupChatPopUpTitle text-4xl font-medium text-center mt-[5px] mb-[5px]'>Create new group chat</div>
+                    <div className='createGroupChatPopUpTitle text-4xl font-medium text-center mt-[10px] mb-[5px]'>Create new group chat</div>
                 </div>
 
-                <input className='groupChatName w-[80%] text-[20px] px-2 py-[2px] mt-[10px] rounded-lg' id="groupChatName" placeholder='Group name'></input>
-                <input
-                    className='groupChatParticipants w-[80%] text-[20px] font-normal mt-[10px] px-2 py-[2px] rounded-lg'
-                    id='groupChatParticipants'
-                    placeholder='Add participants here'
-                    onChange={searchForUsers}>
-                </input>
+                <input className='groupChatName w-[80%] text-[21px] px-2 py-[2px] mt-[10px] rounded-[5px] border-black border-[1px]'
+                    id="groupChatName" placeholder='Group name'></input>
 
-                <div className='suggestedParticipants h-[0px] w-[80%]'>
-                    <div className='suggestedParticipants max-h-[100px] relative w-[100%] z-[10] overflow-y-scroll'>
-                        {
-                            suggestedParticipants.map( (participant) =>
-                                <div className='suggestedParticipant text-[20px] width-[100%] bg-white mt-[0.5px] px-[4px] hover:cursor-pointer border-[1px] border-black border-1'
-                                    key={participant.username}
-                                    value={participant.username}
-                                    onClick={suggestedParticipantClicked}>
-                                        {participant.username}
-                                </div>
-                            )
-                        }
-                    </div>
-                </div>
-
-                <div className='addedParticipants w-[80%] text-center'>
+                <div className='suggestedParticipants h-[500px] w-[80%] mt-[8px] border-black border-[1px] overflow-y-auto'>
+                    <input
+                        className='groupChatParticipants w-full text-[21px] font-normal px-2 py-[2px] border-black border-b-[1px]'
+                        id='groupChatParticipants'
+                        placeholder='Search for participants here'
+                        onChange={searchForUsers}>
+                    </input>
                     {
-                        addedParticipants.map( (participant) =>
-                            <button
-                                className='addedParticipantName inline-flex text-[20px] px-[4px] mt-[7px] mx-[10px] hover:scale-[1.04] active:scale-[1] rounded-[8px] border-[1px] border-black'
-                                id='addedParticipantName'
-                                onClick={removeAddedParticipant}
-                                value={participant}>
+                        suggestedParticipants.map((participant, index) =>
+                        (
+                            <div className="suggestedParticipant h-[65px] flex flex-row border-black border-b-[1px]"
+                                key={`suggestedParticipant-${index}`}>
+                                <div className="suggestedParticipantDisplayPictureDiv w-[70px] flex justify-center items-center"
+                                    key={`suggestedParticipantDisplayPictureDiv-${index}`}>
+                                    <img className="suggestedParticipantDisplayPicture h-[55px] w-[55px] rounded-full border-black border-[1px]"
+                                        src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${chatNameToDisplayPictureMap[participant.username]}`}
+                                        key={`suggestedParticipantDisplayPicture-${index}`}>
+                                    </img>
+                                </div>
+
+                                <div className="participantName flex items-center flex-grow text-[22px] font-[400] pl-[5px] truncate ...">{participant.username}</div>
+
+                                <div className="selectDiv w-[50px] flex justify-center items-center">
+                                    <input className="checkbox h-[19px] w-[19px]" type="checkbox" onChange={checkboxClicked}
+                                        participant-name={participant.username} checked={addedParticipants.includes(participant.username)}></input>
+                                </div>
+                            </div>
+                        ))
+                    }
+                </div>
+
+                <div className='addedParticipants w-[80%] text-center my-[3px]'>
+                    {
+                        addedParticipants.map((participant) =>
+                            <div
+                                className='addedParticipantName inline-flex text-[18px] px-[5px] py-[3px] mt-[7px] mx-[10px] rounded-[8px] border-[1px] border-black'
+                                id='addedParticipantName' key={participant}>
                                     {participant}
-                            </button>
+                            </div>
                         )
                     }
                 </div>
 
                 <button
-                    className='createGroupChatSubmitButton text-white bg-green-500 hover:bg-green-600 font-medium rounded-lg text-md px-5 py-2.5 mt-[8px] hover:scale-[1.04] active:scale-[1]'
+                    className='createGroupChatSubmitButton text-white bg-green-500 hover:bg-green-600 font-medium rounded-lg text-[16px] px-[20px] py-[10px] mt-[8px] hover:scale-[1.04] active:scale-[1]'
                     onClick={createButtonClicked}>
                         Create
                 </button>
 
-                <div className='participantsNumberMessage font-medium text-[18px] mx-[3px] my-[4px] italic'>
+                <div className='participantsNumberMessage font-medium text-[18px] mx-[3px] mt-[4px] mb-[10px] italic'>
                     *Atmost 5 people can be a part of a group chat*
                 </div>
 

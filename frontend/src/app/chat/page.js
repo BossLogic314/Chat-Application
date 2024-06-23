@@ -422,7 +422,7 @@ export default function Page() {
           <img className="h-full w-full" src={logo.src}></img>
         </div>
         <div className="userDisplayPictureDiv flex h-full w-40 justify-center items-center">
-          <img className="userDisplayPicture h-[68px] w-[68px] border-black border-[1px] rounded-full hover:cursor-pointer hover:scale-[1.03] active:scale-[1]"
+          <img className="userDisplayPicture h-[68px] w-[68px] rounded-full hover:cursor-pointer hover:scale-[1.03] active:scale-[1] border-black border-[1px]"
             src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${displayPicture}`}
             value={username}
             participants={[]}
@@ -470,10 +470,10 @@ export default function Page() {
                   </div>
 
                   <div className="chatNameDiv flex flex-col h-full w-full ml-2 mr-[8px] justify-center overflow-hidden" key={`chatNameDiv-${index}`} value={chat.name}>
-                    <div className="chatName text-[23px] font-[470] truncate" key={`chatName-${index}`} value={chat.name}>
+                    <div className="chatName text-[23px] font-[470] truncate ..." key={`chatName-${index}`} value={chat.name}>
                       {chat.name}
                     </div>
-                    <div className="chatLastMessage text-[17px] font-[400] w-[100%] truncate" key={`chatLastMessage-${index}`} value={chat.name}
+                    <div className="chatLastMessage text-[17px] font-[400] w-[100%] truncate ..." key={`chatLastMessage-${index}`} value={chat.name}
                     id="chatLastMessage">
                       {chat.lastMessage.message}
                     </div>
@@ -482,7 +482,7 @@ export default function Page() {
                   {
                     chat.numberOfUnreadMessages != 0 ?
                     (
-                      <div className="numberOfUnreadMessages text-[21px] h-[40px] min-h-[40px] w-[40px] min-w-[40px] flex justify-center items-center mr-[8px] rounded-full truncate"
+                      <div className="numberOfUnreadMessages text-[21px] h-[40px] min-h-[40px] w-[40px] min-w-[40px] flex justify-center items-center mr-[8px] rounded-full truncate ..."
                       id="numberOfUnreadMessages"
                       value={chat.name}>
                         {chat.numberOfUnreadMessages}
@@ -601,7 +601,7 @@ export default function Page() {
       </div>
 
       {
-        createGroupChat ? <CreateGroupChatPopUp /> : <></>
+        createGroupChat ? <CreateGroupChatPopUp chatNameToDisplayPictureMap={chatNameToDisplayPictureMap} /> : <></>
       }
 
       {
