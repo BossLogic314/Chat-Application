@@ -6,6 +6,10 @@
     background-color: rgb(239, 231, 231);
 }
 
+#suggestedParticipants {
+    background-color: white;
+}
+
 #addedParticipantName {
     background-color: rgb(124, 196, 237);
 }

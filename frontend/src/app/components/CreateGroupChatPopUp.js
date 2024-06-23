@@ -157,7 +157,8 @@ export default function CreateGroupChatPopUp({chatNameToDisplayPictureMap}) {
                 <input className='groupChatName w-[80%] text-[21px] px-2 py-[2px] mt-[10px] rounded-[5px] border-black border-[1px]'
                     id="groupChatName" placeholder='Group name'></input>
 
-                <div className='suggestedParticipants h-[500px] w-[80%] mt-[8px] border-black border-[1px] overflow-y-auto'>
+                <div className='suggestedParticipants h-[500px] w-[80%] mt-[8px] border-black border-[1px] overflow-y-auto'
+                    id="suggestedParticipants">
                     <input
                         className='groupChatParticipants w-full text-[21px] font-normal px-2 py-[2px] border-black border-b-[1px]'
                         id='groupChatParticipants'
