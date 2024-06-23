@@ -141,15 +141,15 @@ export default function CreateGroupChatPopUp() {
             id="createGroupChatPopUpOverlay"
             onClick={closeGroupChatPopUp}>
                 
-            <div className='createGroupChatPopUp min-h-[300px] min-w-[600px] flex flex-col items-center border-black border-2'>
+            <div className='createGroupChatPopUp min-h-[600px] min-w-[600px] flex flex-col items-center border-black border-[2px] rounded-[5px]'>
 
                 <div className='createGroupChatPopUpHeader flex flex-row'>
                     <div className='createGroupChatPopUpTitle text-4xl font-medium text-center mt-[5px] mb-[5px]'>Create new group chat</div>
                 </div>
 
-                <input className='groupChatName w-[80%] text-[20px] px-2 mt-[10px] rounded-lg' id="groupChatName" placeholder='Group name'></input>
+                <input className='groupChatName w-[80%] text-[20px] px-2 py-[2px] mt-[10px] rounded-lg' id="groupChatName" placeholder='Group name'></input>
                 <input
-                    className='groupChatParticipants w-[80%] text-[20px] font-normal mt-[10px] px-2 rounded-lg'
+                    className='groupChatParticipants w-[80%] text-[20px] font-normal mt-[10px] px-2 py-[2px] rounded-lg'
                     id='groupChatParticipants'
                     placeholder='Add participants here'
                     onChange={searchForUsers}>

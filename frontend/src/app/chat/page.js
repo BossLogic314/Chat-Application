@@ -27,6 +27,7 @@ export default function Page() {
   const {currentChatName, setCurrentChatName} = useCurrentChatNameStore();
   const {currentChat, setCurrentChat} = useCurrentChatStore();
   const [currentConversation, setCurrentConversation] = useState('');
+  const [chatNameToDisplayPictureMap, setChatNameToDisplayPictureMap] = useState();
   const {readMessages, setReadMessages, unreadMessages, setUnreadMessages, addToMessages} = useMessagesStore();
   const [typedMessage, setTypedMessage] = useState('');
   const router = useRouter();
@@ -405,6 +406,14 @@ export default function Page() {
 
   }, []);
 
+  useEffect(() => {
+    const newChatNameToDisplayPictureMap = {};
+    for (let i = 0; i < chats.length; ++i) {
+      newChatNameToDisplayPictureMap[chats[i].name] = chats[i].displayPicture;
+    }
+    setChatNameToDisplayPictureMap(newChatNameToDisplayPictureMap);
+  }, [chats]);
+
   return (
     <div className="flex flex-col box bg-red h-screen w-screen min-h-[700px] min-w-[850px] mx-auto px-[10px] py-[10px]">
 
@@ -413,7 +422,7 @@ export default function Page() {
           <img className="h-full w-full" src={logo.src}></img>
         </div>
         <div className="userDisplayPictureDiv flex h-full w-40 justify-center items-center">
-          <img className="userDisplayPicture h-[70px] w-[70px] border-black border-[1px] rounded-full hover:cursor-pointer hover:scale-[1.03] active:scale-[1]"
+          <img className="userDisplayPicture h-[68px] w-[68px] border-black border-[1px] rounded-full hover:cursor-pointer hover:scale-[1.03] active:scale-[1]"
             src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${displayPicture}`}
             value={username}
             participants={[]}
@@ -433,7 +442,7 @@ export default function Page() {
             onChange={getChats}>
           </input>
           
-          <div className="chats h-full w-full flex flex-col items-center overflow-y-scroll">
+          <div className="chats h-full w-full flex flex-col items-center overflow-y-auto">
             {
               chats.map((chat, index) =>
               (
@@ -443,12 +452,12 @@ export default function Page() {
                   key={`chat-${index}`}
                   onClick={chatClicked}>
 
-                  <div className="chatDisplayPictureDiv h-[70px] min-w-[70px] rounded-full"
+                  <div className="chatDisplayPictureDiv h-[70px] min-w-[70px] flex justify-center items-center rounded-full"
                     key={`chatDisplayPictureDiv-${index}`}
                     value={chat.name}
                     id="chatDisplayPictureDiv">
                       <img
-                        className="chatDisplayPicture h-[70px] w-[70px] border-black border-[1px] rounded-full"
+                        className="chatDisplayPicture h-[65px] w-[65px] mt-[4px] ml-[3px] border-black border-[1px] rounded-full"
                         src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${chat.displayPicture}`}
                         key={`chatDisplayPicture-${index}`}
                         value={chat.name}
@@ -460,7 +469,7 @@ export default function Page() {
                       </img>
                   </div>
 
-                  <div className="chatNameDiv flex flex-col h-full w-full ml-2 justify-center overflow-hidden" key={`chatNameDiv-${index}`} value={chat.name}>
+                  <div className="chatNameDiv flex flex-col h-full w-full ml-2 mr-[8px] justify-center overflow-hidden" key={`chatNameDiv-${index}`} value={chat.name}>
                     <div className="chatName text-[23px] font-[470] truncate" key={`chatName-${index}`} value={chat.name}>
                       {chat.name}
                     </div>
@@ -498,18 +507,18 @@ export default function Page() {
                 unreadMessages.map((message, index) => (
                   <div className={username == message.from ? 'messageSent' : 'messageReceived'} key={index}>
 
-                    <div className='from text-[18px] italic pt-[3px] pb-[2px]' key={`from-${index}`}>
+                    <div className='from text-[18px] italic pt-[3px] pb-[2px] px-[3px]' key={`from-${index}`}>
                         {message.from}
                     </div>
 
                     <div
-                      className="text-[23px] pt-[3px] pb-[5px]"
+                      className="text-[23px] pt-[3px] pb-[5px] px-[5px]"
                       id={username == message.from ? 'messageSentText' : 'messageReceivedText'}
                       key={`messageText-${index}`}>
                         {message.message}
                     </div>
 
-                    <div className='messageDateTime text-[17px] pt-[2px] pb-[3px] text-right' key={`messageDateTime-${index}`}>
+                    <div className='messageDateTime text-[17px] pt-[2px] pb-[3px] px-[8px] text-right' key={`messageDateTime-${index}`}>
                     {
                         `${ message.hours }:${ message.minutes }:${ message.seconds }, ` +
                         `${ message.date }-${ message.month }-${ message.year }`
@@ -530,18 +539,18 @@ export default function Page() {
                 readMessages.map((message, index) => (
                   <div className={username == message.from ? 'messageSent' : 'messageReceived'} key={index}>
 
-                    <div className='from text-[18px] italic pt-[3px] pb-[2px]' key={`from-${index}`}>
+                    <div className='from text-[18px] italic pt-[3px] pb-[2px] px-[3px]' key={`from-${index}`}>
                         {message.from}
                     </div>
 
                     <div
-                      className="text-[23px] pt-[3px] pb-[5px]"
+                      className="text-[23px] pt-[3px] pb-[5px] px-[5px]"
                       id={username == message.from ? 'messageSentText' : 'messageReceivedText'}
                       key={`messageText-${index}`}>
                         {message.message}
                     </div>
 
-                    <div className='messageDateTime text-[17px] pt-[2px] pb-[3px] text-right' key={`messageDateTime-${index}`}>
+                    <div className='messageDateTime text-[17px] pt-[2px] pb-[3px] px-[8px] text-right' key={`messageDateTime-${index}`}>
                     {
                         `${ message.hours }:${ message.minutes }:${ message.seconds }, ` +
                         `${ message.date }-${ message.month }-${ message.year }`
