@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useCreateGroupChatStore } from "../../../zustand/useCreateGroupChatStore";
@@ -25,23 +25,17 @@ export default function CreateGroupChatPopUp({chatNameToDisplayPictureMap}) {
 
     let searchForUsers = (async () => {
         const searchString = document.getElementById('groupChatParticipants').value;
-        if (searchString !== '') {
-            try {
-                const response = await axios.get(`http://localhost:8080/users/getUsers?searchString=${searchString}&username=${username}`,
-                {
-                    withCredentials: true
-                });
-                setSuggestedParticipants(response.data.response);
-            }
-            catch(error) {
-                // Jwt token expired, the user needs to login again
-                alert(error.response.data.message);
-                router.replace('/');
-            }
+        try {
+            const response = await axios.get(`http://localhost:8080/users/getUsers?searchString=${searchString}&username=${username}`,
+            {
+                withCredentials: true
+            });
+            setSuggestedParticipants(response.data.response);
         }
-        else {
-            // If the search string is empty, no participants should be suggested
-            setSuggestedParticipants([]);
+        catch(error) {
+            // Jwt token expired, the user needs to login again
+            alert(error.response.data.message);
+            router.replace('/');
         }
     });
 
@@ -143,12 +137,16 @@ export default function CreateGroupChatPopUp({chatNameToDisplayPictureMap}) {
         }
     });
 
+    useEffect(() => {
+        searchForUsers();
+    }, [])
+
     return (
-        <div className='h-screen w-screen flex justify-center items-center fixed'
+        <div className='h-full w-full min-h-[700px] min-w-[850px] flex justify-center absolute top-0 bottom-0 left-0 right-0'
             id="createGroupChatPopUpOverlay"
             onClick={closeGroupChatPopUp}>
                 
-            <div className='createGroupChatPopUp h-[80%] max-h-[600px] min-w-[600px] max-w-[600px] flex flex-col items-center border-black border-[2px] rounded-[5px]'>
+            <div className='createGroupChatPopUp h-[600px] min-w-[600px] max-w-[600px] mt-[30px] flex flex-col items-center border-black border-[2px] rounded-[5px]'>
 
                 <div className='createGroupChatPopUpHeader flex flex-row'>
                     <div className='createGroupChatPopUpTitle text-4xl font-medium text-center mt-[10px] mb-[5px]'>Create new group chat</div>
