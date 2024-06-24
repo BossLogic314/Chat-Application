@@ -142,11 +142,11 @@ export default function CreateGroupChatPopUp({chatNameToDisplayPictureMap}) {
     }, [])
 
     return (
-        <div className='h-full w-full min-h-[700px] min-w-[850px] flex justify-center absolute top-0 bottom-0 left-0 right-0'
+        <div className='h-full w-full min-h-[700px] min-w-[850px] flex justify-center items-center absolute top-0 bottom-0 left-0 right-0'
             id="createGroupChatPopUpOverlay"
             onClick={closeGroupChatPopUp}>
                 
-            <div className='createGroupChatPopUp h-[600px] min-w-[600px] max-w-[600px] mt-[30px] flex flex-col items-center border-black border-[2px] rounded-[5px]'>
+            <div className='createGroupChatPopUp h-[600px] min-w-[600px] max-w-[600px] flex flex-col items-center border-black border-[2px] rounded-[5px]'>
 
                 <div className='createGroupChatPopUpHeader flex flex-row'>
                     <div className='createGroupChatPopUpTitle text-4xl font-medium text-center mt-[10px] mb-[5px]'>Create new group chat</div>

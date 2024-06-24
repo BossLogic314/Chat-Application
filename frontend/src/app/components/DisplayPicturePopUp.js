@@ -94,7 +94,7 @@ export default function DisplayPicturePopUp(props) {
     });
 
     return (
-        <div className='h-full w-full min-h-[700px] min-w-[850px] flex flex-col justify-center items-center absolute'
+        <div className='h-full w-full min-h-[700px] min-w-[850px] flex flex-col justify-center items-center absolute top-0 bottom-0 left-0 right-0'
             id="displayPicturePopUpOverlay"
             onClick={closePopUpDisplayPicture}>
 

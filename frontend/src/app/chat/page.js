@@ -500,7 +500,7 @@ export default function Page() {
 
         <div className="messagesWindow flex flex-col flex-1 w-full h-full" id="messagesWindow">
 
-          <div className="readUnreadMessagesWindow flex flex-col-reverse h-full max-h-full overflow-y-scroll">
+          <div className="readUnreadMessagesWindow flex flex-col-reverse h-full max-h-full overflow-y-auto">
 
             <div className="unreadMessages flex-1 w-full">
               {
