@@ -50,19 +50,19 @@ export default function Page() {
   }, [])
 
   return (
-    <div className="h-screen w-screen bg-blue-100 flex justify-center items-center">
+    <div className="h-screen w-screen min-h-[450px] min-w-[450px] bg-blue-100 flex justify-center items-center">
       {
         isPageLoading ? <></> :
         <div className="bg-white rounded-lg min-h-[350px] px-12 py-8">
           <div className="text-5xl w-80 font-medium text-center">Welcome!</div>
           <div className="mt-3 w-80 text-2xl font-normal">Username</div>
-          <input className="bg-gray-100 w-80 text-lg block mt-1 px-3 py-1 border-black border rounded"
+          <input className="bg-gray-100 w-80 text-lg block mt-1 px-[8px] py-1 border-black border rounded"
             value={enteredUsername} placeholder="Enter your username here"
             onChange={(e) => {setEnteredUsername(e.target.value)}}>
           </input>
 
           <div className="mt-2 w-80 text-2xl font-normal">Password</div>
-          <input className="bg-gray-100 w-80 text-lg block mt-1 px-3 py-1 border-black border rounded"
+          <input className="bg-gray-100 w-80 text-lg block mt-1 px-[8px] py-1 border-black border rounded"
             value={enteredPassword} placeholder="Enter your password here"
             type="password" onChange={(e) => {setEnteredPassword(e.target.value)}}>
           </input>
@@ -76,7 +76,7 @@ export default function Page() {
 
           <div className="signupMessageDiv w-80 italic mt-2">
             <div className="text-md max-w-full text-center">Don't have an account?</div>
-            <div className="text-md max-w-full text-center">Signup <a className="text-blue-400 underline underline-offset-4" href="/signup">here</a></div>
+            <div className="text-md max-w-full text-center">Signup <a className="underline underline-offset-4" href="/signup">here</a></div>
           </div>
         </div>
       }
