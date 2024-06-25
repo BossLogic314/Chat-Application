@@ -5,7 +5,7 @@ import './styles/DisplayPicturePopUp.css';
 import { usePopUpDisplayPictureStore } from "../../../zustand/usePopUpDisplayPictureStore";
 import { useUsernameStore } from "../../../zustand/useUsernameStore";
 
-export default function DisplayPicturePopUp(props) {
+export default function DisplayPicturePopUp({name, displayPicture, canChangeDisplayPicture, participants, clearState}) {
 
     const {setPopUpDisplayPicture} = usePopUpDisplayPictureStore();
     const {username} = useUsernameStore();
@@ -34,9 +34,9 @@ export default function DisplayPicturePopUp(props) {
         const fileExtension = splitArr[splitArr.length - 1];
 
         const formData = new FormData();
-        formData.append("name", props.name);
-        formData.append("previousDisplayPicture", props.displayPicture);
-        formData.append("newDisplayPicture", props.name + `.${fileExtension}`);
+        formData.append("name", name);
+        formData.append("previousDisplayPicture", displayPicture);
+        formData.append("newDisplayPicture", name + `.${fileExtension}`);
         formData.append("image", file);
 
         try {
@@ -64,7 +64,7 @@ export default function DisplayPicturePopUp(props) {
         try {
             const response = await axios.post('http://localhost:8080/chats/removeDisplayPictureOfChat',
             {
-                name: props.name
+                name: name
             },
             {
               withCredentials: true
@@ -84,7 +84,8 @@ export default function DisplayPicturePopUp(props) {
             {
               withCredentials: true
             });
-            window.location.reload();
+            // Clearing the configuration so that the user logs in to a fresh page next time
+            clearState();
             router.replace('/');
         }
         catch(error) {
@@ -99,20 +100,20 @@ export default function DisplayPicturePopUp(props) {
             onClick={closePopUpDisplayPicture}>
 
                 <div className="text-[30px]" id="name">
-                    {props.name}
+                    {name}
                 </div>
 
                 <div className="text-[25px] mb-[5px]" id="name">
-                    {props.participants}
+                    {participants}
                 </div>
 
                 <img
                     className="displayPicture h-[450px] w-[450px] min-h-[450px] min-w-[450px] rounded-full border-white border-[2px]"
-                    src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${props.displayPicture}`}>
+                    src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${displayPicture}`}>
                 </img>
 
                 {
-                    props.canChangeDisplayPicture == 'true' ?
+                    canChangeDisplayPicture == 'true' ?
                     <div className="buttons flex flex-row">
                         <button
                             className="text-white bg-green-600 hover:bg-green-700 font-medium rounded-lg text-[20px] px-5 py-2.5 mt-[20px] mr-[10px] hover:scale-[1.04] active:scale-[1]"
@@ -122,7 +123,7 @@ export default function DisplayPicturePopUp(props) {
                         </button>
 
                         {
-                            props.displayPicture != 'default.jpg' ?
+                            displayPicture != 'default.jpg' ?
                             <button
                                 className="text-white bg-green-600 hover:bg-green-700 font-medium rounded-lg text-[20px] px-5 py-2.5 mt-[20px] ml-[10px] hover:scale-[1.04] active:scale-[1]"
                                 id="removeDisplayPictureButton"
@@ -136,7 +137,7 @@ export default function DisplayPicturePopUp(props) {
                 }
 
                 {
-                    props.name == username ?
+                    name == username ?
                     <button
                         className="text-white bg-red-600 hover:bg-red-700 font-medium rounded-lg text-[20px] px-5 py-2.5 mt-[20px] hover:scale-[1.05] active:scale-[1]"
                         id="logoutButton"

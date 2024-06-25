@@ -36,6 +36,12 @@ export default function Page() {
   const {createGroupChat, setCreateGroupChat} = useCreateGroupChatStore();
   const {popUpDisplayPicture, setPopUpDisplayPicture} = usePopUpDisplayPictureStore();
 
+  // Called when the user logs out
+  const clearState = () => {
+    setPopUpDisplayPicture(null);
+    setChats([]);
+  }
+
   let getChats = (async (event, usernameValue=null) => {
 
     const searchTab = document.getElementsByClassName('searchTab')[0];
@@ -643,7 +649,8 @@ export default function Page() {
             name={popUpDisplayPicture.name}
             displayPicture={popUpDisplayPicture.displayPicture}
             canChangeDisplayPicture={popUpDisplayPicture.canChangeDisplayPicture}
-            participants={popUpDisplayPicture.participants} /> :
+            participants={popUpDisplayPicture.participants}
+            clearState={clearState} /> :
           <></>
       }
     </div>
