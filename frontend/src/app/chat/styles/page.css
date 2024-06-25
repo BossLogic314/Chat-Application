@@ -18,8 +18,7 @@
 .messageSent, .messageReceived {
     max-width: 60%;
     width: fit-content;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 30px;
 
     word-wrap: break-word;
 
@@ -32,13 +31,13 @@
 
 .messageSent {
     margin-left: auto;
-    margin-right: 10px;
+    margin-right: 5px;
     border-radius: 15px 0px 15px 15px;
     background-color: rgb(71, 187, 71);
 }
 
 .messageReceived {
-    margin-left: 10px;
+    margin-left: 5px;
     border-radius: 0px 15px 15px 15px;
     background-color: rgb(92, 151, 227);
 }

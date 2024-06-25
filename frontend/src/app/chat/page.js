@@ -411,6 +411,7 @@ export default function Page() {
     for (let i = 0; i < chats.length; ++i) {
       newChatNameToDisplayPictureMap[chats[i].name] = chats[i].displayPicture;
     }
+    newChatNameToDisplayPictureMap[username] = displayPicture;
     setChatNameToDisplayPictureMap(newChatNameToDisplayPictureMap);
   }, [chats]);
 
@@ -505,26 +506,40 @@ export default function Page() {
             <div className="unreadMessages flex-1 w-full">
               {
                 unreadMessages.map((message, index) => (
-                  <div className={username == message.from ? 'messageSent' : 'messageReceived'} key={index}>
-
-                    <div className='from text-[18px] italic pt-[3px] pb-[2px] px-[3px]' key={`from-${index}`}>
-                        {message.from}
-                    </div>
-
-                    <div
-                      className="text-[23px] pt-[3px] pb-[5px] px-[5px]"
-                      id={username == message.from ? 'messageSentText' : 'messageReceivedText'}
-                      key={`messageText-${index}`}>
-                        {message.message}
-                    </div>
-
-                    <div className='messageDateTime text-[17px] pt-[2px] pb-[3px] px-[8px] text-right' key={`messageDateTime-${index}`}>
+                  <div className="displayPictureAndMessage flex flex-row my-[4px] mx-[4px]">
                     {
-                        `${ message.hours }:${ message.minutes }:${ message.seconds }, ` +
-                        `${ message.date }-${ message.month }-${ message.year }`
+                      username != message.from ?
+                      <img className="displayPicture h-[55px] w-[55px] rounded-full border-black border-[1px]"
+                        src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${chatNameToDisplayPictureMap[message.from]}`}>
+                      </img> :
+                      <></>
                     }
-                    </div>
+                    <div className={username == message.from ? 'messageSent' : 'messageReceived'} key={index}>
+                      <div className='from text-[18px] italic pt-[3px] pb-[2px] px-[3px]' key={`from-${index}`}>
+                          {message.from}
+                      </div>
 
+                      <div
+                        className="text-[23px] pt-[3px] pb-[5px] px-[5px]"
+                        id={username == message.from ? 'messageSentText' : 'messageReceivedText'}
+                        key={`messageText-${index}`}>
+                          {message.message}
+                      </div>
+
+                      <div className='messageDateTime text-[17px] pt-[2px] pb-[3px] px-[8px] text-right' key={`messageDateTime-${index}`}>
+                      {
+                          `${ message.hours }:${ message.minutes }:${ message.seconds }, ` +
+                          `${ message.date }-${ message.month }-${ message.year }`
+                      }
+                      </div>
+                    </div>
+                    {
+                      username == message.from ?
+                      <img className="displayPicture h-[55px] w-[55px] rounded-full border-black border-[1px]"
+                        src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${chatNameToDisplayPictureMap[message.from]}`}>
+                      </img> :
+                      <></>
+                    }
                   </div>
                 ))
               }
@@ -537,26 +552,40 @@ export default function Page() {
             <div className="readMessages w-full">
               {
                 readMessages.map((message, index) => (
-                  <div className={username == message.from ? 'messageSent' : 'messageReceived'} key={index}>
-
-                    <div className='from text-[18px] italic pt-[3px] pb-[2px] px-[3px]' key={`from-${index}`}>
-                        {message.from}
-                    </div>
-
-                    <div
-                      className="text-[23px] pt-[3px] pb-[5px] px-[5px]"
-                      id={username == message.from ? 'messageSentText' : 'messageReceivedText'}
-                      key={`messageText-${index}`}>
-                        {message.message}
-                    </div>
-
-                    <div className='messageDateTime text-[17px] pt-[2px] pb-[3px] px-[8px] text-right' key={`messageDateTime-${index}`}>
+                  <div className="displayPictureAndMessage flex flex-row my-[4px] mx-[4px]">
                     {
-                        `${ message.hours }:${ message.minutes }:${ message.seconds }, ` +
-                        `${ message.date }-${ message.month }-${ message.year }`
+                      username != message.from ?
+                      <img className="displayPicture h-[55px] w-[55px] rounded-full border-black border-[1px]"
+                        src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${chatNameToDisplayPictureMap[message.from]}`}>
+                      </img> :
+                      <></>
                     }
-                    </div>
+                    <div className={username == message.from ? 'messageSent' : 'messageReceived'} key={index}>
+                      <div className='from text-[18px] italic pt-[3px] pb-[2px] px-[3px]' key={`from-${index}`}>
+                          {message.from}
+                      </div>
 
+                      <div
+                        className="text-[23px] pt-[3px] pb-[5px] px-[5px]"
+                        id={username == message.from ? 'messageSentText' : 'messageReceivedText'}
+                        key={`messageText-${index}`}>
+                          {message.message}
+                      </div>
+
+                      <div className='messageDateTime text-[17px] pt-[2px] pb-[3px] px-[8px] text-right' key={`messageDateTime-${index}`}>
+                      {
+                          `${ message.hours }:${ message.minutes }:${ message.seconds }, ` +
+                          `${ message.date }-${ message.month }-${ message.year }`
+                      }
+                      </div>
+                    </div>
+                    {
+                      username == message.from ?
+                      <img className="displayPicture h-[55px] w-[55px] rounded-full border-black border-[1px]"
+                        src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${chatNameToDisplayPictureMap[message.from]}`}>
+                      </img> :
+                      <></>
+                    }
                   </div>
                 ))
               }
