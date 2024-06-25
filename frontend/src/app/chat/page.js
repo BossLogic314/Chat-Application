@@ -20,7 +20,6 @@ import './styles/page.css';
 
 export default function Page() {
 
-  const [isPageLoading, setIsPageLoading] = useState(true);
   const {chats, setChats, pushChatToTop, addToNumberOfUnreadMessagesOfChat, clearNumberOfUnreadMessagesOfChat} = useChatsStore();
   const {socket, setSocket} = useSocketStore();
   const {username, setUsername} = useUsernameStore();
@@ -44,8 +43,7 @@ export default function Page() {
 
   let getChats = (async (event, usernameValue=null) => {
 
-    const searchTab = document.getElementsByClassName('searchTab')[0];
-    const searchString = searchTab != null ? searchTab.value : '';
+    const searchString = document.getElementsByClassName('searchTab')[0].value;
 
     if (!usernameValue) {
       usernameValue = username;
@@ -350,7 +348,6 @@ export default function Page() {
   const initialize = async() => {
 
     const usernameValue = await verifyJwtTokenAndGetUsername();
-    setIsPageLoading(false);
 
     const newSocket = io('http://localhost:8081', {
       query: {
@@ -425,7 +422,6 @@ export default function Page() {
   }, [chats]);
 
   return (
-    isPageLoading ? <></> :
     <div className="flex flex-col box bg-red h-screen w-screen min-h-[700px] min-w-[850px] mx-auto px-[10px] py-[10px]">
 
       <div className="header flex flex-row h-[75px] min-h-[75px] justify-between">
