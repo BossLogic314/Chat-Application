@@ -47,7 +47,7 @@ export default function Page() {
 
     checkJwtToken();
 
-  }, [])
+  }, []);
 
   return (
     <div className="h-screen w-screen min-h-[450px] min-w-[450px] bg-blue-100 flex justify-center items-center">
