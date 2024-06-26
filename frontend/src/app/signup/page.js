@@ -1,13 +1,12 @@
 "use client";
-import React, { useEffect } from "react";
-import { useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useUsernamePasswordStore } from "../../../zustand/useUsernamePasswordStore";
+import axios from "axios";
 
 export default function Page() {
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const {signupUsername, setSignupUsername, signupPassword, setSignupPassword, cleanupStore} = useUsernamePasswordStore();
   const [isPageLoading, setIsPageLoading] = useState(true);
   const router = useRouter();
 
@@ -16,12 +15,15 @@ export default function Page() {
     try {
       const response = await axios.post('http://localhost:8080/auth/signup',
       {
-        username: username,
-        password: password,
+        username: signupUsername,
+        password: signupPassword,
       },
       {
         withCredentials: true,
       });
+      // Cleaning the session storage on a successful signup
+      cleanupStore();
+
       router.replace('/');
       alert(response.data.message);
     }
@@ -63,14 +65,14 @@ export default function Page() {
           <div className="text-5xl w-80 font-medium text-center">Welcome!</div>
           <div className="mt-3 w-80 text-2xl font-normal">Username</div>
           <input className="bg-gray-100 w-80 text-lg block mt-1 px-[8px] py-1 border-black border rounded"
-            value={username} placeholder="Enter your username here"
-            onChange={(e) => {setUsername(e.target.value)}} onKeyDown={keyPressedOnInputField}>
+            value={signupUsername} placeholder="Enter your username here"
+            onChange={(e) => {setSignupUsername(e.target.value)}} onKeyDown={keyPressedOnInputField}>
           </input>
 
           <div className="mt-2 w-80 text-2xl font-normal">Password</div>
           <input className="bg-gray-100 w-80 text-lg block mt-1 px-[8px] py-1 border-black border rounded"
-            value={password} placeholder="Enter your password here"
-            type="password" onChange={(e) => {setPassword(e.target.value)}} onKeyDown={keyPressedOnInputField}>
+            value={signupPassword} placeholder="Enter your password here"
+            type="password" onChange={(e) => {setSignupPassword(e.target.value)}} onKeyDown={keyPressedOnInputField}>
           </input>
 
           <div className="loginDiv flex flex-row justify-center">
