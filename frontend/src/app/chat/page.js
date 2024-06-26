@@ -8,7 +8,6 @@ import CreateGroupChatPopUp from "../components/CreateGroupChatPopUp";
 import DisplayPicturePopUp from "../components/DisplayPicturePopUp";
 import { useCreateGroupChatStore } from "../../../zustand/useCreateGroupChatStore";
 import { useUsernameStore } from "../../../zustand/useUsernameStore";
-import { useCurrentChatNameStore } from "../../../zustand/useCurrentChatNameStore";
 import { useCurrentChatStore } from "../../../zustand/useCurrentChatStore";
 import { useMessagesStore } from "../../../zustand/useMessagesStore";
 import { useChatsStore } from "../../../zustand/useChatStore";
@@ -24,8 +23,7 @@ export default function Page() {
   const {socket, setSocket} = useSocketStore();
   const {username, setUsername} = useUsernameStore();
   const {displayPicture, setDisplayPicture} = useDisplayPictureStore();
-  const {currentChatName, setCurrentChatName} = useCurrentChatNameStore();
-  const {currentChat, setCurrentChat} = useCurrentChatStore();
+  const {currentChat, setCurrentChat, currentChatName, setCurrentChatName} = useCurrentChatStore();
   const [currentConversation, setCurrentConversation] = useState('');
   const [chatNameToDisplayPictureMap, setChatNameToDisplayPictureMap] = useState();
   const {readMessages, setReadMessages, unreadMessages, setUnreadMessages, addToMessages} = useMessagesStore();
@@ -197,22 +195,8 @@ export default function Page() {
         continue;
       }
 
-      let conversationName = null;
-
-      // User
-      if (!chats[i].isGroupChat) {
-        // Conversation name in case of two users is 'user1-user2'
-        conversationName = [username, chats[i].name].sort().join('-');
-      }
-      // Group chat
-      else {
-        conversationName = chats[i].name;
-      }
-
-      setCurrentConversation(conversationName);
       setCurrentChat(chats[i]);
       setCurrentChatName(chats[i].name);
-      displayMessages(chats[i].name, chats[i].isGroupChat);
       break;
     }
   });
@@ -421,6 +405,29 @@ export default function Page() {
     setChatNameToDisplayPictureMap(newChatNameToDisplayPictureMap);
   }, [chats]);
 
+  useEffect(() => {
+
+    // The username or the current chat is not assigned yet
+    if (Object.keys(currentChat).length == 0) {
+      return;
+    }
+
+    let conversationName = null;
+    // User
+    if (!currentChat.isGroupChat) {
+      // Conversation name in case of two users is 'user1-user2'
+      conversationName = [username, currentChat.name].sort().join('-');
+    }
+    // Group chat
+    else {
+      conversationName = currentChat.name;
+    }
+
+    setCurrentConversation(conversationName);
+    setCurrentChatName(currentChat.name);
+    displayMessages(currentChat.name, currentChat.isGroupChat);
+  }, [username, currentChat]);
+
   return (
     <div className="flex flex-col box bg-red h-screen w-screen min-h-[700px] min-w-[850px] mx-auto px-[10px] py-[10px]">
 
@@ -558,7 +565,7 @@ export default function Page() {
             <div className="readMessages w-full">
               {
                 readMessages.map((message, index) => (
-                  <div className="displayPictureAndMessage flex flex-row my-[4px] mx-[4px]">
+                  <div className="displayPictureAndMessage flex flex-row my-[4px] mx-[4px]" key={`displayPictureAndMessage-${index}`}>
                     {
                       username != message.from ?
                       <img className="displayPicture h-[55px] w-[55px] rounded-full border-black border-[1px]"

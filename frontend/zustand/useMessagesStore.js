@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { useCurrentChatNameStore } from "./useCurrentChatNameStore";
+import { useCurrentChatStore } from "./useCurrentChatStore";
 import { useUsernameStore } from "./useUsernameStore";
 
 const messageStore = (set) => ({
@@ -9,7 +9,7 @@ const messageStore = (set) => ({
     setUnreadMessages: (newUnreadMessages) => set({unreadMessages: newUnreadMessages}),
     addToMessages: (newMessage) => {
 
-        const currentChatName = useCurrentChatNameStore.getState().currentChatName;
+        const currentChatName = useCurrentChatStore.getState().currentChatName;
         const username = useUsernameStore.getState().username;
 
         // Deciding whether the received message belongs to the chat currently opened by the user
