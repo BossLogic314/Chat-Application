@@ -195,6 +195,11 @@ export default function Page() {
         continue;
       }
 
+      // If the same chat is clicked again, update the unread messages
+      if (currentChatName == chats[i].name) {
+        displayMessagesOfConversation();
+      }
+
       setCurrentChat(chats[i]);
       setCurrentChatName(chats[i].name);
       break;
@@ -384,6 +389,23 @@ export default function Page() {
     getChats(null, usernameValue);
   };
 
+  const displayMessagesOfConversation = () => {
+    let conversationName = null;
+    // User
+    if (!currentChat.isGroupChat) {
+      // Conversation name in case of two users is 'user1-user2'
+      conversationName = [username, currentChat.name].sort().join('-');
+    }
+    // Group chat
+    else {
+      conversationName = currentChat.name;
+    }
+
+    setCurrentConversation(conversationName);
+    setCurrentChatName(currentChat.name);
+    displayMessages(currentChat.name, currentChat.isGroupChat);
+  }
+
   useEffect(() => {
 
     initialize();
@@ -411,21 +433,8 @@ export default function Page() {
     if (Object.keys(currentChat).length == 0) {
       return;
     }
+    displayMessagesOfConversation();
 
-    let conversationName = null;
-    // User
-    if (!currentChat.isGroupChat) {
-      // Conversation name in case of two users is 'user1-user2'
-      conversationName = [username, currentChat.name].sort().join('-');
-    }
-    // Group chat
-    else {
-      conversationName = currentChat.name;
-    }
-
-    setCurrentConversation(conversationName);
-    setCurrentChatName(currentChat.name);
-    displayMessages(currentChat.name, currentChat.isGroupChat);
   }, [username, currentChat]);
 
   return (
