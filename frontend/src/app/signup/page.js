@@ -30,6 +30,14 @@ export default function Page() {
     }
   }
 
+  // When the user presses 'Enter' on input fields
+  const keyPressedOnInputField = (event) => {
+
+    if (event.key == 'Enter') {
+      signupEntered();
+    }
+  }
+
   useEffect(() => {
     async function checkJwtToken() {
       try {
@@ -56,13 +64,13 @@ export default function Page() {
           <div className="mt-3 w-80 text-2xl font-normal">Username</div>
           <input className="bg-gray-100 w-80 text-lg block mt-1 px-[8px] py-1 border-black border rounded"
             value={username} placeholder="Enter your username here"
-            onChange={(e) => {setUsername(e.target.value)}}>
+            onChange={(e) => {setUsername(e.target.value)}} onKeyDown={keyPressedOnInputField}>
           </input>
 
           <div className="mt-2 w-80 text-2xl font-normal">Password</div>
           <input className="bg-gray-100 w-80 text-lg block mt-1 px-[8px] py-1 border-black border rounded"
             value={password} placeholder="Enter your password here"
-            type="password" onChange={(e) => {setPassword(e.target.value)}}>
+            type="password" onChange={(e) => {setPassword(e.target.value)}} onKeyDown={keyPressedOnInputField}>
           </input>
 
           <div className="loginDiv flex flex-row justify-center">

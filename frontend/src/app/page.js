@@ -11,7 +11,7 @@ export default function Page() {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const router = useRouter();
 
-  const loginEntered = async (e) => {
+  const loginEntered = async () => {
 
     try {
       const response = await axios.post('http://localhost:8080/auth/login',
@@ -28,6 +28,14 @@ export default function Page() {
     catch(error) {
       console.log(error);
       alert(error.response.data.message);
+    }
+  }
+
+  // When the user presses 'Enter' on input fields
+  const keyPressedOnInputField = (event) => {
+
+    if (event.key == 'Enter') {
+      loginEntered();
     }
   }
 
@@ -58,13 +66,13 @@ export default function Page() {
           <div className="mt-3 w-80 text-2xl font-normal">Username</div>
           <input className="bg-gray-100 w-80 text-lg block mt-1 px-[8px] py-1 border-black border rounded"
             value={enteredUsername} placeholder="Enter your username here"
-            onChange={(e) => {setEnteredUsername(e.target.value)}}>
+            onChange={(e) => {setEnteredUsername(e.target.value)}} onKeyDown={keyPressedOnInputField}>
           </input>
 
           <div className="mt-2 w-80 text-2xl font-normal">Password</div>
           <input className="bg-gray-100 w-80 text-lg block mt-1 px-[8px] py-1 border-black border rounded"
             value={enteredPassword} placeholder="Enter your password here"
-            type="password" onChange={(e) => {setEnteredPassword(e.target.value)}}>
+            type="password" onChange={(e) => {setEnteredPassword(e.target.value)}} onKeyDown={keyPressedOnInputField}>
           </input>
 
           <div className="loginDiv flex flex-row justify-center">
