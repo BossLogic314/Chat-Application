@@ -419,7 +419,7 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
-    const newChatNameToDisplayPictureMap = {};
+    const newChatNameToDisplayPictureMap = {...chatNameToDisplayPictureMap};
     for (let i = 0; i < chats.length; ++i) {
       newChatNameToDisplayPictureMap[chats[i].name] = chats[i].displayPicture;
     }
