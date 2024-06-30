@@ -13,7 +13,7 @@ export default function Page() {
   const loginEntered = async () => {
 
     try {
-      const response = await axios.post('http://localhost:8080/auth/login',
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`,
       {
         username: loginUsername,
         password: loginPassword,
@@ -43,7 +43,7 @@ export default function Page() {
   useEffect(() => {
     async function checkJwtToken() {
       try {
-        const response = await axios.get('http://localhost:8080/auth/checkJwtToken',
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/checkJwtToken`,
         {
           withCredentials: true,
         });

@@ -48,7 +48,7 @@ export default function Page() {
     }
 
     try {
-      const response = await axios.get(`http://localhost:8080/chats/getAllChats?searchString=${searchString}&username=${usernameValue}`,
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/chats/getAllChats?searchString=${searchString}&username=${usernameValue}`,
       {
         withCredentials: true,
       });
@@ -146,7 +146,7 @@ export default function Page() {
     }
 
     try {
-      const response = await axios.get(`http://localhost:8080/conversation/getConversation?conversationName=${conversationName}`,
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/conversation/getConversation?conversationName=${conversationName}`,
       {
         withCredentials: true,
       });
@@ -224,7 +224,7 @@ export default function Page() {
     }
 
     try {
-      const response = await axios.post('http://localhost:8080/conversation/markMessageOfConversationAsRead',
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/conversation/markMessageOfConversationAsRead`,
       {
         conversationName: conversationName,
         username: username
@@ -290,7 +290,7 @@ export default function Page() {
 
     try {
       // Saving the message in the database
-      const response = await axios.post('http://localhost:8080/conversation/addMessageToConversation',
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/conversation/addMessageToConversation`,
       {
         conversationName: currentConversation,
         from: username,
@@ -320,7 +320,7 @@ export default function Page() {
   const verifyJwtTokenAndGetUsername = async() => {
 
     try {
-      const response = await axios.get('http://localhost:8080/auth/checkJwtToken',
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/checkJwtToken`,
       {
         withCredentials: true,
       });
@@ -338,7 +338,7 @@ export default function Page() {
 
     const usernameValue = await verifyJwtTokenAndGetUsername();
 
-    const newSocket = io('http://localhost:8081', {
+    const newSocket = io(process.env.NEXT_PUBLIC_BACKEND_SOCKET_URL, {
       query: {
         username: usernameValue
       }

@@ -15,7 +15,7 @@ connectToDb();
 
 app.use(cors({
 	credentials: true,
-    origin: ["http://localhost:3000"]
+    origin: [process.env.NEXT_PUBLIC_FRONTEND_URL]
 }));
 app.use(express.json());
 app.use(cookieParser());
@@ -23,10 +23,6 @@ app.use('/auth', authRouter);
 app.use('/users', usersRouter);
 app.use('/chats', chatsRouter);
 app.use('/conversation', conversationRouter);
-
-app.get('/', (req, res) => {
-    res.send('Hi Anish!');
-});
 
 app.listen(PORT, () => {
     console.log(`Application started on port ${PORT}`);

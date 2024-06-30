@@ -68,10 +68,6 @@ io.on('connection', (socket) => {
     });
 });
 
-app.get('/', (req, res) => {
-    res.send('Hello!');
-});
-
 server.listen(PORT, (req, res) => {
     console.log(`Backend listening on port ${PORT}`);
 });

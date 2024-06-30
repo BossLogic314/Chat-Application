@@ -40,7 +40,7 @@ export default function DisplayPicturePopUp({name, displayPicture, canChangeDisp
         formData.append("image", file);
 
         try {
-            const response = await axios.post('http://localhost:8080/chats/updateDisplayPictureOfChat',
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/chats/updateDisplayPictureOfChat`,
             formData,
             {
               withCredentials: true
@@ -62,7 +62,7 @@ export default function DisplayPicturePopUp({name, displayPicture, canChangeDisp
     let removeDisplayPictureButtonClicked = (async(event) => {
 
         try {
-            const response = await axios.post('http://localhost:8080/chats/removeDisplayPictureOfChat',
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/chats/removeDisplayPictureOfChat`,
             {
                 name: name
             },
@@ -79,7 +79,7 @@ export default function DisplayPicturePopUp({name, displayPicture, canChangeDisp
 
     let logoutButtonClicked = (async(req, res) => {
         try {
-            const response = await axios.post('http://localhost:8080/auth/logout',
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/logout`,
             {},
             {
               withCredentials: true

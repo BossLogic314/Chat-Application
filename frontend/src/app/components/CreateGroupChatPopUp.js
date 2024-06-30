@@ -26,7 +26,7 @@ export default function CreateGroupChatPopUp({chatNameToDisplayPictureMap}) {
     let searchForUsers = (async () => {
         const searchString = document.getElementById('groupChatParticipants').value;
         try {
-            const response = await axios.get(`http://localhost:8080/users/getUsers?searchString=${searchString}&username=${username}`,
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/getUsers?searchString=${searchString}&username=${username}`,
             {
                 withCredentials: true
             });
@@ -60,7 +60,7 @@ export default function CreateGroupChatPopUp({chatNameToDisplayPictureMap}) {
 
         // Information provided is valid
         try {
-            const response = await axios.post('http://localhost:8080/chats/createGroupChat',
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/chats/createGroupChat`,
             {
                 name: groupChatName,
                 participants: [username, ...addedParticipants]
