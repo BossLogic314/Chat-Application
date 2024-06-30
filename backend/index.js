@@ -6,6 +6,9 @@ import conversationRouter from './routes/conversation.js';
 import connectToDb from "./db/connect.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express()
 const PORT = 8080;
