@@ -588,7 +588,7 @@ export default function Page() {
             <div className="unreadMessages flex-1 w-full">
               {
                 unreadMessages.map((message, index) => (
-                  <div className="displayPictureAndMessage flex flex-row my-[4px] mx-[4px]">
+                  <div className="displayPictureAndMessage flex flex-row my-[4px] mx-[4px]" key={`displayPictureAndMessage-${index}`}>
                     {
                       username != message.from ?
                       <img className="displayPicture h-[55px] w-[55px] rounded-full border-black border-[1px]"
