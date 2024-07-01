@@ -435,7 +435,7 @@ export default function Page() {
     }
 
     getChats(null, username);
-  }, [username, isPageLoading])
+  }, [username, isPageLoading]);
 
   // When chats change
   useEffect(() => {
