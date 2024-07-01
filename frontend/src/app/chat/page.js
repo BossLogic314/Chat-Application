@@ -437,6 +437,12 @@ export default function Page() {
     setCurrentChatName(currentChat.name);
     displayMessages(currentChat.name, currentChat.isGroupChat);
   }
+  
+  const keyPressedOnMessageField = (event) => {
+    if (event.key == 'Enter') {
+      document.getElementById('sendButton').click();
+    }
+  }
 
   // When the page loads
   useEffect(() => {
@@ -698,7 +704,7 @@ export default function Page() {
               <input
                 className="typingBox h-10 w-5/6 pl-[5px] border-black border-[1px]" id="typingBox"
                 placeholder="Type your message here..." type="text" value={typedMessage}
-                onChange={messageTyped}>
+                onChange={messageTyped} onKeyDown={keyPressedOnMessageField}>
               </input>
               {
                 typedMessage == '' || currentChatName == '' ?
@@ -708,8 +714,7 @@ export default function Page() {
                   </div>
                   :
                   <div className="sendButton flex justify-center items-center h-[44px] w-[44px] ml-[7px] hover:scale-[1.05] active:scale-[1] hover:cursor-pointer"
-                    id="sendButton"
-                    onClick={sendButtonClicked}>
+                    id="sendButton" onClick={sendButtonClicked}>
                       <div className="sendShape ml-[15%]" id="sendShape"></div>
                   </div>
               }
