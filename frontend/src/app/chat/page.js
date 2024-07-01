@@ -26,7 +26,7 @@ export default function Page() {
   const {displayPicture, setDisplayPicture} = useDisplayPictureStore();
   const {currentChat, setCurrentChat, currentChatName, setCurrentChatName} = useCurrentChatStore();
   const [currentConversation, setCurrentConversation] = useState('');
-  const [chatNameToDisplayPictureMap, setChatNameToDisplayPictureMap] = useState();
+  const [chatNameToDisplayPictureMap, setChatNameToDisplayPictureMap] = useState({});
   const {readMessages, setReadMessages, unreadMessages, setUnreadMessages, addToMessages} = useMessagesStore();
   const [typedMessage, setTypedMessage] = useState('');
   const router = useRouter();
@@ -34,10 +34,35 @@ export default function Page() {
   const {createGroupChat, setCreateGroupChat} = useCreateGroupChatStore();
   const {popUpDisplayPicture, setPopUpDisplayPicture} = usePopUpDisplayPictureStore();
 
+  const defaultDisplayPicture = 'default.jpg';
+
+  let logout = (async(req, res) => {
+    try {
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/logout`,
+        {},
+        {
+          withCredentials: true
+        });
+        // Clearing the configuration so that the user logs in to a fresh page next time
+        clearState();
+        router.replace('/');
+    }
+    catch(error) {
+        // Jwt token expired, the user needs to login again
+        clearState();
+        router.replace('/');
+    }
+  });
+
   // Called when the user logs out
   const clearState = () => {
+    setCreateGroupChat(false);
     setPopUpDisplayPicture(null);
     setChats([]);
+    setCurrentChatName('');
+    setCurrentChat({});
+    setReadMessages([]);
+    setUnreadMessages([]);
   }
 
   let getChats = (async (event, usernameValue=null) => {
@@ -103,7 +128,7 @@ export default function Page() {
     }
     catch(error) {
       // Jwt token expired, the user needs to login again
-      router.replace('/');
+      logout();
     }
   });
 
@@ -173,7 +198,7 @@ export default function Page() {
     }
     catch(error) {
       // Jwt token expired, the user needs to login again
-      router.replace('/');
+      logout();
     }
   });
 
@@ -241,7 +266,7 @@ export default function Page() {
     }
     catch(error) {
       // Jwt token expired, the user needs to login again
-      router.replace('/');
+      logout();
     }
   };
 
@@ -317,7 +342,7 @@ export default function Page() {
     }
     catch(error) {
       // Jwt token expired, the user needs to login again
-      router.replace('/');
+      logout();
     }
 
     setTypedMessage('');
@@ -337,7 +362,7 @@ export default function Page() {
     }
     catch(error) {
       // Jwt token expired, the user needs to login again
-      router.replace('/');
+      logout();
     }
   };
 
@@ -441,7 +466,7 @@ export default function Page() {
   useEffect(() => {
 
     // Nothing to do if the page is not loaded yet
-    if (isPageLoading) {
+    if (isPageLoading || displayPicture == '') {
       return;
     }
 
@@ -451,12 +476,12 @@ export default function Page() {
     }
     newChatNameToDisplayPictureMap[username] = displayPicture;
     setChatNameToDisplayPictureMap(newChatNameToDisplayPictureMap);
-  }, [chats, isPageLoading]);
+  }, [chats, isPageLoading, displayPicture]);
 
   useEffect(() => {
 
     // Nothing to do if the page is not loaded yet
-    if (isPageLoading) {
+    if (isPageLoading || username == '') {
       return;
     }
 
@@ -464,6 +489,7 @@ export default function Page() {
     if (Object.keys(currentChat).length == 0) {
       return;
     }
+
     displayMessagesOfConversation();
 
   }, [username, currentChat, isPageLoading]);
@@ -478,7 +504,9 @@ export default function Page() {
         </div>
         <div className="userDisplayPictureDiv flex h-full w-40 justify-center items-center">
           <img className="userDisplayPicture h-[68px] w-[68px] rounded-full hover:cursor-pointer hover:scale-[1.03] active:scale-[1] border-black border-[1px]"
-            src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${displayPicture}`}
+            src={displayPicture == '' ?
+              `https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${defaultDisplayPicture}` :
+              `https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${displayPicture}`}
             value={username}
             participants={[]}
             display-picture={displayPicture}
@@ -564,7 +592,9 @@ export default function Page() {
                     {
                       username != message.from ?
                       <img className="displayPicture h-[55px] w-[55px] rounded-full border-black border-[1px]"
-                        src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${chatNameToDisplayPictureMap[message.from]}`}>
+                        src={chatNameToDisplayPictureMap[message.from] == null ?
+                          `https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${defaultDisplayPicture}` :
+                          `https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${chatNameToDisplayPictureMap[message.from]}`}>
                       </img> :
                       <></>
                     }
@@ -590,7 +620,9 @@ export default function Page() {
                     {
                       username == message.from ?
                       <img className="displayPicture h-[55px] w-[55px] rounded-full border-black border-[1px]"
-                        src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${chatNameToDisplayPictureMap[message.from]}`}>
+                        src={chatNameToDisplayPictureMap[message.from] == null ?
+                          `https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${defaultDisplayPicture}` :
+                          `https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${chatNameToDisplayPictureMap[message.from]}`}>
                       </img> :
                       <></>
                     }
@@ -610,7 +642,9 @@ export default function Page() {
                     {
                       username != message.from ?
                       <img className="displayPicture h-[55px] w-[55px] rounded-full border-black border-[1px]"
-                        src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${chatNameToDisplayPictureMap[message.from]}`}>
+                        src={chatNameToDisplayPictureMap[message.from] == null ?
+                          `https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${defaultDisplayPicture}` :
+                          `https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${chatNameToDisplayPictureMap[message.from]}`}>
                       </img> :
                       <></>
                     }
@@ -636,7 +670,9 @@ export default function Page() {
                     {
                       username == message.from ?
                       <img className="displayPicture h-[55px] w-[55px] rounded-full border-black border-[1px]"
-                        src={`https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${chatNameToDisplayPictureMap[message.from]}`}>
+                        src={chatNameToDisplayPictureMap[message.from] == null ?
+                          `https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${defaultDisplayPicture}` :
+                          `https://chat-application-display-pictures-bucket.s3.ap-south-1.amazonaws.com/${chatNameToDisplayPictureMap[message.from]}`}>
                       </img> :
                       <></>
                     }
@@ -694,7 +730,8 @@ export default function Page() {
             displayPicture={popUpDisplayPicture.displayPicture}
             canChangeDisplayPicture={popUpDisplayPicture.canChangeDisplayPicture}
             participants={popUpDisplayPicture.participants}
-            clearState={clearState} /> :
+            clearState={clearState}
+            logout={logout} /> :
           <></>
       }
     </div>

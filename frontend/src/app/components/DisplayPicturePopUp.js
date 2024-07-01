@@ -5,7 +5,7 @@ import './styles/DisplayPicturePopUp.css';
 import { usePopUpDisplayPictureStore } from "../../../zustand/usePopUpDisplayPictureStore";
 import { useUsernameStore } from "../../../zustand/useUsernameStore";
 
-export default function DisplayPicturePopUp({name, displayPicture, canChangeDisplayPicture, participants, clearState}) {
+export default function DisplayPicturePopUp({name, displayPicture, canChangeDisplayPicture, participants, logout}) {
 
     const {setPopUpDisplayPicture} = usePopUpDisplayPictureStore();
     const {username} = useUsernameStore();
@@ -77,23 +77,6 @@ export default function DisplayPicturePopUp({name, displayPicture, canChangeDisp
         }
     });
 
-    let logoutButtonClicked = (async(req, res) => {
-        try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/logout`,
-            {},
-            {
-              withCredentials: true
-            });
-            // Clearing the configuration so that the user logs in to a fresh page next time
-            clearState();
-            router.replace('/');
-        }
-        catch(error) {
-            // Jwt token expired, the user needs to login again
-            router.replace('/');
-        }
-    });
-
     return (
         <div className='h-full w-full min-h-[700px] min-w-[850px] flex flex-col justify-center items-center absolute top-0 bottom-0 left-0 right-0'
             id="displayPicturePopUpOverlay"
@@ -140,8 +123,7 @@ export default function DisplayPicturePopUp({name, displayPicture, canChangeDisp
                     name == username ?
                     <button
                         className="text-white bg-red-600 hover:bg-red-700 font-medium rounded-lg text-[20px] px-5 py-2.5 mt-[20px] hover:scale-[1.05] active:scale-[1]"
-                        id="logoutButton"
-                        onClick={logoutButtonClicked}>
+                        id="logoutButton" onClick={logout}>
                             Logout
                     </button> :
                     <></>
