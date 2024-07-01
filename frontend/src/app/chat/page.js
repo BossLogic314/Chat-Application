@@ -339,6 +339,9 @@ export default function Page() {
       {
         withCredentials: true
       });
+
+      // Marking all messages of chat as 'read' for the current user
+      await markMessagesOfConversationToRead();
     }
     catch(error) {
       // Jwt token expired, the user needs to login again
