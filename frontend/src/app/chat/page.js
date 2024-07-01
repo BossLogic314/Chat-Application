@@ -19,6 +19,7 @@ import './styles/page.css';
 
 export default function Page() {
 
+  const [isPageLoading, setIsPageLoading] = useState(true);
   const {chats, setChats, pushChatToTop, addToNumberOfUnreadMessagesOfChat, clearNumberOfUnreadMessagesOfChat} = useChatsStore();
   const {socket, setSocket} = useSocketStore();
   const {username, setUsername} = useUsernameStore();
@@ -40,6 +41,11 @@ export default function Page() {
   }
 
   let getChats = (async (event, usernameValue=null) => {
+
+    // If the page is not loaded yet, there is nothing to do
+    if (isPageLoading) {
+      return;
+    }
 
     const searchString = document.getElementsByClassName('searchTab')[0].value;
 
@@ -326,6 +332,7 @@ export default function Page() {
       });
       setUsername(response.data.username);
       setDisplayPicture(response.data.displayPicture);
+      setIsPageLoading(false);
       return response.data.username;
     }
     catch(error) {
@@ -386,7 +393,7 @@ export default function Page() {
       }
     });
 
-    getChats(null, usernameValue);
+    getChats(null);
   };
 
   const displayMessagesOfConversation = () => {
@@ -406,6 +413,7 @@ export default function Page() {
     displayMessages(currentChat.name, currentChat.isGroupChat);
   }
 
+  // When the page loads
   useEffect(() => {
 
     initialize();
@@ -418,16 +426,39 @@ export default function Page() {
 
   }, []);
 
+  // When the check whether the user is logged in is complete
   useEffect(() => {
+
+    // Nothing to do if the page is not loaded yet
+    if (isPageLoading) {
+      return;
+    }
+
+    getChats(null, username);
+  }, [username, isPageLoading])
+
+  // When chats change
+  useEffect(() => {
+
+    // Nothing to do if the page is not loaded yet
+    if (isPageLoading) {
+      return;
+    }
+
     const newChatNameToDisplayPictureMap = {...chatNameToDisplayPictureMap};
     for (let i = 0; i < chats.length; ++i) {
       newChatNameToDisplayPictureMap[chats[i].name] = chats[i].displayPicture;
     }
     newChatNameToDisplayPictureMap[username] = displayPicture;
     setChatNameToDisplayPictureMap(newChatNameToDisplayPictureMap);
-  }, [chats]);
+  }, [chats, isPageLoading]);
 
   useEffect(() => {
+
+    // Nothing to do if the page is not loaded yet
+    if (isPageLoading) {
+      return;
+    }
 
     // The username or the current chat is not assigned yet
     if (Object.keys(currentChat).length == 0) {
@@ -435,9 +466,10 @@ export default function Page() {
     }
     displayMessagesOfConversation();
 
-  }, [username, currentChat]);
+  }, [username, currentChat, isPageLoading]);
 
   return (
+    isPageLoading ? <></> :
     <div className="flex flex-col box bg-red h-screen w-screen min-h-[700px] min-w-[850px] mx-auto px-[10px] py-[10px]">
 
       <div className="header flex flex-row h-[75px] min-h-[75px] justify-between">
