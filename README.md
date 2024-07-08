@@ -1,13 +1,6 @@
 # Chat Application
 A chatting application with one-to-one and group chat features.
 
-## How to run the app
-1. Clone the repository
-2. Startup each microservice -\
-&nbsp; run `npm install && npm start` in the folders `backend` and `backend-socket`\
-&nbsp; run `npm install && npm run dev` in the folder `frontend`
-3. The application should now be running on your host, listening on port 3000. URL to access the application : `http://localhost:3000`
-
 ## Login page
 ![ChatApplicationLoginPage](https://github.com/BossLogic314/Chat-Application/assets/73065560/eacb8b80-8117-453e-8a05-e71b54949c59)
 
