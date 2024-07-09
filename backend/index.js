@@ -11,7 +11,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express()
-const PORT = 8080;
+const PORT = 3100;
 
 // Calling the method to connect to MongoDB
 connectToDb();
